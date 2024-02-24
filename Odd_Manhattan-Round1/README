@@ -1,0 +1,23 @@
+README: This file
+KAT/PQCkemKAT_4661.req: Known Answer Tests request file
+KAT/PQCkemKAT_4661.rsp: Known Answer Tests respond file
+Optimized_Implementation/api.h: api.h for optimized implementation
+Optimized_Implementation/api.h.128: api.h for 128bit security
+Optimized_Implementation/api.h.192: api.h for 192bit security
+Optimized_Implementation/api.h.256: api.h for 128bit security
+Reference_Implementation/api.h.kat: api.h to build KAT file
+Optimized_Implementation/kem.c: kem.c for optimized implementation
+Optimized_Implementation/rng.c: random generator functions provided by NIST 
+Optimized_Implementation/rng.h: random generator functions provided by NIST 
+Reference_Implementation/api.h: api.h for reference implementation
+Reference_Implementation/api.h.128: api.h for 128bit security
+Reference_Implementation/api.h.192: api.h for 192bit security
+Reference_Implementation/api.h.256: api.h for 256bit security
+Reference_Implementation/api.h.kat: api.h to build KAT file
+Reference_Implementation/kem.c: kem.c for reference implementation
+Reference_Implementation/Makefile: Makefile to build KAT file generator
+Reference_Implementation/PQCgenKAT_kem.c: KAT file generator provided by NIST
+Reference_Implementation/rng.c: random generator functions provided by NIST 
+Reference_Implementation/rgn.h: random generator functions provided by NIST 
+Supporting_Documentation/Algorithm_Specifications.pdf: pdf Report on algorithm specification
+Supporting_Documentation/Cover_Sheet.pdf: Cover Sheet

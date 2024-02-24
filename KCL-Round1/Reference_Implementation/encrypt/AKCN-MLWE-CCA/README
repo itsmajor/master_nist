@@ -1,0 +1,25 @@
+ 
+first go to ref folder
+
+  for example:   $ cd ref 
+
+ 
+if you want to compile and run KAT generation files , run following script:
+
+   $  make PQCgenKAT_encrypt
+   $  ./PQCgenKAT_encrypt
+
+if you want to compile and run our KAT input and output tuples generation files , run following script:
+
+   $  make encrypt_KATgen
+   $  ./encrypt_KATgen 
+
+Then if you want to compile and run our implementation, run following script:
+
+   $  make akcn-mlwe-cca
+   $  ./akcn-mlwe-cca
+
+if you want to compile and run speed test files , run following script:
+
+   $  make speed
+   $  ./speed

@@ -1,0 +1,56 @@
+	 _____    ______              _____    __  __   ______ 
+	|  __ \  |  ____|     /\     |  __ \  |  \/  | |  ____|
+	| |__) | | |__       /  \    | |  | | | \  / | | |__   
+	|  _  /  |  __|     / /\ \   | |  | | | |\/| | |  __|  
+	| | \ \  | |____   / ____ \  | |__| | | |  | | | |____ 
+	|_|  \_\ |______| /_/    \_\ |_____/  |_|  |_| |______|
+                                                        
+                                                        
+
+														
+README
+
+	A description of each file in this submission.
+
+	
+	
+Supporting_Documentation/
+
+	doc.pdf:	Main documentation
+	
+	
+	
+KAT/
+
+	PQCgenKAT_kem.c, rng.c, rng.h
+		
+		Code to generate KAT files from NIST.
+
+		
+	output/
+	
+		PQCkemKAT_1536.req, PQCkemKAT_1536.rsp, PQCkemKAT_3072.req, PQCkemKAT_3072.rsp
+	
+			Sample output files (.req, .rsp) for two parameter choices.
+			
+			In order to generate KATs for different parameter choices, modify N defined in api.h.
+
+
+
+Optimized_Implementation/
+
+	kem.c, api.h, Makefile
+	
+		Implementation of our protocol.
+
+
+
+Reference_Implementation/
+
+	kem.c, api.h, Makefile
+	
+		Implementation of our protocol.
+
+		
+		
+Note that files in folder 'Optimized_Implementation' and 'Reference_Implementation' are the same.

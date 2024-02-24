@@ -1,0 +1,15 @@
+OPENSSL_DIR=/usr
+
+CC=cc
+
+OPENSSL_INCLUDE_DIR=$(OPENSSL_DIR)/include
+OPENSSL_LIB_DIR=$(OPENSSL_DIR)/lib
+
+CFLAGS=-O3 -mavx2 -I$(OPENSSL_INCLUDE_DIR)
+LDFLAGS=-L$(OPENSSL_LIB_DIR) -lcrypto -lssl
+
+
+all:
+
+	$(CC) $(CFLAGS) -c encrypt.c $(LDFLAGS)
+	$(CC) $(CFLAGS) -o EMBLEM encrypt.o $(LDFLAGS)

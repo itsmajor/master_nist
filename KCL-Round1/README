@@ -1,0 +1,368 @@
+ 
+In KAT/kem/OKCN-MLWE folder: 
+
+	PQCkemKAT_288.req       input for Known Answer Test
+
+	PQCkemKAT_288.rsp       output for Known Answer Test
+
+        genKAT_kem_keypair.txt        input and output tuples for function crypto_kem_keypair_KAT in kem.c
+
+        genKAT_kem_enc.txt            input and output tuples for function crypto_kem_enc_KAT in kem.c
+
+        genKAT_kem_dec.txt            input and output tuples for function crypto_kem_dec in kem.c
+
+        keypair_intermediate.txt      intermediate values for function crypto_kem_keypair_KAT in kem.c
+
+        enc_intermediate.txt          intermediate values for function crypto_kem_enc_KAT in kem.c
+
+        dec_intermediate.txt          intermediate values for function crypto_kem_dec in kem.c
+
+In KAT/kem/AKCN-MLWE folder:   similar with KAT/OKCN-MLWE folder.
+
+In KAT/kem/OKCN-SEC folder:
+
+	PQCkemKAT_1664.req       input for Known Answer Test
+
+	PQCkemKAT_1664.rsp       output for Known Answer Test
+
+        genKAT_kem_keypair.txt        input and output tuples for function crypto_kem_keypair_KAT in kem.c
+
+        genKAT_kem_enc.txt            input and output tuples for function crypto_kem_enc_KAT in kem.c
+
+        genKAT_kem_dec.txt            input and output tuples for function crypto_kem_dec in kem.c
+
+
+
+
+In KAT/kem/AKCN-SEC folder:   similar with KAT/OKCN-SEC folder.
+
+
+In KAT/encrypt/AKCN-MLWE-CCA folder:
+
+	PQCencryptKAT_1312.req       input for Known Answer Test
+
+	PQCencryptKAT_1312.rsp       output for Known Answer Test
+
+        genKAT_encrypt_keypair.txt        input and output tuples for function crypto_encrypt_keypair_KAT in encrypt.c
+
+        genKAT_encrypt_enc.txt            input and output tuples for function crypto_encrypt_KAT in encrypt.c
+
+        genKAT_encrypt_dec.txt            input and output tuples for function crypto_encrypt_open in encrypt.c
+
+In Reference_Implementation/kem/OKCN-MLWE folder: 
+
+        README   give instructions on how to run our implementation, generate Known Answer Test, intermediate values and test speed.
+
+In Reference_Implementation/kem/OKCN-MLWE/ref folder: 
+
+	makefile  make file
+
+	okcn_mlwe.c our file contains main function for our implementation.
+
+	okcn_mlwe  executable file for our implementation. 
+
+	PQCgenKAT_kem  executable file for generate  Known Answer Test.
+
+	PQCgenKAT_kem.c   provided by NIST, file for generating  Known Answer Test.
+
+        okcn-mlwe-KATgen.c  file contains main function for generating KAT input and output tuples
+
+        okcn-mlwe-KATgen    executable file for generating KAT input and output tuples
+
+        okcn-mlwe-intermediate-gen.c  file contains main function for generating intermediate values
+
+        okcn-mlwe-intermediate-gen    executable file for generating intermediate values
+
+	speed        executable file for speed test.
+
+	speed.c      file contains main function for speed test
+
+	api.h  provided by NIST, API for this implementation
+
+	kem.c  part of our implementation
+
+	parameter.h  part of our implementation
+
+	polynomial.c  part of our implementation
+
+	polynomial.h   part of our implementation
+
+	reduce.c     part of our implementation
+
+	reduce.h     part of our implementation
+
+	io.c     part of our implementation
+
+	io.h     part of our implementation
+
+	okcn.c     part of our implementation
+
+	okcn.h     part of our implementation
+
+        vector.c     part of our implementation
+
+	vector.h     part of our implementation
+
+	rng.c        provided by NIST
+
+	rng.h        provided by NIST
+
+	PQCkemKAT_288.req  input for Known Answer Test
+
+	PQCkemKAT_288.rsp  output for Known Answer Test
+
+
+In Reference_Implementation/kem/AKCN-MLWE folder: 
+
+        README   give instructions on how to run our implementation, generate Known Answer Test and test speed.
+
+In Reference_Implementation/kem/AKCN-MLWE/ref folder: 
+
+	makefile  make file
+
+	akcn_mlwe.c our file contains main function for our implementation.
+
+	akcn_mlwe  executable file for our implementation. 
+
+	PQCgenKAT_kem  executable file for generate  Known Answer Test.
+
+	PQCgenKAT_kem.c   provided by NIST, file for generating  Known Answer Test.
+
+        akcn-mlwe-KATgen.c  file contains main function for generating KAT input and output tuples
+
+        akcn-mlwe-KATgen    executable file for generating KAT input and output tuples
+
+        akcn-mlwe-intermediate-gen.c  file contains main function for generating intermediate values
+
+        akcn-mlwe-intermediate-gen    executable file for generating intermediate values
+
+	speed        executable file for speed test.
+
+	speed.c      file contains main function for speed test
+
+	api.h  provided by NIST, API for this implementation
+
+	kem.c  part of our implementation
+
+	parameter.h  part of our implementation
+
+	polynomial.c  part of our implementation
+
+	polynomial.h   part of our implementation
+
+	reduce.c     part of our implementation
+
+	reduce.h     part of our implementation
+
+	io.c     part of our implementation
+
+	io.h     part of our implementation
+
+	akcn.c     part of our implementation
+
+	akcn.h     part of our implementation
+
+        vector.c     part of our implementation
+
+	vector.h     part of our implementation
+
+	rng.c        provided by NIST
+
+	rng.h        provided by NIST
+
+	PQCkemKAT_288.req  input for Known Answer Test
+
+	PQCkemKAT_288.rsp  output for Known Answer Test
+
+
+In Reference_Implementation/kem/AKCN-SEC folder: 
+
+        README   give instructions on how to run our implementation, generate Known Answer Test and test speed.
+
+In Reference_Implementation/kem/AKCN-SEC/ref folder: 
+
+	makefile  make file
+
+	akcn_sec.c our file contains main function for our implementation.
+
+	akcn_sec  executable file for our implementation. 
+
+	PQCgenKAT_kem  executable file for generate  Known Answer Test.
+
+	PQCgenKAT_kem.c   provided by NIST, file for generating  Known Answer Test.
+
+        akcn-sec-KATgen.c  file contains main function for generating KAT input and output tuples
+
+        akcn-sec-KATgen    executable file for generating KAT input and output tuples
+
+	speed        executable file for speed test.
+
+	speed.c      file contains main function for speed test
+
+	api.h  provided by NIST, API for this implementation
+
+	kem.c  part of our implementation
+
+	parameter.h  part of our implementation
+
+	polynomial.c  part of our implementation
+
+	polynomial.h   part of our implementation
+
+	reduce.c     part of our implementation
+
+	reduce.h     part of our implementation
+
+	io.c     part of our implementation
+
+	io.h     part of our implementation
+
+	akcn.c     part of our implementation
+
+	akcn.h     part of our implementation
+
+        sec.c      part of our implementation
+
+        sec.h      part of our implementation
+
+	rng.c        provided by NIST
+
+	rng.h        provided by NIST
+
+	PQCkemKAT_288.req  input for Known Answer Test
+
+	PQCkemKAT_288.rsp  output for Known Answer Test
+
+
+In Reference_Implementation/kem/OKCN-SEC folder: 
+
+        README   give instructions on how to run our implementation, generate Known Answer Test and test speed.
+
+In Reference_Implementation/kem/OKCN-SEC/ref folder: 
+
+	makefile  make file
+
+	okcn_sec.c our file contains main function for our implementation.
+
+	okcn_sec  executable file for our implementation. 
+
+	PQCgenKAT_kem  executable file for generate  Known Answer Test.
+
+	PQCgenKAT_kem.c   provided by NIST, file for generating  Known Answer Test.
+
+
+        okcn-sec-KATgen.c  file contains main function for generating KAT input and output tuples
+
+        okcn-sec-KATgen    executable file for generating KAT input and output tuples
+
+	speed        executable file for speed test.
+
+	speed.c      file contains main function for speed test
+
+	api.h  provided by NIST, API for this implementation
+
+	kem.c  part of our implementation
+
+	parameter.h  part of our implementation
+
+	polynomial.c  part of our implementation
+
+	polynomial.h   part of our implementation
+
+	reduce.c     part of our implementation
+
+	reduce.h     part of our implementation
+
+	io.c     part of our implementation
+
+	io.h     part of our implementation
+
+	akcn.c     part of our implementation
+
+	akcn.h     part of our implementation
+
+        sec.c      part of our implementation
+
+        sec.h      part of our implementation
+
+	rng.c        provided by NIST
+
+	rng.h        provided by NIST
+
+	PQCkemKAT_288.req  input for Known Answer Test
+
+	PQCkemKAT_288.rsp  output for Known Answer Test
+
+In Reference_Implementation/encrypt/AKCN-MLWE-CCA/ref folder: 
+
+	makefile  make file
+
+	akcn-mlwe-cca.c our file contains main function for our implementation.
+
+	akcn-mlwe-cca  executable file for our implementation. 
+
+	PQCgenKAT_encrypt  executable file for generate  Known Answer Test.
+
+	PQCgenKAT_encrypt.c   provided by NIST, file for generating  Known Answer Test.
+
+        encrypt_KATgen.c  file contains main function for generating KAT input and output tuples
+
+        encrypt_KATgen    executable file for generating KAT input and output tuples
+
+	speed        executable file for speed test.
+
+	speed.c      file contains main function for speed test
+
+	api.h  provided by NIST, API for this implementation
+
+	encrypt.c  part of our implementation
+
+	parameter.h  part of our implementation
+
+	polynomial.c  part of our implementation
+
+	polynomial.h   part of our implementation
+
+	reduce.c     part of our implementation
+
+	reduce.h     part of our implementation
+
+	io.c     part of our implementation
+
+	io.h     part of our implementation
+
+	akcn.c     part of our implementation
+
+	akcn.h     part of our implementation
+
+        vector.c     part of our implementation
+
+	vector.h     part of our implementation
+
+        myOpenSSL.c     part of our implementation
+
+	myOpenSSL.h     part of our implementation
+
+	rng.c        provided by NIST
+
+	rng.h        provided by NIST
+
+	PQCencryptKAT_1312.req  input for Known Answer Test
+
+	PQCencryptKAT_1312.rsp  output for Known Answer Test
+ 
+
+In Optimized_Implementation folder:
+
+       exactly same with Reference_Implementation folder
+
+
+In Supporting_Documentation folder:
+
+	Specifications-CN.pdf                                          Detail Specifications Document.
+        Supporting Document of performance analysis and KAT.pdf        performance analysis and introduce to our KAT files
+        CoverSheet-CN.pdf                                              CoverSheet
+
+
+
+README: this file
