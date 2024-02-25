@@ -20,7 +20,7 @@
 
     #if DETERMINIST_ROOT
         BEGIN_EXTERNC
-            #include <libkeccak.a.headers/SimpleFIPS202.h>
+            #include <libXKCP.a.headers/SimpleFIPS202.h>
         END_EXTERNC
     #endif
 #endif

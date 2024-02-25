@@ -8,7 +8,7 @@
  * KDF produces a string of fixed length. 
  **/
 
-#include <libkeccak.a.headers/SP800-185.h>
+#include <libXKCP.a.headers/SP800-185.h>
 #include "modp.h"
 
 #include <stdint.h>

@@ -1,9 +1,9 @@
 #include "sign_openPKI.hpp"
 #include <stdlib.h>
 BEGIN_EXTERNC
-    #include <libkeccak.a.headers/SimpleFIPS202.h>
-    #include <libkeccak.a.headers/SP800-185.h>
-    #include <libkeccak.a.headers/KeccakSpongeWidth1600.h>
+    #include <libXKCP.a.headers/SimpleFIPS202.h>
+    #include <libXKCP.a.headers/SP800-185.h>
+    #include <libXKCP.a.headers/KeccakSpongeWidth1600.h>
 END_EXTERNC
 #include "bit.h"
 #include "init.h"

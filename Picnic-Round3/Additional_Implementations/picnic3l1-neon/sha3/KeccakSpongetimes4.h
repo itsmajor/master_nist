@@ -19,7 +19,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #if !defined(SUPERCOP)
 #include "align.h"
 #else
-#include <libkeccak.a.headers/align.h>
+#include <libXKCP.a.headers/align.h>
 #endif
 
 #define KCP_DeclareSpongeStructuretimes4(prefix, size, alignment) \
@@ -40,7 +40,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #if !defined(SUPERCOP)
     #include "KeccakP-1600-times4-SnP.h"
 #else
-    #include <libkeccak.a.headers/KeccakP-1600-times4-SnP.h>
+    #include <libXKCP.a.headers/KeccakP-1600-times4-SnP.h>
 #endif
     KCP_DeclareSpongeStructuretimes4(KeccakWidth1600times4, KeccakP1600times4_statesSizeInBytes, KeccakP1600times4_statesAlignment)
     KCP_DeclareSpongeFunctionstimes4(KeccakWidth1600times4)
