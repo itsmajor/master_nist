@@ -18,7 +18,7 @@ Please refer to PlSnP-documentation.h for more details.
 #ifndef _KeccakP_1600_times4_SnP_h_
 #define _KeccakP_1600_times4_SnP_h_
 
-#include "KeccakP-1600-SnP.h"
+#include "KeccakSponge.h"
 
 #define KeccakP1600times4_implementation        "fallback on serial implementation (" KeccakP1600_implementation ")"
 #define KeccakP1600times4_statesSizeInBytes     (((KeccakP1600_stateSizeInBytes+(KeccakP1600_stateAlignment-1))/KeccakP1600_stateAlignment)*KeccakP1600_stateAlignment*4)

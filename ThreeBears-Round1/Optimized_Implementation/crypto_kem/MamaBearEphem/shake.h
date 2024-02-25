@@ -1,5 +1,5 @@
 #include "common.h"
-#include <libXKCP.a.headers/KeccakP-1600-SnP.h>
+#include <libXKCP.a.headers/KeccakSponge.h>
 
 #if defined(VECLEN)
 #elif defined(__AVX512F__)
