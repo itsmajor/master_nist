@@ -22,7 +22,7 @@ $(BUILDDIR)/%.o: NIST/%.c *.h NIST/*.h
 	$(CC) $(CFLAGS) -I. -INIST -c -o $@ $<
 
 $(BUILDDIR)/genkat: $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $^ -lkeccak -lcrypto
+	$(CC) $(LDFLAGS) -o $@ $^ -lXKCP -lcrypto
 
 clean:
 	rm -fr $(BUILDDIR)

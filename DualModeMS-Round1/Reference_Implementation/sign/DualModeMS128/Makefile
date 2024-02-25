@@ -5,7 +5,8 @@ SRC=$(wildcard src/*.c*)
 OBJS=$(SRC:.c*=.o)
 
 CC=g++
-LDFLAGS=-lntl -lgmp -lkeccak -lcrypto -ldl -lpthread
+#LDFLAGS=-lntl -lgmp -lXKCP -lcrypto -ldl -lpthread
+LDFLAGS=-std=c++11 -lntl -lgmp -lXKCP -lcrypto -ldl -lpthread
 CFLAGS=-ansi -Wall -O4 -I include/ -I $(LOCAL)/include -L $(LOCAL)/lib
 
 all : PQCgenKAT_sign

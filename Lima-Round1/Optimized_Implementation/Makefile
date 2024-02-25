@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -pedantic -std=c11 -g -L./Lib -I./Lib -O3 -march=native  
-LIBS = -lLima -lkeccak -lm
+LIBS = -lLima -lXKCP -lm
 
 all: lib Test-SubRoutines.exe 
 
