@@ -1,7 +1,7 @@
 #include "signPKI.hpp"
 BEGIN_EXTERNC
     #include <libXKCP.a.headers/SP800-185.h>
-    #include <libXKCP.a.headers/KeccakSpongeWidth1600.h>
+    #include <libXKCP.a.headers/KeccakSponge.h>
 END_EXTERNC
 
 #include <stdlib.h>
