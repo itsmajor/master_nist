@@ -7,7 +7,7 @@
 #include <string.h>
 
 #include "utils.h"
-#include "sha256.h"
+#include <openssl/sha.h>
 
 static uint32_t load_bigendian_32(const uint8_t *x) {
     return (uint32_t)(x[3]) | (((uint32_t)(x[2])) << 8) |

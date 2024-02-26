@@ -2,7 +2,8 @@
 #include <string.h>
 #include "param.h"
 
-#include "SHA256.h"
+//#include <openssl/sha.h>
+#include <openssl/sha.h>
 #include <time.h>
 
 clock_t elapsed, start;
