@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS_AVX = -Wall -fomit-frame-pointer -Ofast -msse2avx -march=native
+CFLAGS_AVX = -Wall -fomit-frame-pointer -Ofast -march=native
 LIBS_AVX = -lm -lcrypto
 
 CSRC = $(wildcard *.c) \
