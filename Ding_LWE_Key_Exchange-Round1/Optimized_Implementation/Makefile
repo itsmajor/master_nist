@@ -12,7 +12,7 @@ DEFINES=$(INCLUDES) $(DEFS)
 
 XFLAGS = -Ofast -march=native
 
-SRCS = kem.c ../KAT/rng.c ../KAT/PQCgenKAT_kem.c
+SRCS = kem.c KAT/rng.c KAT/PQCgenKAT_kem.c
 
 OBJNAMES = $(SRCS:.cpp=.o)
 
