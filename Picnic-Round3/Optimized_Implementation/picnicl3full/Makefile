@@ -18,7 +18,7 @@ $(LIBPICNIC): $(SOURCES:.c=.o) $(SOURCES:.s=.o)
 	$(CC) -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 .s.o:
-	$(CC) -c $(CPPFLAGS) $(CFLAGS) -mavx2 $< -o $@
+	$(CC) -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 $(EXECUTABLE_NISTKAT): CPPFLAGS+=-DHAVE_RANDOMBYTES
 $(EXECUTABLE_NISTKAT): CFLAGS+=-Wno-sign-compare -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-result

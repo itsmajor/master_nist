@@ -6,7 +6,7 @@ OBJS=$(SRC:.c*=.o)
 
 CC=g++
 LDFLAGS=-lntl -lgmp -lgf2x -lXKCP -lcrypto -ldl -lpthread
-CFLAGS=-ansi -Wall -O4 -mavx2 -mpclmul -I include/ -I $(LOCAL)/include -L $(LOCAL)/lib
+CFLAGS=-ansi -Wall -O4 -mpclmul -I include/ -I $(LOCAL)/include -L $(LOCAL)/lib
 
 all : PQCgenKAT_sign
 

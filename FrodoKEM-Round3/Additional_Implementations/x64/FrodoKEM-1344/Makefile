@@ -41,7 +41,7 @@ endif
 
 ifeq "$(ARCHITECTURE)" "_AMD64_"
 ifeq "$(USE_OPT_LEVEL)" "_OPTIMIZED_FAST_"
-CFLAGS += -mavx2 -maes -msse2
+CFLAGS += -maes -msse2
 endif
 endif
 

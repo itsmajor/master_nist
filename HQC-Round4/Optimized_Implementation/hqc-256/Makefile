@@ -4,7 +4,7 @@ endif
 
 CC:=gcc
 
-CFLAGS:=-O3 -std=c99 -funroll-all-loops -flto -mavx -mavx2 -mbmi -mpclmul -pedantic -Wall -Wextra
+CFLAGS:=-O3 -std=c99 -funroll-all-loops -flto -mavx -mbmi -mpclmul -pedantic -Wall -Wextra
 
 SHA3_SRC:=$(ROOT)/lib/fips202/fips202.c
 SHA3_INCLUDE:=-I $(ROOT)/lib/fips202

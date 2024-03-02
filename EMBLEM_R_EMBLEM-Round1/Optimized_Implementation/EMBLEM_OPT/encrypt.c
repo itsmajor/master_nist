@@ -2,7 +2,6 @@
 #include <string.h>
 #include "param.h"
 
-//#include <openssl/sha.h>
 #include <openssl/sha.h>
 #include <time.h>
 

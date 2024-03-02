@@ -9,7 +9,7 @@
 .POSIX:
 
 CC = c99
-CFLAGS = -W -Wall -O2 -mavx2
+CFLAGS = -W -Wall -O2
 LD = c99
 LDFLAGS = 
 LIBS = 
