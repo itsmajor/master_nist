@@ -3,7 +3,7 @@ CC	= gcc
 LDFLAGS = -lcrypto
 CFLAGS	= -ansi -O3 -march=native -mtune=native -fomit-frame-pointer -funroll-loops -Wall -Wextra -D_SEC=$(SEC)
 DIR     = lotus$(SEC)
-KDIR	= ../../KAT/PQCgenKAT
+KDIR	= ../PQCgenKAT
 INCL	= -I./$(DIR)
 SRC	= $(wildcard $(DIR)/*.c) $(KDIR)/rng.c
 OBJ	= $(SRC:.c=.o)
