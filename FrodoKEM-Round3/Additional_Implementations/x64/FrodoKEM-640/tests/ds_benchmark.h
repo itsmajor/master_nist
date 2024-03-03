@@ -75,10 +75,10 @@ int gettimeofday(struct timeval *tp, struct timezone *tzp) {
 static uint64_t rdtsc(void) {
 #if (OS_TARGET == OS_WIN)
 	return __rdtsc();
-#elif (OS_TARGET == OS_NIX) && (TARGET == TARGET_AMD64 || TARGET == TARGET_x86)
-	uint64_t x;
-	__asm__ volatile (".byte 0x0f, 0x31" : "=A" (x));
-	return x;
+//#elif (OS_TARGET == OS_NIX) && (TARGET == TARGET_AMD64 || TARGET == TARGET_x86)
+//	uint64_t x;
+//	__asm__ volatile (".byte 0x0f, 0x31" : "=A" (x));
+//	return x;
 #elif (OS_TARGET == OS_NIX && TARGET == TARGET_ARM)
     struct timespec time;
     clock_gettime(CLOCK_REALTIME, &time);
