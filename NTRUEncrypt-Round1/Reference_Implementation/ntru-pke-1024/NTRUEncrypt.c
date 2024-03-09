@@ -275,7 +275,7 @@ mask_m(
     for (i=0;i<LENGTH_OF_HASH*2;i++)
     {
         seed[i] = (rh[i*8] & 1);
-        for (j=1;j<8;j++);
+        for (j=1;j<8;j++)
         {
             seed[i] <<= 1;
             seed[i] += (rh[i*8+j] & 1);
