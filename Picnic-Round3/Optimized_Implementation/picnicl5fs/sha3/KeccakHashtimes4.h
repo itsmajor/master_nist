@@ -20,7 +20,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #if !defined(SUPERCOP)
 #include "KeccakHash.h"
 #else
-#include <libXKCP.a.headers/KeccakHash.h>
+#include <libkeccak.a.headers/KeccakHash.h>
 #endif
 #include "KeccakSpongetimes4.h"
 

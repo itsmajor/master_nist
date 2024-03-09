@@ -18,7 +18,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 This file implements Keccak-p[1600] in a SnP-compatible way.
 Please refer to SnP-documentation.h for more details.
 
-This implementation comes with KeccakSponge.h in the same folder.
+This implementation comes with KeccakP-1600-SnP.h in the same folder.
 Please refer to LowLevel.build for the exact list of other files it must be combined with.
 */
 

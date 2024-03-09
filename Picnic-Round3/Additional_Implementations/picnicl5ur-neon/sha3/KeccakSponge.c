@@ -75,7 +75,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #endif
 
 #ifdef XKCP_has_KeccakP1600
-    #include "KeccakSponge.h"
+    #include "KeccakP-1600-SnP.h"
 
     #define prefix KeccakWidth1600
     #define SnP KeccakP1600
@@ -93,7 +93,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #endif
 
 #ifdef XKCP_has_KeccakP1600
-    #include "KeccakSponge.h"
+    #include "KeccakP-1600-SnP.h"
 
     #define prefix KeccakWidth1600_12rounds
     #define SnP KeccakP1600

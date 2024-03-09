@@ -19,7 +19,7 @@ This implementation comes with KeccakP-1600-times4-SnP.h in the same folder.
 Please refer to LowLevel.build for the exact list of other files it must be combined with.
 */
 
-#include "KeccakSponge.h"
+#include "KeccakP-1600-SnP.h"
 
 #define prefix                          KeccakP1600times4
 #define PlSnP_baseParallelism           1
