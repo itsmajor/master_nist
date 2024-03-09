@@ -39,8 +39,7 @@ static void delta(unsigned long long *l, size_t llen)
 static unsigned long long cpucycles(void)
 {
   unsigned long long result;
-  __asm volatile(".byte 15;.byte 49;shlq $32,%%rdx;orq %%rdx,%%rax"
-    : "=a" (result) ::  "%rdx");
+    __asm volatile("isb; mrs %0, CNTVCT_EL0" : "=r"(result));;
   return result;
 }
 
