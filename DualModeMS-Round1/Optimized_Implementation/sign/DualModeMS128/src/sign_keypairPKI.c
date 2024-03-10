@@ -12,7 +12,7 @@
 
 BEGIN_EXTERNC
     #include <libXKCP.a.headers/SimpleFIPS202.h>
-    #include <libXKCP.a.headers/KeccakSpongeWidth1600.h>
+    #include <libXKCP.a.headers/KeccakSponge.h>
 END_EXTERNC
 
 
