@@ -8,7 +8,7 @@
 #ifndef KECCAK_H
 #define KECCAK_H
 
-#include <libkeccak.a.headers/SimpleFIPS202.h>
-#include <libkeccak.a.headers/SP800-185.h>
+#include <libXKCP.a.headers/SimpleFIPS202.h>
+#include <libXKCP.a.headers/SP800-185.h>
 
 #endif

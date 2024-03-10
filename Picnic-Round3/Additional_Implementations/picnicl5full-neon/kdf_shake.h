@@ -24,7 +24,7 @@
 #include "sha3/KeccakHash.h"
 #else
 /* use SUPERCOP implementation */
-#include <libkeccak.a.headers/KeccakHash.h>
+#include <libXKCP.a.headers/KeccakHash.h>
 #endif
 
 /* use the Keccakx4 implementation */

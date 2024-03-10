@@ -17,7 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #if !defined(SUPERCOP)
 #include "KeccakP-1600-times4-SnP.h"
 #else
-#include <libkeccak.a.headers/KeccakP-1600-times4-SnP.h>
+#include <libXKCP.a.headers/KeccakP-1600-times4-SnP.h>
 #endif
 
 #define prefix KeccakWidth1600times4
