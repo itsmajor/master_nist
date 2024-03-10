@@ -143,7 +143,7 @@ main()
         }
         
         if ( memcmp(m, m1, mlen) ) {
-            printf("crypto_encrypt_open returned bad 'm' value\n");
+            printf("crypto_encrypt_open returned bad 'm' value\nm:  %s\nm1: %s\n", m, m1);
             return KAT_CRYPTO_FAILURE;
         }
         

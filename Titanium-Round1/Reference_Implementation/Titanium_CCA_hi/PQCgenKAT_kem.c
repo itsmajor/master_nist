@@ -110,7 +110,7 @@ main()
         }
         
         if ( memcmp(ss, ss1, CRYPTO_BYTES) ) {
-            printf("crypto_kem_dec returned bad 'ss' value\n");
+            printf("crypto_kem_dec returned bad 'ss' value\nss:  %s\nss1: %s", ss, ss1);
             return KAT_CRYPTO_FAILURE;
         }
 
