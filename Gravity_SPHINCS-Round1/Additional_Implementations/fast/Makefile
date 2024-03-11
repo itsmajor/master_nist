@@ -2,7 +2,7 @@ SRC=$(wildcard *.c) $(wildcard primitives/*.c)
 OBJ=$(patsubst %.c, %.o, $(SRC))
 
 CFLAGS_COMMON=-std=c89 -pedantic -Wall -Wextra -Wno-long-long -march=native
-LDFLAGS=-lcrypto
+LDFLAGS=-lssl -lcrypto
 
 VERSION_S= -DPORS_k=24 -DMERKLE_h=5  -DGRAVITY_d=1  -DGRAVITY_c=10
 VERSION_M= -DPORS_k=32 -DMERKLE_h=5  -DGRAVITY_d=7  -DGRAVITY_c=15
@@ -30,7 +30,7 @@ help:
 			@echo "\tformat\t\t formats the code using .clang-format rules"
 
 bench:		$(SRC)
-			$(CC) $(CFLAGS) $(LDFLAGS) $^ -o bench
+			$(CC) $(CFLAGS) $^ -o bench $(LDFLAGS)
 			./bench
 
 format:
