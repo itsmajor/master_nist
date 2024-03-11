@@ -11,7 +11,7 @@
 CC = arm-linux-gcc
 CFLAGS = -W -Wall -O2 -mcpu=cortex-m4
 LD = arm-linux-gcc
-LDFLAGS = 
+LDFLAGS = -lssl -lcrypto
 LIBS = 
 
 OBJ1 = build/codec.o build/common.o build/fft.o build/fpr.o build/keygen.o build/nist.o build/rng.o build/shake.o build/sign.o build/vrfy.o
@@ -30,7 +30,7 @@ clean:
 	-rm -f build/kat1024cxm4 $(OBJ1) $(OBJ2)
 
 build/kat1024cxm4: $(OBJ1) $(OBJ2)
-	$(LD) $(LDFLAGS) -o build/kat1024cxm4 $(OBJ1) $(OBJ2) $(LIBS)
+	$(LD) -o build/kat1024cxm4 $(OBJ1) $(OBJ2) $(LIBS) $(LDFLAGS)
 
 build/codec.o: codec.c $(HEAD1)
 	$(CC) $(CFLAGS) -c -o build/codec.o codec.c
