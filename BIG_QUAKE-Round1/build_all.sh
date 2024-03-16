@@ -1,1 +1,1 @@
-asdx
+Optimized_Implementation/BIG_QUAKE_1/make all
