@@ -15,7 +15,7 @@ cd Optimized_Implementation/amd64/tests/Gui-312
 echo "--------------------"
 echo "test Gui-312"
 ./gui-genkey pk sk
-echo "Gui-184 signing"
+echo "Gui-312 signing"
 ./gui-sign sk gui-genkey > sig
 ./gui-verify pk sig gui-genkey
 cd ../../../..
@@ -24,7 +24,7 @@ cd Optimized_Implementation/amd64/tests/Gui-448
 echo "--------------------"
 echo "test Gui-448"
 ./gui-genkey pk sk
-echo "Gui-184 signing"
+echo "Gui-448 signing"
 ./gui-sign sk gui-genkey > sig
 ./gui-verify pk sig gui-genkey
 cd ../../../..
