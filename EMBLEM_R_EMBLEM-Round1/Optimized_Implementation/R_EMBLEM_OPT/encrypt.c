@@ -3,7 +3,7 @@
 #include "ntt.h"
 #include "ntt_const.h"
 #include <openssl/sha.h>
-#include <immintrin.h>
+//#include <immintrin.h>
 #include <time.h>
 
 clock_t elapsed, start;
