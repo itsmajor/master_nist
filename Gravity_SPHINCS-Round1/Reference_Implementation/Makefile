@@ -31,7 +31,7 @@ help:
 
 bench:		$(SRC)
 			$(CC) $(CFLAGS) $^ -o bench $(LDFLAGS)
-			./bench
+			#./bench
 
 format:
 			clang-format -i *.c *.h
