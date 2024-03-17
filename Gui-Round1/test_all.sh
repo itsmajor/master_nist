@@ -9,14 +9,14 @@ echo "test Gui-184"
 cd ../../../..
 
 cd Optimized_Implementation/amd64/tests/Gui-312
-echo "test Gui-184"
+echo "test Gui-312"
 ./gui-genkey pk sk
 ./gui-sign sk gui-genkey > sig
 ./gui-verify pk sig gui-genkey
 cd ../../../..
 
 cd Optimized_Implementation/amd64/tests/Gui-448
-echo "test Gui-184"
+echo "test Gui-448"
 ./gui-genkey pk sk
 ./gui-sign sk gui-genkey > sig
 ./gui-verify pk sig gui-genkey
