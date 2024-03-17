@@ -2,7 +2,7 @@ SHELL = /bin/sh
 RM=/bin/rm -f
 CXX=g++
 
-PROGNAME=a.out
+PROGNAME=PQCgenKAT_kem
 
 INCLUDES = -I.
 
