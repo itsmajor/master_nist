@@ -9,13 +9,13 @@ OBJECTS = keccak.o kem.o m2e.o permutation.o gf.o poly.o goppa.o decode.o roots.
 
 .PHONY: force all
 
-all: nistKAT
+all: PQCgenKAT_kem
 
 #
 # main targets
 #
 
-nistKAT: $(OBJECTS) rng.o PQCgenKAT_kem.o
+PQCgenKAT_kem: $(OBJECTS) rng.o PQCgenKAT_kem.o
 	$(CC) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
 
 #
@@ -26,7 +26,7 @@ clean:
 	- /bin/rm -f *.o
 
 veryclean: clean
-	- /bin/rm nistKAT PQCkemKAT_*.req PQCkemKAT_*.rsp
+	- /bin/rm PQCgenKAT_kem PQCkemKAT_*.req PQCkemKAT_*.rsp
 
 # DO NOT DELETE
 
