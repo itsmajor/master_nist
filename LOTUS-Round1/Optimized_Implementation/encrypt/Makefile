@@ -9,7 +9,7 @@ SRC	= $(wildcard $(DIR)/*.c) $(KDIR)/rng.c
 OBJ	= $(SRC:.c=.o)
 
 PQCgenKAT_encrypt: $(OBJ)
-	$(CC) $(CFLAGS) $(INCL) -o $@ $(KDIR)/PQCgenKAT_encrypt.c $^ $(LDFLAGS)
+	$(CC) $(CFLAGS) $(INCL) -o tests/lotus$(SEC)/$@ $(KDIR)/PQCgenKAT_encrypt.c $^ $(LDFLAGS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCL) -o $@ -c $<
