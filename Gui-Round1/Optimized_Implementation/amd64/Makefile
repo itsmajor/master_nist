@@ -44,7 +44,6 @@ EXE= PQCgenKAT_sign gui-genkey gui-sign gui-verify
 
 all: $(OBJ) $(EXE)
 
-
 %-test: $(OBJ) %-test.o
 	$(LD) $(LDFLAGS) $(LIBPATH) -o $@ $^ $(LIBS)
 
@@ -52,16 +51,17 @@ all: $(OBJ) $(EXE)
 	$(LD) $(LDFLAGS) $(LIBPATH) -o $@ $^ $(LIBS)
 
 PQCgenKAT_sign: $(OBJ) PQCgenKAT_sign.o
-	$(LD) $(LDFLAGS) $(LIBPATH) -o $@ $^ $(LIBS)
+	$(LD) $(LDFLAGS) $(LIBPATH) -o tests/$(PROJ)/$@ $^ $(LIBS)
 
 gui-genkey: $(OBJ) gui-genkey.o
-	$(LD) $(LDFLAGS) $(LIBPATH) -o $@ $^ $(LIBS)
+	mkdir -p tests/$(PROJ)
+	$(LD) $(LDFLAGS) $(LIBPATH) -o tests/$(PROJ)/$@ $^ $(LIBS)
 
 gui-sign: $(OBJ) gui-sign.o
-	$(LD) $(LDFLAGS) $(LIBPATH) -o $@ $^ $(LIBS)
+	$(LD) $(LDFLAGS) $(LIBPATH) -o tests/$(PROJ)/$@ $^ $(LIBS)
 
 gui-verify: $(OBJ) gui-verify.o
-	$(LD) $(LDFLAGS) $(LIBPATH) -o $@ $^ $(LIBS)
+	$(LD) $(LDFLAGS) $(LIBPATH) -o tests/$(PROJ)/$@ $^ $(LIBS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCPATH) -c $<
