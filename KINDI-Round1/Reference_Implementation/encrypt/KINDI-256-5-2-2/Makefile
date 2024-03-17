@@ -4,7 +4,7 @@ LIBS = -lm  -lcrypto
 
 CSRC = $(wildcard *.c) 
 
-TARGET = kindi_cpa
+TARGET = PQCgenKAT_encrypt
 
 
 ## don't change after here 

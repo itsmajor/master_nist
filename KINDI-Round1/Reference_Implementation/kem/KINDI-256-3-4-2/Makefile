@@ -4,7 +4,7 @@ LIBS = -lm  -lcrypto
 
 CSRC = $(wildcard *.c) 
 
-TARGET = kindi_kem
+TARGET = PQCgenKAT_kem
 
 ## don't change after here 
 BUILD_DIR = .build
