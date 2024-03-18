@@ -1,38 +1,38 @@
-mkdir -p Reference_Implementation/tests
+mkdir -p tests
 
 cd Reference_Implementation/ntru-kem-1024
 echo "moved to: ${PWD}"
 make
-mv ntru-kem-1024 ../tests
+mv ntru-kem-1024 ../../tests
 cd ../..
 
 cd Reference_Implementation/ntru-kem-443
 echo "moved to: ${PWD}"
 make
-mv ntru-kem-443 ../tests
+mv ntru-kem-443 ../../tests
 cd ../..
 
 cd Reference_Implementation/ntru-kem-743
 echo "moved to: ${PWD}"
 make
-mv ntru-kem-743 ../tests
+mv ntru-kem-743 ../../tests
 cd ../..
 
 cd Reference_Implementation/ntru-pke-1024
 echo "moved to: ${PWD}"
 make
-mv ntru-pke-1024 ../tests
+mv ntru-pke-1024 ../../tests
 cd ../..
 
 cd Reference_Implementation/ntru-pke-443
 echo "moved to: ${PWD}"
 make
-mv ntru-pke-443 ../tests
+mv ntru-pke-443 ../../tests
 cd ../..
 
 cd Reference_Implementation/ntru-pke-743
 echo "moved to: ${PWD}"
 make
-mv ntru-pke-743 ../tests
+mv ntru-pke-743 ../../tests
 cd ../..
 

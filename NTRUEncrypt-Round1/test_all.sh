@@ -1,4 +1,4 @@
-cd Reference_Implementation/tests
+cd tests
 echo "test ntru-pke-443"
 ./ntru-pke-443
 
@@ -17,4 +17,4 @@ echo "test ntru-kem-743"
 echo "test ntru-kem-1024"
 ./ntru-kem-1024
 
-cd ../..
+cd ..
