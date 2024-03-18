@@ -9,6 +9,7 @@ SRC	= $(wildcard $(DIR)/*.c) $(KDIR)/rng.c
 OBJ	= $(SRC:.c=.o)
 
 PQCgenKAT_kem: $(OBJ)
+	@mkdir -p tests/lotus$(SEC)
 	$(CC) $(CFLAGS) $(INCL) -o tests/lotus$(SEC)/$@ $(KDIR)/PQCgenKAT_kem.c $^ $(LDFLAGS)
 
 %.o: %.c
