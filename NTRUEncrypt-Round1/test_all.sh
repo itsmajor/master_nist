@@ -1,4 +1,4 @@
-cd NTRUEncrypt-Round1/Reference_Implementation/tests
+cd Reference_Implementation/tests
 echo "test ntru-pke-443"
 ./ntru-pke-443
 
