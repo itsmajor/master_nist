@@ -17,4 +17,4 @@ echo "test ntru-kem-743"
 echo "test ntru-kem-1024"
 ./ntru-kem-1024
 
-cd ../../..
+cd ../..
