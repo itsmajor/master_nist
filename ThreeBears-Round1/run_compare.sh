@@ -18,19 +18,32 @@ cp build/genkat ../../../test_compare/genkat_BabyBear_OI
 cd  ../../..
 
 cd test_compare
-cd NTRUEncrypt-Round1/tests
 
+MAX=10
+SUM=0
 echo genkat_BabyBear_AI_Low_Memory
-let TIME_A=($(date +%s%N)/1)
-./genkat_BabyBear_AI_Low_Memory
-let TIME_B=($(date +%s%N)/1)
-let DIFF=$TIME_B-$TIME_A
-let DIFF_S=$DIFF/1000000000
-let DIFF_MS=$DIFF%1000000000/1000000
+for i in 0 .. $MAX
+do
+  let TIME_A=($(date +%s%N)/1)
+  ./genkat_BabyBear_AI_Low_Memory
+  let TIME_B=($(date +%s%N)/1)
+  let DIFF=$TIME_B-$TIME_A
+  let DIFF_S=$DIFF/1000000000
+  let DIFF_MS=$DIFF%1000000000/1000000
+  if [[ -z "$DIFF_S" ]]; then
+      DIFF_S=0
+  fi
+  let SUM=$SUM+DIFF
+  echo ${i}: ${DIFF_S}s ${DIFF_MS}ms
+done
+let SUM=$SUM/$MAX
+let DIFF_S=$SUM/1000000000
+let DIFF_MS=$SUM%1000000000/1000000
 if [[ -z "$DIFF_S" ]]; then
     DIFF_S=0
 fi
-echo ${DIFF_S}s ${DIFF_MS}ms
+echo SUM: ${DIFF_S}s ${DIFF_MS}ms
+SUM=10
 
 echo genkat_BabyBear_AI_With_Asm
 let TIME_A=($(date +%s%N)/1)
@@ -56,3 +69,4 @@ if [[ -z "$DIFF_S" ]]; then
 fi
 echo ${DIFF_S}s ${DIFF_MS}ms
 
+cd ..
