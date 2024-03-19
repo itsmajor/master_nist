@@ -1,18 +1,12 @@
 mkdir -p test_compare
-cd Additional_Implementations/Low_Memory/crypto_kem/BabyBear
+cd Optimized_Implementation/crypto_kem/kyber512
 echo "moved to: ${PWD}"
 make
-cp build/genkat ../../../../test_compare/genkat_BabyBear_AI_Low_Memory
-cd  ../../../..
-
-cd Additional_Implementations/With_Asm/crypto_kem/BabyBear
-echo "moved to: ${PWD}"
-make
-cp build/genkat ../../../../test_compare/genkat_BabyBear_AI_With_Asm
-cd  ../../../..
-
-cd Optimized_Implementation/crypto_kem/BabyBear
-echo "moved to: ${PWD}"
-make
-cp build/genkat ../../../test_compare/genkat_BabyBear_OI
+cp PQCgenKAT_kem ../../../test_compare/PQCgenKAT_kem__clean_kyber512
 cd  ../../..
+
+#cd Additional_Implementations/With_Asm/crypto_kem/BabyBear
+#echo "moved to: ${PWD}"
+#make
+#cp build/genkat ../../../../test_compare/genkat_BabyBear_AI_With_Asm
+#cd  ../../../..
