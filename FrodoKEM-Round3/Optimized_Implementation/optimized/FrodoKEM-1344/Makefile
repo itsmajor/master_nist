@@ -7,7 +7,7 @@ else ifeq "$(CC)" "clang"
     COMPILER=clang
 endif
 
-ARCHITECTURE=_AMD64_
+ARCHITECTURE=_ARM_
 ifeq "$(ARCH)" "x64"
     ARCHITECTURE=_AMD64_
 else ifeq "$(ARCH)" "x86"
