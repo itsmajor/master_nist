@@ -70,16 +70,16 @@ static int picnic_sign_verify(const picnic_params_t param) {
 
 static int perform_test(const picnic_params_t param)
 {
-  printf("testing: %s ... ", picnic_get_param_name(param));
   const int r = picnic_sign_verify(param);
   if (r == -2) {
-    printf("SKIPPED\n");
-  } else if (r) {
+      return 0;
+  }
+  printf("tested: %s ... ", picnic_get_param_name(param));
+  if (r) {
     printf("FAILED\n");
     return -1;
-  } else {
-    printf("OK\n");
   }
+  printf("OK\n");
   return 0;
 }
 
