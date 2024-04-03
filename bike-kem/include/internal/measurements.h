@@ -67,9 +67,9 @@ This MACRO measures the number of cycles "x" runs. This is the flow:
 calculating the total number of cycles, and dividing it by REPEAT
  */
 #  define MEASURE(msg, x)                                    \
-    for(rdtsc_itr = 0; rdtsc_itr < WARMUP; rdtsc_itr++) {    \
+/*    for(rdtsc_itr = 0; rdtsc_itr < WARMUP; rdtsc_itr++) {    \
       {x};                                                   \
-    }                                                        \
+    }                                                        \*/
     total_clk = DBL_MAX;                                     \
     for(rdtsc_outer_itr = 0; rdtsc_outer_itr < OUTER_REPEAT; \
         rdtsc_outer_itr++) {                                 \
