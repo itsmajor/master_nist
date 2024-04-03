@@ -19,15 +19,15 @@
 
 // This part defines the functions and macros needed to measure using RDTSC
 #  if !defined(REPEAT)
-#    define REPEAT 100
+#    define REPEAT 10
 #  endif
 
 #  if !defined(OUTER_REPEAT)
-#    define OUTER_REPEAT 10
+#    define OUTER_REPEAT 1
 #  endif
 
 #  if !defined(WARMUP)
-#    define WARMUP (REPEAT / 4)
+#    define WARMUP 0
 #  endif
 
 uint64_t               start_clk, end_clk;
