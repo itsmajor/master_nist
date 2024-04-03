@@ -3,7 +3,7 @@ mkdir -p build
 cd build
 rm -R *
 
-echo "*** modified measurement parameter (REPEAT 10, OUTER_REPEAT 1, WARMUP 0) in include/internal/measurement.h ****"
+echo "*** modified measurement parameter (REPEAT 10, OUTER_REPEAT 1, WARMUP 1) in include/internal/measurement.h ****"
 echo "cmake bike level 1 (10 repeats)"
 cmake -DCMAKE_BUILD_TYPE=Release -DLEVEL=1 -DNUM_OF_TESTS=1 -DRDTSC=1 ..
 make
