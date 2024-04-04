@@ -5,13 +5,14 @@ rm -R *
 
 echo "*** modified measurement parameter (REPEAT 10, OUTER_REPEAT 1, WARMUP 1) in include/internal/measurement.h ****"
 echo "cmake bike level 1 SHA3/SHAKE (10 repeats)"
-cmake -DCMAKE_BUILD_TYPE=Release -DLEVEL=1 -DNUM_OF_TESTS=1 -DRDTSC=1 ..
+#cmake -DCMAKE_BUILD_TYPE=Release -DLEVEL=1 -DNUM_OF_TESTS=1 -DRDTSC=1 ..
+cmake -DCMAKE_BUILD_TYPE=Release -DLEVEL=1 -DRDTSC=1 ..
 make
 mv bike-test ../tests2/bike-test-1_sha3
 rm -R *
 
 echo "cmake bike level 3 SHA3/SHAKE (10 repeats)"
-cmake -DCMAKE_BUILD_TYPE=Release -DLEVEL=3  ..
+cmake -DCMAKE_BUILD_TYPE=Release -DLEVEL=3 -DRDTSC=1 ..
 make
 mv bike-test ../tests2/bike-test-3_sha3
 rm -R *
