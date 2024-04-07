@@ -1,25 +1,39 @@
 mkdir -p tests
 
-cd Optimized_Implementation/crypto_kem/newhope512cca
+cd Optimized_Implementation/crypto_kem/kyber1024
 echo "moved to: ${PWD}"
 make
-mv PQCgenKAT_kem ../../../tests/PQCgenKAT_kem_newhope512cca
+cp PQCgenKAT_kem ../../../tests/PQCgenKAT_kem__kyber1024
 cd ../../..
 
-cd Optimized_Implementation/crypto_kem/newhope512cpa
+cd Optimized_Implementation/crypto_kem/kyber1024-90s
 echo "moved to: ${PWD}"
 make
-mv PQCgenKAT_kem ../../../tests/PQCgenKAT_kem_newhope512cpa
+cp PQCgenKAT_kem ../../../tests/PQCgenKAT_kem__kyber1024-90s
 cd ../../..
 
-cd Optimized_Implementation/crypto_kem/newhope1024cca
+cd Optimized_Implementation/crypto_kem/kyber512
 echo "moved to: ${PWD}"
 make
-mv PQCgenKAT_kem ../../../tests/PQCgenKAT_kem_newhope1024cca
+cp PQCgenKAT_kem ../../../tests/PQCgenKAT_kem__kyber512
 cd ../../..
 
-cd Optimized_Implementation/crypto_kem/newhope1024cpa
+cd Optimized_Implementation/crypto_kem/kyber512-90s
 echo "moved to: ${PWD}"
 make
-mv PQCgenKAT_kem ../../../tests/PQCgenKAT_kem_newhope1024cpa
+cp PQCgenKAT_kem ../../../tests/PQCgenKAT_kem__kyber512-90s
 cd ../../..
+
+cd Optimized_Implementation/crypto_kem/kyber768
+echo "moved to: ${PWD}"
+make
+cp PQCgenKAT_kem ../../../tests/PQCgenKAT_kem__kyber768
+cd ../../..
+
+cd Optimized_Implementation/crypto_kem/kyber768-90s
+echo "moved to: ${PWD}"
+make
+cp PQCgenKAT_kem ../../../tests/PQCgenKAT_kem__kyber768-90s
+cd ../../..
+
+
