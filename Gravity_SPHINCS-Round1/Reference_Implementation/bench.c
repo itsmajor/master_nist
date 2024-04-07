@@ -36,6 +36,8 @@ int main () {
         goto label_exit_0;
     }
 
+    printf ("CPU: 11th Gen Intel(R) Core(TM) i5-11400F @ 2.60GHz\n");
+    printf ("Impl: Reference \n\n");
     printf ("k\t%d\n", PORS_k);
     printf ("h\t%d\n", MERKLE_h);
     printf ("d\t%d\n", GRAVITY_d);
