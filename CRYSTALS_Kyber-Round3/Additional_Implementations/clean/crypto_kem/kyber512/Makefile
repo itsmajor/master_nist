@@ -4,7 +4,7 @@ LIB=libkyber512_clean.a
 HEADERS=api.h cbd.h indcpa.h ntt.h params.h poly.h polyvec.h reduce.h verify.h symmetric.h kem.h
 OBJECTS=cbd.o indcpa.o kem.o ntt.o poly.o polyvec.o reduce.o verify.o symmetric-shake.o
 
-CFLAGS=-O3 -Wall -Wextra -Wpedantic -Werror -Wmissing-prototypes -Wredundant-decls -std=c99 -I../../../../../_common/NIST -I../../../../../_common/fips202
+CFLAGS=-O3 -Wall -Wextra -Wpedantic -Werror -Wmissing-prototypes -Wredundant-decls -std=c99 -I../../../../../_common/NIST -I../../../../../_common/fips202/pqclean
 
 all: $(LIB)
 
