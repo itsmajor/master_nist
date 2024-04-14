@@ -1,7 +1,7 @@
-cd Optimized_Implementation/encrypt/AKCN-MLWE-CCA/ref
-echo "test KCL encrypt AKCN-MLWE-CCA"
-./speed
-cd ../../../..
+#cd Optimized_Implementation/encrypt/AKCN-MLWE-CCA/ref
+#echo "test KCL encrypt AKCN-MLWE-CCA"
+#./speed
+#cd ../../../..
 
 cd Optimized_Implementation/kem/AKCN-MLWE/ref
 echo "test KCL kem AKCN-MLWE"

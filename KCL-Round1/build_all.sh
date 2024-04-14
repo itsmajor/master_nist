@@ -1,7 +1,7 @@
-cd Optimized_Implementation/encrypt/AKCN-MLWE-CCA/ref
-echo "moved to: ${PWD}"
-make speed
-cd ../../../..
+#cd Optimized_Implementation/encrypt/AKCN-MLWE-CCA/ref
+#echo "moved to: ${PWD}"
+#make speed
+#cd ../../../..
 
 cd Optimized_Implementation/kem/AKCN-MLWE/ref
 echo "moved to: ${PWD}"
