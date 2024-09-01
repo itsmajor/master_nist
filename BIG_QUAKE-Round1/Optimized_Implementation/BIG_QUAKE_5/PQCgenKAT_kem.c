@@ -6,11 +6,11 @@
 //  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
 //
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "rng.h"
 #include "api.h"
+#include <time.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -31,97 +31,120 @@ main()
     unsigned char       entropy_input[48];
     unsigned char       ct[CRYPTO_CIPHERTEXTBYTES], ss[CRYPTO_BYTES], ss1[CRYPTO_BYTES];
     int                 count;
-    int                 done;
     unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
-    
+    clock_t start;
+    double time_keypair, time_enc, time_dec, time_prepare;
+
+    start = clock();
+
     // Create the REQUEST file
-    sprintf(fn_req, "PQCkemKAT_%d.req", CRYPTO_SECRETKEYBYTES);
+//    sprintf(fn_req, "PQCkemKAT_%d.req", CRYPTO_SECRETKEYBYTES);
+    sprintf(fn_req, "PQCkemKAT.req");
     if ( (fp_req = fopen(fn_req, "w")) == NULL ) {
-        printf("Couldn't open <%s> for write\n", fn_req);
+        printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_req);
         return KAT_FILE_OPEN_ERROR;
     }
-    sprintf(fn_rsp, "PQCkemKAT_%d.rsp", CRYPTO_SECRETKEYBYTES);
+
+//    sprintf(fn_rsp, "PQCkemKAT_%d.rsp", CRYPTO_SECRETKEYBYTES);
+    sprintf(fn_rsp, "PQCkemKAT.rsp");
     if ( (fp_rsp = fopen(fn_rsp, "w")) == NULL ) {
-        printf("Couldn't open <%s> for write\n", fn_rsp);
+        printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_rsp);
         return KAT_FILE_OPEN_ERROR;
     }
-    
+    fprintf(fp_rsp, "time since start to open rsp file (μs) = %.0f\n", ((double) (clock() - start)));
+
     for (int i=0; i<48; i++)
         entropy_input[i] = i;
 
     randombytes_init(entropy_input, NULL, 256);
+    fprintf(fp_rsp, "time since start to randombytes_init (μs) = %.0f\n", ((double) (clock() - start)));
     for (int i=0; i<10; i++) {
         fprintf(fp_req, "count = %d\n", i);
         randombytes(seed, 48);
         fprintBstr(fp_req, "seed = ", seed, 48);
         fprintf(fp_req, "pk =\n");
         fprintf(fp_req, "sk =\n");
+        fprintf(fp_req, "keygen (s) =\n");
         fprintf(fp_req, "ct =\n");
         fprintf(fp_req, "ss =\n\n");
     }
     fclose(fp_req);
-    
+    fprintf(fp_rsp, "time since start to req closing (μs) = %.0f\n", ((double) (clock() - start)));
+
     //Create the RESPONSE file based on what's in the REQUEST file
     if ( (fp_req = fopen(fn_req, "r")) == NULL ) {
-        printf("Couldn't open <%s> for read\n", fn_req);
+        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fn_req);
         return KAT_FILE_OPEN_ERROR;
     }
-    
+    fprintf(fp_rsp, "time since start to open req readable (μs) = %.0f\n", ((double) (clock() - start)));
+
     fprintf(fp_rsp, "# %s\n\n", CRYPTO_ALGNAME);
-    done = 0;
-    do {
+    while (1) {
+        start = clock();
         if ( FindMarker(fp_req, "count = ") )
             fscanf(fp_req, "%d", &count);
         else {
-            done = 1;
             break;
         }
         fprintf(fp_rsp, "count = %d\n", count);
-        
+
         if ( !ReadHex(fp_req, seed, 48, "seed = ") ) {
-            printf("ERROR: unable to read 'seed' from <%s>\n", fn_req);
+            printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_req);
             return KAT_DATA_ERROR;
         }
         fprintBstr(fp_rsp, "seed = ", seed, 48);
-        
         randombytes_init(seed, NULL, 256);
-        
+        time_prepare = ((double) (clock() - start));
+
         // Generate the public/private keypair
+        start = clock();
         if ( (ret_val = crypto_kem_keypair(pk, sk)) != 0) {
-            printf("crypto_kem_keypair returned <%d>\n", ret_val);
+            printf("PQCgenKAT ERROR: crypto_kem_keypair returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
+        time_keypair = ((double) (clock() - start));
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
         fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
-        
+
+        // encoding
+        randombytes_init(seed, NULL, 256);
+        start = clock();
         if ( (ret_val = crypto_kem_enc(ct, ss, pk)) != 0) {
-            printf("crypto_kem_enc returned <%d>\n", ret_val);
+            printf("PQCgenKAT ERROR: crypto_kem_enc returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
+        time_enc = ((double) (clock() - start));
         fprintBstr(fp_rsp, "ct = ", ct, CRYPTO_CIPHERTEXTBYTES);
         fprintBstr(fp_rsp, "ss = ", ss, CRYPTO_BYTES);
-        
-        fprintf(fp_rsp, "\n");
-        
-        if ( (ret_val = crypto_kem_dec(ss1, ct, sk)) != 0) {
-            printf("crypto_kem_dec returned <%d>\n", ret_val);
-            return KAT_CRYPTO_FAILURE;
-        }
-        
-        if ( memcmp(ss, ss1, CRYPTO_BYTES) ) {
-            printf("crypto_kem_dec returned bad 'ss' value\n");
-            return KAT_CRYPTO_FAILURE;
-        }
 
-    } while ( !done );
-    
+        // decoding
+        randombytes_init(seed, NULL, 256);
+        start = clock();
+        if ( (ret_val = crypto_kem_dec(ss1, ct, sk)) != 0) {
+            printf("PQCgenKAT ERROR: crypto_kem_dec returned <%d>\n", ret_val);
+            return KAT_CRYPTO_FAILURE;
+        }
+        time_dec = ((double) (clock() - start));
+
+        // write time measure to file
+        fprintf(fp_rsp, "prepare (μs) = %.0f\n", time_prepare);
+        fprintf(fp_rsp, "crypto_kem_keypair (μs) = %.0f\n", time_keypair);
+        fprintf(fp_rsp, "crypto_kem_enc (μs) = %.0f\n", time_enc);
+        fprintf(fp_rsp, "crypto_kem_dec (μs) = %.0f\n", time_dec);
+        fprintf(fp_rsp, "\n");
+
+        if ( memcmp(ss, ss1, CRYPTO_BYTES) ) {
+            printf("PQCgenKAT ERROR: crypto_kem_dec returned bad 'ss' value\n");
+            return KAT_CRYPTO_FAILURE;
+        }
+    }
+
     fclose(fp_req);
     fclose(fp_rsp);
 
     return KAT_SUCCESS;
 }
-
 
 
 //
@@ -203,7 +226,7 @@ ReadHex(FILE *infile, unsigned char *A, int Length, char *str)
 				ich = ch - 'a' + 10;
             else // shouldn't ever get here
                 ich = 0;
-			
+
 			for ( i=0; i<Length-1; i++ )
 				A[i] = (A[i] << 4) | (A[i+1] >> 4);
 			A[Length-1] = (A[Length-1] << 4) | ich;
