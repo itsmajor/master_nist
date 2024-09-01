@@ -18,6 +18,7 @@ date +'%d.%m.%Y %H:%M:%S.%3N'
 ./PQCgenKAT_kem
 cp PQCkemKAT.req ../../testresult/BIG_QUAKE_1/
 cp PQCkemKAT*.rsp ../../testresult/BIG_QUAKE_1/
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_kem done
 valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_kem_enc
 valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_kem_enc
 echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
@@ -39,6 +40,7 @@ date +'%d.%m.%Y %H:%M:%S.%3N'
 ./PQCgenKAT_kem
 cp PQCkemKAT.req ../../testresult/BIG_QUAKE_3/
 cp PQCkemKAT*.rsp ../../testresult/BIG_QUAKE_3/
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_kem done
 valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_kem_enc
 valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_kem_enc
 echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
@@ -60,6 +62,7 @@ date +'%d.%m.%Y %H:%M:%S.%3N'
 ./PQCgenKAT_kem
 cp PQCkemKAT.req ../../testresult/BIG_QUAKE_5/
 cp PQCkemKAT*.rsp ../../testresult/BIG_QUAKE_5/
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_kem done
 valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_kem_enc
 valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_kem_enc
 echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
