@@ -3,7 +3,7 @@ CFLAGS = -W -Wall -O4
 LDFLAGS = -lssl -lcrypto
 CPPFLAGS =
 
-OBJECTS = keccak.o kem.o m2e.o permutation.o gf.o poly.o goppa.o decode.o roots.o
+OBJECTS = keccak.o kem.o m2e.o permutation.o gf.o poly.o goppa.o decode.o roots.o rng.o
 
 .SECONDARY:
 
@@ -15,16 +15,16 @@ all: PQCgenKAT_kem PQCgenKAT_kem_keygen PQCgenKAT_kem_dec PQCgenKAT_kem_enc
 # main targets
 #
 
-PQCgenKAT_kem: $(OBJECTS) rng.o PQCgenKAT_kem.o
+PQCgenKAT_kem: $(OBJECTS) PQCgenKAT_kem.o
 	$(CC) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
 
-PQCgenKAT_kem_keygen: $(OBJECTS) rng.o PQCgenKAT_kem_keygen.o
+PQCgenKAT_kem_keygen: $(OBJECTS) PQCgenKAT_kem_keygen.o
 	$(CC) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
 
-PQCgenKAT_kem_enc: $(OBJECTS) rng.o PQCgenKAT_kem_enc.o
+PQCgenKAT_kem_enc: $(OBJECTS) PQCgenKAT_kem_enc.o
 	$(CC) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
 
-PQCgenKAT_kem_dec: $(OBJECTS) rng.o PQCgenKAT_kem_dec.o
+PQCgenKAT_kem_dec: $(OBJECTS) PQCgenKAT_kem_dec.o
 	$(CC) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
 
 #
@@ -35,7 +35,7 @@ clean:
 	- /bin/rm -f *.o
 
 veryclean: clean
-	- /bin/rm PQCgenKAT_kem PQCkemKAT_*.req PQCkemKAT_*.rsp
+	- /bin/rm PQCgenKAT_kem PQCgenKAT_kem_dec PQCgenKAT_kem_enc PQCgenKAT_kem_keygen PQCkemKAT_*.req PQCkemKAT_*.rsp
 
 # DO NOT DELETE
 
