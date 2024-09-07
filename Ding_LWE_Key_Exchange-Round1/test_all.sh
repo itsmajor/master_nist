@@ -39,10 +39,10 @@ if [ $doValgrindEncDec == "1" ]; then
   valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_kem_dec
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
 fi
-mv PQCkemKAT.req ../../../testresult/Ding_LWE/
-mv PQCkemKAT*.rsp ../../../testresult/Ding_LWE/
-mv massif.* ../../../testresult/Ding_LWE/ 2> /dev/null
-cd ../..
+mv PQCkemKAT.req ../../testresult/Ding_LWE/
+mv PQCkemKAT*.rsp ../../testresult/Ding_LWE/
+mv massif.* ../../testresult/Ding_LWE/ 2> /dev/null
+cd ..
 
 echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
 echo "done ding lwe key exchange"
