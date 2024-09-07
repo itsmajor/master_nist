@@ -8,8 +8,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "rng.h"
-#include "api.h"
+#include "../../../BIG_QUAKE-Round1/Optimized_Implementation/BIG_QUAKE_1/rng.h"
+#include "../../../BIG_QUAKE-Round1/Optimized_Implementation/BIG_QUAKE_1/api.h"
 #include <time.h>
 
 #define	MAX_MARKER_LEN		50

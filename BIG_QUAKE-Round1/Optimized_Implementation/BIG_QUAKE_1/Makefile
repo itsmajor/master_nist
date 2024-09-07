@@ -1,9 +1,11 @@
 CC = gcc-9
 CFLAGS = -W -Wall -O4
 LDFLAGS = -lssl -lcrypto
-CPPFLAGS =
+CPPFLAGS = -I. -I../../../_common/NIST
+vpath %.h ../../../_common/NIST
+vpath %.c ../../../_common/tomas
 
-OBJECTS = keccak.o kem.o m2e.o permutation.o gf.o poly.o goppa.o decode.o roots.o rng.o
+OBJECTS = keccak.o kem.o m2e.o permutation.o gf.o poly.o goppa.o decode.o roots.o ../../../_common/NIST/rng.o
 
 .SECONDARY:
 
