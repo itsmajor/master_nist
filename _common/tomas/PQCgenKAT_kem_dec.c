@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "rng.h"
+#include "../NIST/rng.h"
 #include "api.h"
 #include <time.h>
 
