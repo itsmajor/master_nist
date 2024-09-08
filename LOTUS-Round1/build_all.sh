@@ -7,8 +7,8 @@ cd ../..
 
 cd Optimized_Implementation/kem
 echo "moved to: ${PWD}"
-make SEC=128 PQCgenKAT_kem
-make SEC=192 PQCgenKAT_kem
-make SEC=256 PQCgenKAT_kem
+make SEC=128
+make SEC=192
+make SEC=256
 cd ../..
 

@@ -39,7 +39,7 @@ $(BUILD_DIR)/%.d: %.c
 
 
 clean:
-	rm -f -R ./.build/ $(TARGET) $(TARGET2) $(TARGET3) $(TARGET4)
+	rm -f -R ./.build/ $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4)
 
 -include $(DEP)
 
