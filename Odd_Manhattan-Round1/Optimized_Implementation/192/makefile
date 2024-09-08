@@ -1,12 +1,12 @@
 .SECONDEXPANSION:
 CC=gcc
-CFLAGS= -I. -I../../../../_common/NIST -I../common -Wall -fomit-frame-pointer -Ofast -march=native -w
-LDFLAGS = -lm -lcrypto
+CFLAGS= -I. -I../../../_common/NIST -I../common -Wall -fomit-frame-pointer -Ofast -march=native -w
+LDFLAGS = -lgmp -lcrypto
 vpath % ../common
-vpath % ../../../../_common/NIST
-vpath %.c ../../../../_common/tomas
+vpath % ../../../_common/NIST
+vpath %.c ../../../_common/tomas
 
-CSRC = $(wildcard *.c)
+CSRC = $(wildcard *.c) rng.c
 CSRC2 := $(wildcard ../common/*.c)
 CSRC3 := $(CSRC) $(notdir $(CSRC2:.c=.o))
 
