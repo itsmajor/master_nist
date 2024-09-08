@@ -33,8 +33,8 @@ fi
 
 
 name=lotus128_kem
-baseDir=Optimized_Implementation/kem/tests/lotus128
-leaveBaseDir=../../../..
+baseDir=Optimized_Implementation/kem/lotus128
+leaveBaseDir=../../..
 
 mkdir -p ../testresult
 mkdir -p ../testresult/$name
@@ -73,10 +73,8 @@ echo "done" $name
 
 
 
-
 name=lotus192_kem
-baseDir=Optimized_Implementation/kem/tests/lotus192
-leaveBaseDir=../../../..
+baseDir=Optimized_Implementation/kem/lotus192
 
 mkdir -p ../testresult
 mkdir -p ../testresult/$name
@@ -115,8 +113,7 @@ echo "done" $name
 
 
 name=lotus256_kem
-baseDir=Optimized_Implementation/kem/tests/lotus256
-leaveBaseDir=../../../..
+baseDir=Optimized_Implementation/kem/lotus256
 
 mkdir -p ../testresult
 mkdir -p ../testresult/$name
