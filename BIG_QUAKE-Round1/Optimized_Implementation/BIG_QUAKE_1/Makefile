@@ -11,7 +11,7 @@ OBJECTS = keccak.o kem.o m2e.o permutation.o gf.o poly.o goppa.o decode.o roots.
 
 .PHONY: force all
 
-all: PQCgenKAT_kem PQCgenKAT_kem_keygen PQCgenKAT_kem_dec PQCgenKAT_kem_enc
+all: PQCgenKAT_kem PQCgenKAT_kem_enc PQCgenKAT_kem_dec PQCgenKAT_kem_keygen
 
 #
 # main targets
@@ -20,13 +20,13 @@ all: PQCgenKAT_kem PQCgenKAT_kem_keygen PQCgenKAT_kem_dec PQCgenKAT_kem_enc
 PQCgenKAT_kem: $(OBJECTS) PQCgenKAT_kem.o
 	$(CC) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
 
-PQCgenKAT_kem_keygen: $(OBJECTS) PQCgenKAT_kem_keygen.o
-	$(CC) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
-
 PQCgenKAT_kem_enc: $(OBJECTS) PQCgenKAT_kem_enc.o
 	$(CC) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
 
 PQCgenKAT_kem_dec: $(OBJECTS) PQCgenKAT_kem_dec.o
+	$(CC) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
+
+PQCgenKAT_kem_keygen: $(OBJECTS) PQCgenKAT_kem_keygen.o
 	$(CC) $(CPPFLAGS) -o $@ $^ $(LDFLAGS)
 
 #
@@ -37,7 +37,7 @@ clean:
 	- /bin/rm -f *.o
 
 veryclean: clean
-	- /bin/rm PQCgenKAT_kem PQCgenKAT_kem_dec PQCgenKAT_kem_enc PQCgenKAT_kem_keygen PQCkemKAT_*.req PQCkemKAT_*.rsp
+	- /bin/rm PQCgenKAT_kem PQCgenKAT_kem_enc PQCgenKAT_kem_dec PQCgenKAT_kem_keygen PQCkemKAT_*.req PQCkemKAT_*.rsp
 
 # DO NOT DELETE
 
