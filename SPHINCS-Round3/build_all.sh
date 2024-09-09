@@ -1,3 +1,5 @@
+MAKEOPTION=$1;
+
 mkdir -p tests
 
 SPHINCSNAME=sphincs-haraka-128f-robust

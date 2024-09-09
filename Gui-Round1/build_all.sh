@@ -1,3 +1,5 @@
+MAKEOPTION=$1;
+
 cd Optimized_Implementation/amd64/
 echo "moved to: ${PWD}"
 #modified gui-genkey to generate test/PROJ/ path, default PROJ is 'Gui-184'

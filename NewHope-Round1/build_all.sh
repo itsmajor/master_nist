@@ -1,5 +1,4 @@
 MAKEOPTION=$1;
-mkdir -p tests
 
 cd Optimized_Implementation/crypto_kem/newhope512cca
 echo "moved to: ${PWD}"

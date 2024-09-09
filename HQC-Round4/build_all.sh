@@ -1,3 +1,5 @@
+MAKEOPTION=$1;
+
 mkdir -p tests
 
 cd Additional_Implementation/hqc-128

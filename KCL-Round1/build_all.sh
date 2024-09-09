@@ -1,3 +1,5 @@
+MAKEOPTION=$1;
+
 #cd Optimized_Implementation/encrypt/AKCN-MLWE-CCA/ref
 #echo "moved to: ${PWD}"
 #make speed
