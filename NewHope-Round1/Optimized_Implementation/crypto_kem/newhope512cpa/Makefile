@@ -1,13 +1,66 @@
-CC=/usr/bin/gcc
-LDFLAGS=-lcrypto
+# need for $$(patsubst %,%.o,$$@)
+.SECONDEXPANSION:
+# eval path to root
+PATHTOROOT = $(shell cd ../_common/ 2> /dev/null && echo "../")$(shell cd ../../_common 2> /dev/null && echo "../../")$(shell cd ../../../_common 2> /dev/null && echo "../../../")$(shell cd ../../../../_common 2> /dev/null && echo "../../../../")$(shell cd ../../../../../_common 2> /dev/null && echo "../../../../../")$(shell cd ../../../../../../_common 2> /dev/null && echo "../../../../../../")
+CC=gcc
+CFLAGS= -I. -I$(PATHTOROOT)_common/NIST -I../common -Wall -fomit-frame-pointer -Ofast -march=native -w
+LDFLAGS = -lm -lcrypto
+# add make lookup pathes
+# common: if project use common folder
+vpath % ../common
+# NIST: esp for rng.c
+vpath % $(PATHTOROOT)_common/NIST
+# 4kem path
+vpath %.c $(PATHTOROOT)_common/tomas
 
-SOURCES= cpapke.c fips202.c kem.c ntt.c poly.c PQCgenKAT_kem.c precomp.c reduce.c rng.c verify.c
-HEADERS= api.h cpapke.h fips202.h ntt.h params.h poly.h reduce.h rng.h verify.h 
+# add all c files in this directory
+CSRC := $(wildcard *.c)
+# add common path (nothing happen if not found)
+COMMON := $(wildcard ../common/*.c)
+# remove PQCgenKAT_kem.c from CSRC and add all COMMON files without path. vpath and cflags imports will find it)
+CSRC := $(subst PQCgenKAT_kem.c, ,$(CSRC)) $(notdir $(COMMON:.c=.o))
 
-PQCgenKAT_kem: $(HEADERS) $(SOURCES)
-	$(CC) -o $@ $(SOURCES) $(LDFLAGS)
+# 4 kems to test them all, executable created in same folder
+TARGET1 = PQCgenKAT_kem
+TARGET2 = PQCgenKAT_kem_dec
+TARGET3 = PQCgenKAT_kem_enc
+TARGET4 = PQCgenKAT_kem_keygen
 
-.PHONY: clean
+## all files will be created in BUILD_DIR
+BUILD_DIR = .build
+
+OBJ=$(addprefix ${BUILD_DIR}/,$(CSRC:.c=.o))
+
+all: rmOriginal_PQCgenKAT_kem $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4)
+
+test:
+	@echo $(CSRC1)
+
+DEP=$(OBJ:.o=.d)
+
+$(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4) : $(OBJ) .build/$$(patsubst %,%.o,$$@)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+# remove original PQCgenKAT_kem
+rmOriginal_PQCgenKAT_kem:
+	rm -f PQCgenKAT_kem.c
+
+$(BUILD_DIR)/%.o: %.c
+	@mkdir -p `dirname $@`
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(BUILD_DIR)/%.o: %.s
+	@mkdir -p `dirname $@`
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(BUILD_DIR)/%.d: %.c
+	@mkdir -p `dirname $@`
+	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) > $@
+
+.phony: all clean rmOriginal_PQCgenKAT_kem
 
 clean:
-	-rm PQCgenKAT_kem
+	rm -f -R ./.build/ $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4)
+
+-include $(DEP)
+

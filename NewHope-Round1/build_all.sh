@@ -1,25 +1,22 @@
+MAKEOPTION=$1;
 mkdir -p tests
 
 cd Optimized_Implementation/crypto_kem/newhope512cca
 echo "moved to: ${PWD}"
-make
-mv PQCgenKAT_kem ../../../tests/PQCgenKAT_kem_newhope512cca
+make $MAKEOPTION
 cd ../../..
 
 cd Optimized_Implementation/crypto_kem/newhope512cpa
 echo "moved to: ${PWD}"
-make
-mv PQCgenKAT_kem ../../../tests/PQCgenKAT_kem_newhope512cpa
+make $MAKEOPTION
 cd ../../..
 
 cd Optimized_Implementation/crypto_kem/newhope1024cca
 echo "moved to: ${PWD}"
-make
-mv PQCgenKAT_kem ../../../tests/PQCgenKAT_kem_newhope1024cca
+make $MAKEOPTION
 cd ../../..
 
 cd Optimized_Implementation/crypto_kem/newhope1024cpa
 echo "moved to: ${PWD}"
-make
-mv PQCgenKAT_kem ../../../tests/PQCgenKAT_kem_newhope1024cpa
+make $MAKEOPTION
 cd ../../..
