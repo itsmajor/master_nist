@@ -1,44 +1,61 @@
-CC 		  = /usr/bin/gcc
-CFLAGS  = -Wall -Wextra -Wmissing-prototypes -Wredundant-decls\
-	-O3 -fomit-frame-pointer -march=native 
-NISTFLAGS  = -Wno-unused-result -O3 -fomit-frame-pointer -march=native -std=c99 
-CLANG   = clang -march=native -O3 -fomit-frame-pointer -fwrapv -Qunused-arguments
-RM 		  = /bin/rm
+# need for $$(patsubst %,%.o,$$@)
+.SECONDEXPANSION:
+# eval path to root
+PATHTOROOT = $(shell cd ../_common/ 2> /dev/null && echo "../")$(shell cd ../../_common 2> /dev/null && echo "../../")$(shell cd ../../../_common 2> /dev/null && echo "../../../")$(shell cd ../../../../_common 2> /dev/null && echo "../../../../")$(shell cd ../../../../../_common 2> /dev/null && echo "../../../../../")$(shell cd ../../../../../../_common 2> /dev/null && echo "../../../../../../")
+CC=gcc
+CFLAGS= -I. -I$(PATHTOROOT)_common/NIST -I../common -Wall -fomit-frame-pointer -Ofast -march=native -w
+#LDFLAGS = -lm -lssl-lcrypto
+LDFLAGS = -lssl -lcrypto
+# add make lookup pathes
+# common: if project use common folder
+vpath % ../common
+# NIST: esp for rng.c
+vpath % $(PATHTOROOT)_common/NIST
+# 4kem path
+vpath %.c $(PATHTOROOT)_common/tomas
 
+# add all c files in this directory
+CSRC := $(wildcard *.c)
+# add common path (nothing happen if not found)
+COMMON := $(wildcard ../common/*.c)
+# remove PQCgenKAT_kem.c from CSRC and add all COMMON files without path. vpath and cflags imports will find it)
+CSRC := $(subst PQCgenKAT_kem.c, ,$(CSRC)) $(notdir $(COMMON:.c=.o)) rng.c
 
-all: test/PQCgenKAT_kem \
-     test/test_kex \
-     test/kem \
+# 4 kems to test them all, executable created in same folder
+TARGET = PQCgenKAT_kem PQCgenKAT_kem_dec PQCgenKAT_kem_enc PQCgenKAT_kem_keygen
 
-SOURCES = pack_unpack.c poly.c fips202.c verify.c cbd.c SABER_indcpa.c kem.c
-HEADERS = SABER_params.h pack_unpack.h poly.h rng.h fips202.h verify.h cbd.h SABER_indcpa.h 
+## all files will be created in BUILD_DIR
+BUILD_DIR = .build
 
-test/test_kex: $(SOURCES) $(HEADERS) rng.o test/test_kex.c
-	$(CC) $(CFLAGS) -o $@ $(SOURCES) rng.o test/test_kex.c -lcrypto
+OBJ=$(addprefix ${BUILD_DIR}/,$(CSRC:.c=.o))
 
-test/PQCgenKAT_kem: $(SOURCES) $(HEADERS) rng.o test/PQCgenKAT_kem.c 
-	$(CC) $(NISTFLAGS) -o $@ $(SOURCES) rng.o test/PQCgenKAT_kem.c -lcrypto
+all: rmOriginal_PQCgenKAT_kem $(TARGET)
 
-test/kem: $(SOURCES) $(HEADERS) rng.o test/kem.c
-	$(CC) $(CFLAGS) -o $@ $(SOURCES) rng.o test/kem.c -lcrypto
-
-rng.o: rng.c
-	$(CC) $(NISTFLAGS) -c rng.c -lcrypto -o $@ 
-
-# fips202.o: fips202.c
-# 	$(CLANG) -c $^ -o $@
-
-.PHONY: clean test
-
-test: 
-	./test/test_kex
-	./test/PQCgenKAT_kem
-	./test/kem
+.PHONY: all clean rmOriginal_PQCgenKAT_kem
 
 clean:
-	-$(RM) -f *.o
-	-$(RM) -rf test/test_kex
-	-$(RM) -rf test/kem
-	-$(RM) -rf test/PQCgenKAT_kem
-	-$(RM) -f *.req
-	-$(RM) -f *.rsp
+	rm -f -R ./.build/ $(TARGET)
+
+DEP=$(OBJ:.o=.d)
+
+$(TARGET): $(OBJ) .build/$$(patsubst %,%.o,$$@)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+# remove original PQCgenKAT_kem
+rmOriginal_PQCgenKAT_kem:
+	@rm -f PQCgenKAT_kem.c
+
+$(BUILD_DIR)/%.o: %.c
+	@mkdir -p `dirname $@`
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(BUILD_DIR)/%.o: %.s
+	@mkdir -p `dirname $@`
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+#$(BUILD_DIR)/%.d: %.c
+#	@mkdir -p `dirname $@`
+#	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) > $@
+
+-include $(DEP)
+

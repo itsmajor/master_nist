@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "api.h"
 #include "poly.h"
-#include "poly_mul.h"
+#include "poly_mul.hxxx"
 #include "pack_unpack.h"
 #include "cbd.h"
 #include "fips202.h"

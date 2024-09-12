@@ -53,8 +53,8 @@ $(BUILD_DIR)/%.o: %.s
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 #$(BUILD_DIR)/%.d: %.c
-#	@mkdir -p `#dirname $@`
-	#$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) > $@
+#	@mkdir -p `dirname $@`
+#	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) > $@
 
 -include $(DEP)
 
