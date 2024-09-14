@@ -2,4 +2,5 @@
 #define CRYPTO_SECRETKEYBYTES 13932
 #define CRYPTO_CIPHERTEXTBYTES 208
 #define CRYPTO_BYTES 32
-
+#define CRYPTO_ALGNAME "mceliece6688128"
+#include "crypto_kem.h"

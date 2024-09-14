@@ -1,49 +1,409 @@
-cd tests/mceliece348864
-echo "test mceliece348864"
-./kat
-cd ../..
+doValgrindFull=$1;
+doValgrindKeygen=$2;
+doValgrindEncDec=$3;
 
-cd tests/mceliece348864f
-echo "test mceliece348864f"
-./kat
-cd ../..
+if [ ! $# -eq 3 ];
+then
+  echo "3 parameter expected for valgrind control (doValgrindFull, doValgrindKeygen, doValgrindEncDec)"
+  echo "set 1 to be executed, 0 to skip it"
+  echo "example: $ ./test_all.sh 0 1 0   --> will do only valgrind keygen"
+  echo "example: $ ./test_all.sh 0 1 1   --> will do valgrind keygen, encoding and decoding"
+  echo "example: $ ./test_all.sh 0 0 0   --> no valgrind"
+  exit
+fi
 
-cd tests/mceliece460896
-echo "test mceliece460896"
-./kat
-cd ../..
 
-cd tests/mceliece460896f
-echo "test mceliece460896f"
-./kat
-cd ../..
 
-cd tests/mceliece6688128
-echo "test mceliece6688128"
-./kat
-cd ../..
+name=mceliece348864
+baseDir=Additional_Implementations/kem/mceliece348864/vec
+leaveBaseDir=../../../..
 
-cd tests/mceliece6688128f
-echo "test mceliece6688128f"
-./kat
-cd ../..
+mkdir -p ../testresult
+mkdir -p ../testresult/$name
+rm ../testresult/$name/* 2> /dev/null
 
-cd tests/mceliece6960119
-echo "test mceliece6960119"
-./kat
-cd ../..
+cd $baseDir
+echo "test" $name
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+./PQCgenKAT_kem
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_kem done
+if [ $doValgrindFull == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./PQCgenKAT_kem
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./PQCgenKAT_kem
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+fi
+if [ $doValgrindKeygen == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./PQCgenKAT_kem_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./PQCgenKAT_kem_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+fi
+if [ $doValgrindEncDec == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_kem_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_kem_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./PQCgenKAT_kem_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_kem_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+fi
+mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
+mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
+cd $leaveBaseDir
 
-cd tests/mceliece6960119f
-echo "test mceliece6960119f"
-./kat
-cd ../..
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
+echo "done" $name
 
-cd tests/mceliece8192128
-echo "test mceliece8192128"
-./kat
-cd ../..
 
-cd tests/mceliece8192128f
-echo "test mceliece8192128f"
-./kat
-cd ../..
+
+name=mceliece348864f
+baseDir=Additional_Implementations/kem/mceliece348864f/vec
+
+mkdir -p ../testresult/$name
+rm ../testresult/$name/* 2> /dev/null
+
+cd $baseDir
+echo "test" $name
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+./PQCgenKAT_kem
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_kem done
+if [ $doValgrindFull == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./PQCgenKAT_kem
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./PQCgenKAT_kem
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+fi
+if [ $doValgrindKeygen == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./PQCgenKAT_kem_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./PQCgenKAT_kem_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+fi
+if [ $doValgrindEncDec == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_kem_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_kem_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./PQCgenKAT_kem_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_kem_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+fi
+mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
+mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
+cd $leaveBaseDir
+
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
+echo "done" $name
+
+
+
+name=mceliece460896
+baseDir=Additional_Implementations/kem/mceliece460896/vec
+
+mkdir -p ../testresult/$name
+rm ../testresult/$name/* 2> /dev/null
+
+cd $baseDir
+echo "test" $name
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+./PQCgenKAT_kem
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_kem done
+if [ $doValgrindFull == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./PQCgenKAT_kem
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./PQCgenKAT_kem
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+fi
+if [ $doValgrindKeygen == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./PQCgenKAT_kem_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./PQCgenKAT_kem_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+fi
+if [ $doValgrindEncDec == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_kem_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_kem_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./PQCgenKAT_kem_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_kem_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+fi
+mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
+mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
+cd $leaveBaseDir
+
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
+echo "done" $name
+
+
+
+name=mceliece460896f
+baseDir=Additional_Implementations/kem/mceliece460896f/vec
+
+mkdir -p ../testresult/$name
+rm ../testresult/$name/* 2> /dev/null
+
+cd $baseDir
+echo "test" $name
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+./PQCgenKAT_kem
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_kem done
+if [ $doValgrindFull == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./PQCgenKAT_kem
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./PQCgenKAT_kem
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+fi
+if [ $doValgrindKeygen == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./PQCgenKAT_kem_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./PQCgenKAT_kem_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+fi
+if [ $doValgrindEncDec == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_kem_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_kem_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./PQCgenKAT_kem_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_kem_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+fi
+mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
+mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
+cd $leaveBaseDir
+
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
+echo "done" $name
+
+
+
+name=mceliece6688128
+baseDir=Additional_Implementations/kem/mceliece6688128/vec
+
+mkdir -p ../testresult/$name
+rm ../testresult/$name/* 2> /dev/null
+
+cd $baseDir
+echo "test" $name
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+./PQCgenKAT_kem
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_kem done
+if [ $doValgrindFull == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./PQCgenKAT_kem
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./PQCgenKAT_kem
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+fi
+if [ $doValgrindKeygen == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./PQCgenKAT_kem_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./PQCgenKAT_kem_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+fi
+if [ $doValgrindEncDec == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_kem_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_kem_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./PQCgenKAT_kem_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_kem_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+fi
+mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
+mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
+cd $leaveBaseDir
+
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
+echo "done" $name
+
+
+
+name=mceliece6688128f
+baseDir=Additional_Implementations/kem/mceliece6688128f/vec
+
+mkdir -p ../testresult/$name
+rm ../testresult/$name/* 2> /dev/null
+
+cd $baseDir
+echo "test" $name
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+./PQCgenKAT_kem
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_kem done
+if [ $doValgrindFull == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./PQCgenKAT_kem
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./PQCgenKAT_kem
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+fi
+if [ $doValgrindKeygen == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./PQCgenKAT_kem_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./PQCgenKAT_kem_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+fi
+if [ $doValgrindEncDec == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_kem_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_kem_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./PQCgenKAT_kem_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_kem_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+fi
+mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
+mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
+cd $leaveBaseDir
+
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
+echo "done" $name
+
+
+
+
+name=mceliece6960119
+baseDir=Additional_Implementations/kem/mceliece6960119/vec
+
+mkdir -p ../testresult/$name
+rm ../testresult/$name/* 2> /dev/null
+
+cd $baseDir
+echo "test" $name
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+./PQCgenKAT_kem
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_kem done
+if [ $doValgrindFull == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./PQCgenKAT_kem
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./PQCgenKAT_kem
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+fi
+if [ $doValgrindKeygen == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./PQCgenKAT_kem_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./PQCgenKAT_kem_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+fi
+if [ $doValgrindEncDec == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_kem_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_kem_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./PQCgenKAT_kem_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_kem_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+fi
+mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
+mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
+cd $leaveBaseDir
+
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
+echo "done" $name
+
+
+
+
+name=mceliece6960119f
+baseDir=Additional_Implementations/kem/mceliece6960119f/vec
+
+mkdir -p ../testresult/$name
+rm ../testresult/$name/* 2> /dev/null
+
+cd $baseDir
+echo "test" $name
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+./PQCgenKAT_kem
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_kem done
+if [ $doValgrindFull == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./PQCgenKAT_kem
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./PQCgenKAT_kem
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+fi
+if [ $doValgrindKeygen == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./PQCgenKAT_kem_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./PQCgenKAT_kem_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+fi
+if [ $doValgrindEncDec == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_kem_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_kem_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./PQCgenKAT_kem_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_kem_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+fi
+mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
+mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
+cd $leaveBaseDir
+
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
+echo "done" $name
+
+
+
+
+name=mceliece8192128
+baseDir=Additional_Implementations/kem/mceliece8192128/vec
+
+mkdir -p ../testresult/$name
+rm ../testresult/$name/* 2> /dev/null
+
+cd $baseDir
+echo "test" $name
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+./PQCgenKAT_kem
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_kem done
+if [ $doValgrindFull == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./PQCgenKAT_kem
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./PQCgenKAT_kem
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+fi
+if [ $doValgrindKeygen == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./PQCgenKAT_kem_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./PQCgenKAT_kem_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+fi
+if [ $doValgrindEncDec == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_kem_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_kem_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./PQCgenKAT_kem_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_kem_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+fi
+mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
+mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
+cd $leaveBaseDir
+
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
+echo "done" $name
+
+
+
+
+name=mceliece8192128f
+baseDir=Additional_Implementations/kem/mceliece8192128f/vec
+
+mkdir -p ../testresult/$name
+rm ../testresult/$name/* 2> /dev/null
+
+cd $baseDir
+echo "test" $name
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+./PQCgenKAT_kem
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_kem done
+if [ $doValgrindFull == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./PQCgenKAT_kem
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./PQCgenKAT_kem
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+fi
+if [ $doValgrindKeygen == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./PQCgenKAT_kem_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./PQCgenKAT_kem_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+fi
+if [ $doValgrindEncDec == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_kem_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_kem_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./PQCgenKAT_kem_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_kem_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+fi
+mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
+mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
+cd $leaveBaseDir
+
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
+echo "done" $name

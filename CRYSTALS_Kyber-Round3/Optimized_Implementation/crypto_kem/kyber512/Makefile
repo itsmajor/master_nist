@@ -31,7 +31,7 @@ OBJ=$(addprefix ${BUILD_DIR}/,$(CSRC:.c=.o))
 
 all: rmOriginal_PQCgenKAT_kem $(TARGET)
 
-.PHONY: all clean rmOriginal_PQCgenKAT_kem
+.PHONY: all clean rmOriginals
 
 clean:
 	rm -f -R ./.build/ $(TARGET)
@@ -41,9 +41,9 @@ DEP=$(OBJ:.o=.d)
 $(TARGET): $(OBJ) .build/$$(patsubst %,%.o,$$@)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-# remove original PQCgenKAT_kem
-rmOriginal_PQCgenKAT_kem:
-	@rm -f PQCgenKAT_kem.c
+# remove NIST originals in project
+rmOriginals:
+	@rm -f PQCgenKAT_kem.c randombytes.h rng.c rng.h
 
 $(BUILD_DIR)/%.o: %.c
 	@mkdir -p `dirname $@`

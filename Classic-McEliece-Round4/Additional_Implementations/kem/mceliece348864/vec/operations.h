@@ -1,7 +1,7 @@
 #ifndef OPERATIONS_H
 #define OPERATIONS_H
 
-#include "crypto_kem.h"
+#include "api.h"
 
 int crypto_kem_enc(
        unsigned char *c,
