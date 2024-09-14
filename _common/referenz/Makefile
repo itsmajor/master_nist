@@ -4,7 +4,7 @@
 PATHTOROOT = $(shell cd ../_common/ 2> /dev/null && echo "../")$(shell cd ../../_common 2> /dev/null && echo "../../")$(shell cd ../../../_common 2> /dev/null && echo "../../../")$(shell cd ../../../../_common 2> /dev/null && echo "../../../../")$(shell cd ../../../../../_common 2> /dev/null && echo "../../../../../")$(shell cd ../../../../../../_common 2> /dev/null && echo "../../../../../../")
 PROJECTCOMMONPATH=../common
 CC=gcc
-CFLAGS= -I. -I$(PATHTOROOT)_common/NIST -I$(PROJECTCOMMONPATH) -Wall -fomit-frame-pointer -Ofast -march=native -w
+CFLAGS= -I . -I $(PATHTOROOT)_common/NIST -I $(PROJECTCOMMONPATH) -Wall -fomit-frame-pointer -Ofast -march=native -w
 LDFLAGS = -lm -lXKCP -lcrypto
 # add make lookup pathes
 # common: if project use common folder
@@ -29,9 +29,9 @@ BUILD_DIR = .build
 
 OBJ=$(addprefix ${BUILD_DIR}/,$(CSRC:.c=.o))
 
-all: rmOriginal_PQCgenKAT_kem $(TARGET)
+all: removeOriginals $(TARGET)
 
-.PHONY: all clean rmOriginals
+.PHONY: all clean removeOriginals
 
 clean:
 	rm -f -R ./.build/ $(TARGET)
@@ -42,7 +42,7 @@ $(TARGET): $(OBJ) .build/$$(patsubst %,%.o,$$@)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 # remove NIST originals in project
-rmOriginals:
+removeOriginals:
 	@rm -f PQCgenKAT_kem.c randombytes.h rng.c rng.h
 
 $(BUILD_DIR)/%.o: %.c
