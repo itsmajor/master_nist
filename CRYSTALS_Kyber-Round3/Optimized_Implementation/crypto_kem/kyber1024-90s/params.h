@@ -5,7 +5,7 @@
 #define KYBER_K 4	/* Change this for different security strengths */
 #endif
 
-//#define KYBER_90S	/* Uncomment this if you want the 90S variant */
+#define KYBER_90S	/* Uncomment this if you want the 90S variant */
 
 /* Don't change parameters below this line */
 #if   (KYBER_K == 2)

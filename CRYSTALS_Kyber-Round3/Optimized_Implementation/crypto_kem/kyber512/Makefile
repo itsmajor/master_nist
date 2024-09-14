@@ -2,12 +2,13 @@
 .SECONDEXPANSION:
 # eval path to root
 PATHTOROOT = $(shell cd ../_common/ 2> /dev/null && echo "../")$(shell cd ../../_common 2> /dev/null && echo "../../")$(shell cd ../../../_common 2> /dev/null && echo "../../../")$(shell cd ../../../../_common 2> /dev/null && echo "../../../../")$(shell cd ../../../../../_common 2> /dev/null && echo "../../../../../")$(shell cd ../../../../../../_common 2> /dev/null && echo "../../../../../../")
+PROJECTCOMMONPATH=../common
 CC=gcc
-CFLAGS= -I. -I$(PATHTOROOT)_common/NIST -I../common -Wall -fomit-frame-pointer -Ofast -march=native -w
+CFLAGS= -I. -I$(PATHTOROOT)_common/NIST -I$(PROJECTCOMMONPATH) -Wall -fomit-frame-pointer -Ofast -march=native -w
 LDFLAGS = -lm -lXKCP -lcrypto
 # add make lookup pathes
 # common: if project use common folder
-vpath % ../common
+vpath % $(PROJECTCOMMONPATH)
 # NIST: esp for rng.c
 vpath % $(PATHTOROOT)_common/NIST
 # 4kem path
@@ -16,7 +17,7 @@ vpath %.c $(PATHTOROOT)_common/tomas
 # add all c files in this directory
 CSRC := $(wildcard *.c)
 # add common path (nothing happen if not found)
-COMMON := $(wildcard ../common/*.c)
+COMMON := $(wildcard $(PROJECTCOMMONPATH)/*.c)
 # remove PQCgenKAT_kem.c from CSRC and add all COMMON files without path. vpath and cflags imports will find it)
 CSRC := $(subst PQCgenKAT_kem.c, ,$(CSRC)) $(notdir $(COMMON:.c=.o)) rng.c
 
