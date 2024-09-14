@@ -834,10 +834,10 @@ static void Hide(unsigned char *c,unsigned char *r_enc,const Inputs r,const unsi
   Inputs_encode(r_enc,r);
 #ifdef KAT
   {
-    int j;
-    printf("Hide r_enc: ");
-    for (j = 0;j < Inputs_bytes;++j) printf("%02x",r_enc[j]);
-    printf("\n");
+    //int j;
+    //printf("Hide r_enc: ");
+    //for (j = 0;j < Inputs_bytes;++j) printf("%02x",r_enc[j]);
+    //printf("\n");
   }
 #endif
   ZEncrypt(c,r,pk); c += Ciphertexts_bytes;
@@ -888,7 +888,7 @@ static void Decap(unsigned char *k,const unsigned char *c,const unsigned char *s
 
 /* ----- crypto_kem API */
 
-#include "crypto_kem.h"
+#include "api.h"
 
 int crypto_kem_keypair(unsigned char *pk,unsigned char *sk)
 {

@@ -2,3 +2,15 @@
 #define CRYPTO_PUBLICKEYBYTES 994
 #define CRYPTO_CIPHERTEXTBYTES 897
 #define CRYPTO_BYTES 32
+#define CRYPTO_ALGNAME "sntrup653"
+
+#include "crypto_kem_sntrup653.h"
+
+#define crypto_kem_keypair crypto_kem_sntrup653_keypair
+#define crypto_kem_enc crypto_kem_sntrup653_enc
+#define crypto_kem_dec crypto_kem_sntrup653_dec
+#define crypto_kem_PUBLICKEYBYTES crypto_kem_sntrup653_PUBLICKEYBYTES
+#define crypto_kem_SECRETKEYBYTES crypto_kem_sntrup653_SECRETKEYBYTES
+#define crypto_kem_BYTES crypto_kem_sntrup653_BYTES
+#define crypto_kem_CIPHERTEXTBYTES crypto_kem_sntrup653_CIPHERTEXTBYTES
+#define crypto_kem_PRIMITIVE "sntrup653"

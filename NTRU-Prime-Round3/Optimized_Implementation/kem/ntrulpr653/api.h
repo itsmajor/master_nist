@@ -2,3 +2,15 @@
 #define CRYPTO_PUBLICKEYBYTES 897
 #define CRYPTO_CIPHERTEXTBYTES 1025
 #define CRYPTO_BYTES 32
+#define CRYPTO_ALGNAME "ntrulpr653"
+
+#include "crypto_kem_ntrulpr653.h"
+
+#define crypto_kem_keypair crypto_kem_ntrulpr653_keypair
+#define crypto_kem_enc crypto_kem_ntrulpr653_enc
+#define crypto_kem_dec crypto_kem_ntrulpr653_dec
+#define crypto_kem_PUBLICKEYBYTES crypto_kem_ntrulpr653_PUBLICKEYBYTES
+#define crypto_kem_SECRETKEYBYTES crypto_kem_ntrulpr653_SECRETKEYBYTES
+#define crypto_kem_BYTES crypto_kem_ntrulpr653_BYTES
+#define crypto_kem_CIPHERTEXTBYTES crypto_kem_ntrulpr653_CIPHERTEXTBYTES
+#define crypto_kem_PRIMITIVE "ntrulpr653"

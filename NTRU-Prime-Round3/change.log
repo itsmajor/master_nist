@@ -1,0 +1,6 @@
+remove subfolder nist
+remove randombytes
+copy crypto_kem.h to api.h
+deleted crypto_kem.h
+added #define CRYPTO_ALGNAME "ntrulpr653" to api.h
+change include crypto_kem.h to api.h in kem.c
