@@ -1,0 +1,2 @@
+special makefile (non generic)
+removed handleError in aes.h and aes.c

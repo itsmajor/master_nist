@@ -76,11 +76,11 @@ void AES256_free_schedule(uint8_t *schedule) {
 
 #else  // Use OpenSSL's AES implementation
 
-void handleErrors(void)
-{
-    ERR_print_errors_fp(stderr);
-    abort();
-}
+//void handleErrors(void)
+//{
+//    ERR_print_errors_fp(stderr);
+//    abort();
+//}
 
 
 void AES128_free_schedule(EVP_CIPHER_CTX *schedule) {

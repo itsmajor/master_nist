@@ -8,7 +8,9 @@
     #include "aes/aes.h"
 #elif defined (USE_SHAKE128_FOR_A)
     #include "sha3/fips202.h"
-#endif 
+#endif
+
+#include "frodo_macrify.h"
 
 
 int frodo_mul_add_as_plus_e(uint16_t *out, const uint16_t *s, const uint16_t *e, const uint8_t *seed_A) 
