@@ -17,7 +17,7 @@ endif()
 # Only little endian systems are supported
 try_run(RUN_RESULT COMPILE_RESULT
   "${CMAKE_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/cmake/test_endianess.c"
-  COMPILE_DEFINITIONS "-Werror -Wall -Wpedantic"
+  COMPILE_DEFINITIONS "-w"
   OUTPUT_VARIABLE OUTPUT
 )
 

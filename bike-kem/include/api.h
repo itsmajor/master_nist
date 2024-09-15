@@ -13,3 +13,5 @@
 #define CRYPTO_PUBLICKEYBYTES  sizeof(pk_t)
 #define CRYPTO_CIPHERTEXTBYTES sizeof(ct_t)
 #define CRYPTO_BYTES           sizeof(ss_t)
+
+#define CRYPTO_ALGNAME "bike"
