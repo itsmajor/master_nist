@@ -1,34 +1,69 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -pedantic -std=c11 -g -L./../../Lib -I./../../Lib -O3 -march=native
-LIBS = -lLima -lXKCP -lcrypto -lm
+# 6 security level: 1018, 1024, 1306, 1822, 2048, 2062
+# (make SEC=1018)
+SEC=1018
 
-all: KATFiles
+# need for $$(patsubst %,%.o,$$@)
+.SECONDEXPANSION:
+# eval path to root
+PATHTOROOT = $(shell cd ../_common/ 2> /dev/null && echo "../")$(shell cd ../../_common 2> /dev/null && echo "../../")$(shell cd ../../../_common 2> /dev/null && echo "../../../")$(shell cd ../../../../_common 2> /dev/null && echo "../../../../")$(shell cd ../../../../../_common 2> /dev/null && echo "../../../../../")$(shell cd ../../../../../../_common 2> /dev/null && echo "../../../../../../")
+PROJECTCOMMONPATH=../common
+PROJECTNAME=$(shell basename $(CURDIR))
+BINARYPATH=../../../bin/$(PROJECTNAME)_$(SEC)
+CC=gcc
+CFLAGS= -L./../../Lib -I./../../Lib -I . -I $(PATHTOROOT)_common/NIST -I $(PROJECTCOMMONPATH) -fomit-frame-pointer -Ofast -march=native -w
+LDFLAGS = -lLima -lm -lXKCP -lcrypto
 
-PQCgenKAT_kem-2048.exe:  kem.c api.h rng.c rng.h PQCgenKAT_kem.c
-	$(CC) $(CFLAGS) -DLIMASZ=2048 PQCgenKAT_kem.c kem.c rng.c -o PQCgenKAT_kem-2048.exe $(LIBS)
+# add make lookup pathes
+# common: if project use common folder
+vpath % $(PROJECTCOMMONPATH)
+# NIST: esp for rng.c
+vpath % $(PATHTOROOT)_common/NIST
+# 4kem path
+vpath %.c $(PATHTOROOT)_common/tomas
 
-PQCgenKAT_kem-1018.exe:  kem.c api.h rng.c rng.h PQCgenKAT_kem.c
-	$(CC) $(CFLAGS) -DLIMASZ=1018 PQCgenKAT_kem.c kem.c rng.c -o PQCgenKAT_kem-1018.exe $(LIBS)
+# add all c files in this directory
+CSRC := $(wildcard *.c)
+# add common path (nothing happen if not found)
+COMMON := $(wildcard $(PROJECTCOMMONPATH)/*.c)
+# remove PQCgenKAT_kem.c from CSRC and add all COMMON files without path. vpath and cflags imports will find it)
+CSRC := $(subst PQCgenKAT_kem.c, ,$(CSRC)) $(notdir $(COMMON:.c=.o)) rng.c
 
-PQCgenKAT_kem-1306.exe:  kem.c api.h rng.c rng.h PQCgenKAT_kem.c
-	$(CC) $(CFLAGS) -DLIMASZ=1306 PQCgenKAT_kem.c kem.c rng.c -o PQCgenKAT_kem-1306.exe $(LIBS)
+# 4 kems to test them all, executable created in same folder
+TARGET = PQCgenKAT_kem PQCgenKAT_kem_dec PQCgenKAT_kem_enc PQCgenKAT_kem_keygen
 
-PQCgenKAT_kem-1822.exe:  kem.c api.h rng.c rng.h PQCgenKAT_kem.c
-	$(CC) $(CFLAGS) -DLIMASZ=1822 PQCgenKAT_kem.c kem.c rng.c -o PQCgenKAT_kem-1822.exe $(LIBS)
+## all files will be created in BUILD_DIR
+BUILD_DIR = .build
 
-PQCgenKAT_kem-2062.exe:  kem.c api.h rng.c rng.h PQCgenKAT_kem.c
-	$(CC) $(CFLAGS) -DLIMASZ=2062 PQCgenKAT_kem.c kem.c rng.c -o PQCgenKAT_kem-2062.exe $(LIBS)
+OBJ=$(addprefix ${BUILD_DIR}/,$(CSRC:.c=.o))
 
-PQCgenKAT_kem-1024.exe:  kem.c api.h rng.c rng.h PQCgenKAT_kem.c
-	$(CC) $(CFLAGS) -DLIMASZ=1024 PQCgenKAT_kem.c kem.c rng.c -o PQCgenKAT_kem-1024.exe $(LIBS)
+all: removeOriginals $(TARGET)
 
-KATFiles: PQCgenKAT_kem-2048.exe PQCgenKAT_kem-1018.exe PQCgenKAT_kem-1306.exe PQCgenKAT_kem-1822.exe PQCgenKAT_kem-2062.exe PQCgenKAT_kem-1024.exe
-	./PQCgenKAT_kem-2048.exe 
-	./PQCgenKAT_kem-1018.exe 
-	./PQCgenKAT_kem-1306.exe 
-	./PQCgenKAT_kem-1822.exe 
-	./PQCgenKAT_kem-2062.exe 
-	./PQCgenKAT_kem-1024.exe
+.PHONY: all clean removeOriginals
 
 clean:
-	rm *.exe *.rsp *.req
+	rm -f -R ./.build/ $(BINARYPATH)
+
+DEP=$(OBJ:.o=.d)
+
+$(TARGET): $(OBJ) .build/$$(patsubst %,%.o,$$@)
+	mkdir -p $(BINARYPATH)
+	$(CC) $(CFLAGS) -o $(BINARYPATH)/$@ $^ $(LDFLAGS)
+
+# remove NIST originals in project
+removeOriginals:
+	@rm -f PQCgenKAT_kem.c randombytes.h rng.c rng.h
+
+$(BUILD_DIR)/%.o: %.c
+	@mkdir -p `dirname $@`
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(BUILD_DIR)/%.o: %.s
+	@mkdir -p `dirname $@`
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+#$(BUILD_DIR)/%.d: %.c
+#	@mkdir -p `dirname $@`
+#	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) > $@
+
+-include $(DEP)
+

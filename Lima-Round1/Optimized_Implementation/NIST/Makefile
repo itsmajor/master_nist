@@ -29,8 +29,8 @@ all:
 	cp EncapCCA/PQCkemKAT_24745.rsp KAT-Test/lima_sp_2062_EncapCCA-KAT.txt
 
 clean:
-	+ cd EncCPA ; make clean ;
-	+ cd EncCCA ; make clean ;
-	+ cd EncapCPA ; make clean ;
 	+ cd EncapCCA ; make clean ;
+	+ cd EncapCPA ; make clean ;
+	+ cd EncCCA ; make clean ;
+	+ cd EncCPA ; make clean ;
 
