@@ -1,4 +1,3 @@
-
 //
 //  PQCgenKAT_kem.c
 //
@@ -151,9 +150,6 @@ main()
 }
 
 
-//
-// ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
-//
 //
 // ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
 //

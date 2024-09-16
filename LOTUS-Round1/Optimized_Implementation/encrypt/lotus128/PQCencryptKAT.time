@@ -1,0 +1,37 @@
+# LOTUS128PKE
+
+time since start to open rsp file (μs) = 15655
+time since start to randombytes_init (μs) = 15798
+time since start to req closing (μs) = 16576
+time since start to open req readable (μs) = 16623
+
+count = 0
+prepare (μs) = 171
+crypto_encrypt_keypair (μs) = 74704
+crypto_encrypt_enc (μs) = 1389
+crypto_encrypt_dec (μs) = 1582
+
+count = 1
+prepare (μs) = 117
+crypto_encrypt_keypair (μs) = 63981
+crypto_encrypt_enc (μs) = 1315
+crypto_encrypt_dec (μs) = 1521
+
+count = 2
+prepare (μs) = 115
+crypto_encrypt_keypair (μs) = 63972
+crypto_encrypt_enc (μs) = 1339
+crypto_encrypt_dec (μs) = 1520
+
+count = 3
+prepare (μs) = 116
+crypto_encrypt_keypair (μs) = 63901
+crypto_encrypt_enc (μs) = 1314
+crypto_encrypt_dec (μs) = 1574
+
+count = 4
+prepare (μs) = 116
+crypto_encrypt_keypair (μs) = 63970
+crypto_encrypt_enc (μs) = 1345
+crypto_encrypt_dec (μs) = 1541
+
