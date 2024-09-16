@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -pedantic -std=c11 -g -O3 -march=native 
+CFLAGS = -w -std=c11 -g -O3 -march=native
 
 SRC = fft.c lima.c modp.c xof.c LimaAPI.c fft.h lima.h modp.h xof.h LimaAPI.h 
 
