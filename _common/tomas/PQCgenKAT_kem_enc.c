@@ -4,12 +4,12 @@
 //  Created by Bassham, Lawrence E (Fed) on 8/29/17.
 //  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
 //
+// changed by Tomas Antal for heap&stack measurement by valgrind (massif)
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include "../NIST/rng.h"
 #include "api.h"
-#include <time.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -36,8 +36,8 @@ main()
     int                 count;
     unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
-    clock_t start;
-    double time_enc, time_prepare;
+//    clock_t start;
+//    double time_enc, time_prepare;
 
     // Create the REQUEST file
 //    sprintf(fn_req, "PQCkemKAT_%d.req", CRYPTO_SECRETKEYBYTES);
@@ -83,7 +83,7 @@ main()
 
     fprintf(fp_rsp, "# %s\n\n", CRYPTO_ALGNAME);
     while (1) {
-        start = clock();
+//        start = clock();
         if ( FindMarker(fp_rsp_origin, "count = ") )
             fscanf(fp_rsp_origin, "%d", &count);
         else {
@@ -104,7 +104,7 @@ main()
         }
         fprintBstr(fp_rsp, "seed = ", seed, 48);
         randombytes_init(seed, NULL, 256);
-        time_prepare = ((double) (clock() - start));
+//        time_prepare = ((double) (clock() - start));
 
 //        ret_val = crypto_kem_keypair(pk, sk);
 
@@ -121,17 +121,15 @@ main()
 
         // prepare decode
         ReadHex(fp_rsp_origin, pk, CRYPTO_PUBLICKEYBYTES, "pk = ");
-//        ReadHex(fp_rsp_origin, ct, CRYPTO_CIPHERTEXTBYTES, "ct = ");
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
-//        fprintBstr(fp_rsp, "ct = ", ct, CRYPTO_CIPHERTEXTBYTES);
 
         // encoding
-        start = clock();
+//        start = clock();
         if ( (ret_val = crypto_kem_enc(ct, ss, pk)) != 0) {
             printf("PQCgenKAT ERROR: crypto_kem_enc returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
-        time_enc = ((double) (clock() - start));
+//        time_enc = ((double) (clock() - start));
         fprintBstr(fp_rsp, "ct = ", ct, CRYPTO_CIPHERTEXTBYTES);
         fprintBstr(fp_rsp, "ss = ", ss, CRYPTO_BYTES);
 
@@ -145,11 +143,11 @@ main()
 //        time_dec = ((double) (end - start));
 
         // write time measure to file
-        fprintf(fp_rsp, "prepare (μs) = %.0f\n", time_prepare);
+//        fprintf(fp_rsp, "prepare (μs) = %.0f\n", time_prepare);
 //        fprintf(fp_rsp, "crypto_kem_keypair (μs) = %.0f\n", time_keypair);
 //        fprintf(fp_rsp, "crypto_kem_enc (μs) = %.0f\n", time_enc);
-        fprintf(fp_rsp, "crypto_kem_enc (μs) = %.0f\n", time_enc);
-        fprintf(fp_rsp, "\n");
+//        fprintf(fp_rsp, "crypto_kem_enc (μs) = %.0f\n", time_enc);
+//        fprintf(fp_rsp, "\n");
 
         // no compare possible - dec only
 //        if ( memcmp(ss, ss1, CRYPTO_BYTES) ) {

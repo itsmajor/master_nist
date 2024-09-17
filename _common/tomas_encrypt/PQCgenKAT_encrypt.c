@@ -4,6 +4,7 @@
 //  Created by Bassham, Lawrence E (Fed) on 8/29/17.
 //  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
 //
+// changed by Tomas Antal for time measurement
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>

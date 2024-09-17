@@ -1,18 +1,34 @@
 MAKEOPTION=$1;
 
-cd Optimized_Implementation/encrypt
-echo "moved to: ${PWD}"
-make SEC=128 PQCgenKAT_encrypt $MAKEOPTION
-make SEC=192 PQCgenKAT_encrypt $MAKEOPTION
-make SEC=256 PQCgenKAT_encrypt $MAKEOPTION
-cd ../..
-
-cd Optimized_Implementation/kem
+cd Optimized_Implementation/encrypt/lotus128
 echo "moved to: ${PWD}"
 make SEC=128 $MAKEOPTION
+cd ../../..
+
+cd Optimized_Implementation/encrypt/lotus192
+echo "moved to: ${PWD}"
 make SEC=192 $MAKEOPTION
+cd ../../..
+
+cd Optimized_Implementation/encrypt/lotus256
+echo "moved to: ${PWD}"
 make SEC=256 $MAKEOPTION
-cd ../..
+cd ../../..
+
+cd Optimized_Implementation/kem/lotus128
+echo "moved to: ${PWD}"
+make SEC=128 $MAKEOPTION
+cd ../../..
+
+cd Optimized_Implementation/kem/lotus192
+echo "moved to: ${PWD}"
+make SEC=192 $MAKEOPTION
+cd ../../..
+
+cd Optimized_Implementation/kem/lotus256
+echo "moved to: ${PWD}"
+make SEC=256 $MAKEOPTION
+cd ../../..
 
 ##! /bin/bash
 #sec_array=(128 192 256)

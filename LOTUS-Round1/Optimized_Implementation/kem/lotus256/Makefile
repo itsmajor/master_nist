@@ -1,4 +1,4 @@
-SEC     = 128
+SEC     = 256
 # need for $$(patsubst %,%.o,$$@)
 .SECONDEXPANSION:
 # eval path to root
@@ -15,17 +15,17 @@ vpath % $(PROJECTCOMMONPATH)
 # NIST: esp for rng.c
 vpath % $(PATHTOROOT)_common/NIST
 # 4kem path
-vpath %.c $(PATHTOROOT)_common/tomas_encrypt
+vpath %.c $(PATHTOROOT)_common/tomas
 
 # add all c files in this directory
 CSRC := $(wildcard *.c)
 # add common path (nothing happen if not found)
 COMMON := $(wildcard $(PROJECTCOMMONPATH)/*.c)
-# remove PQCgenKAT_encrypt.c from CSRC and add all COMMON files without path. vpath and cflags imports will find it)
-CSRC := $(subst PQCgenKAT_encrypt.c, ,$(CSRC)) $(notdir $(COMMON:.c=.o)) rng.c
+# remove PQCgenKAT_kem.c from CSRC and add all COMMON files without path. vpath and cflags imports will find it)
+CSRC := $(subst PQCgenKAT_kem.c, ,$(CSRC)) $(notdir $(COMMON:.c=.o)) rng.c
 
 # 4 kems to test them all, executable created in same folder
-TARGET = PQCgenKAT_encrypt PQCgenKAT_encrypt_keygen PQCgenKAT_encrypt_dec PQCgenKAT_encrypt_enc
+TARGET = PQCgenKAT_kem PQCgenKAT_kem_dec PQCgenKAT_kem_enc PQCgenKAT_kem_keygen
 
 ## all files will be created in BUILD_DIR
 BUILD_DIR = .build
@@ -46,7 +46,7 @@ $(TARGET): $(OBJ) .build/$$(patsubst %,%.o,$$@)
 
 # remove NIST originals in project
 removeOriginals:
-	@rm -f PQCgenKAT_encrypt.c randombytes.h rng.c rng.h
+	@rm -f PQCgenKAT_kem.c randombytes.h rng.c rng.h
 
 $(BUILD_DIR)/%.o: %.c
 	@mkdir -p `dirname $@`

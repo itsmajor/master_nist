@@ -5,7 +5,7 @@ CFLAGS	= -ansi -O3 -march=native -mtune=native -fomit-frame-pointer -funroll-loo
 DIR     = lotus$(SEC)
 KDIR	= ../PQCgenKAT
 INCL	= -I./$(DIR) -I../../_common/NIST -I../../_common/tomas
-SRC	= $(wildcard $(DIR)/*.c) $(KDIR)/rng.c
+SRC	= $(wildcard $(DIR)/*.c) rng.c
 OBJ	= $(SRC:.c=.o)
 vpath % ../../../_common/NIST
 vpath %.c ../../../_common/tomas

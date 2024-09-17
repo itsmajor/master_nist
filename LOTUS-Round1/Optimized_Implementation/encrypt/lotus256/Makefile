@@ -1,4 +1,4 @@
-SEC     = 128
+SEC     = 256
 # need for $$(patsubst %,%.o,$$@)
 .SECONDEXPANSION:
 # eval path to root

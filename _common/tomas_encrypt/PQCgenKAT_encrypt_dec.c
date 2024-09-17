@@ -51,7 +51,7 @@ main()
 //        printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_req);
 //        return KAT_FILE_OPEN_ERROR;
 //    }
-    sprintf(fn_rsp, "PQCencryptKAT_keygen.rsp");
+    sprintf(fn_rsp, "PQCencryptKAT_enc.rsp");
     if ( (fp_rsp = fopen(fn_rsp, "w")) == NULL ) {
         printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_rsp);
         return KAT_FILE_OPEN_ERROR;
@@ -107,12 +107,12 @@ main()
 //        fprintf(fp_rsp, "count = %d\n", count);
 //        fprintf(fp_time, "count = %d\n", count);
 
-        if ( !ReadHex(fp_rsp_origin, seed, 48, "seed = ") ) {
-            printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_rsp_origin);
-            return KAT_DATA_ERROR;
-        }
-        fprintBstr(fp_rsp, "seed = ", seed, 48);
-        randombytes_init(seed, NULL, 256);
+//        if ( !ReadHex(fp_rsp_origin, seed, 48, "seed = ") ) {
+//            printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_rsp_origin);
+//            return KAT_DATA_ERROR;
+//        }
+//        fprintBstr(fp_rsp, "seed = ", seed, 48);
+//        randombytes_init(seed, NULL, 256);
 
         if ( FindMarker(fp_rsp_origin, "mlen = ") )
             fscanf(fp_rsp_origin, "%llu", &mlen);
@@ -122,26 +122,30 @@ main()
         }
 //        fprintf(fp_rsp, "mlen = %llu\n", mlen);
         
-        m = (unsigned char *)calloc(mlen, sizeof(unsigned char));
+//        m = (unsigned char *)calloc(mlen, sizeof(unsigned char));
         m1 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
         c = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
         
-        if ( !ReadHex(fp_rsp_origin, m, (int)mlen, "msg = ") ) {
-            printf("ERROR: unable to read 'msg' from <%s>\n", fn_rsp_origin);
-            return KAT_DATA_ERROR;
-        }
+//        if ( !ReadHex(fp_rsp_origin, m, (int)mlen, "msg = ") ) {
+//            printf("ERROR: unable to read 'msg' from <%s>\n", fn_rsp_origin);
+//            return KAT_DATA_ERROR;
+//        }
 //        fprintBstr(fp_rsp, "msg = ", m, mlen);
 //        time_prepare = ((double) (clock() - start));
 
         // Generate the public/private keypair
 //        start = clock();
-        if ( (ret_val = crypto_encrypt_keypair(pk, sk)) != 0) {
-            printf("PQCgenKAT ERROR: crypto_encrypt_keypair returned <%d>\n", ret_val);
-            return KAT_CRYPTO_FAILURE;
-        }
+//        if ( (ret_val = crypto_encrypt_keypair(pk, sk)) != 0) {
+//            printf("PQCgenKAT ERROR: crypto_encrypt_keypair returned <%d>\n", ret_val);
+//            return KAT_CRYPTO_FAILURE;
+//        }
 //        time_keypair = ((double) (clock() - start));
-        fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
-        fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
+//        fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
+//        fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
+
+        // prepare decode
+//        ReadHex(fp_rsp_origin, pk, CRYPTO_PUBLICKEYBYTES, "pk = ");
+//        fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
 
         // encoding
 //        randombytes_init(seed, NULL, 256);
@@ -155,11 +159,15 @@ main()
 //        fprintBstr(fp_rsp, "c = ", c, clen);
 //        fprintf(fp_rsp, "\n");
 
+        // prepare decode
+        ReadHex(fp_rsp_origin, sk, CRYPTO_SECRETKEYBYTES, "sk = ");
+        ReadHex(fp_rsp_origin, c, clen, "ct = ");
+
 //        start = clock();
-//        if ( (ret_val = crypto_encrypt_open(m1, &mlen1, c, clen, sk)) != 0) {
-//            printf("crypto_encrypt_open returned <%d>\n", ret_val);
-//            return KAT_CRYPTO_FAILURE;
-//        }
+        if ( (ret_val = crypto_encrypt_open(m1, &mlen1, c, clen, sk)) != 0) {
+            printf("crypto_encrypt_open returned <%d>\n", ret_val);
+            return KAT_CRYPTO_FAILURE;
+        }
 //        time_dec = ((double) (clock() - start));
 
         // write time measure to file

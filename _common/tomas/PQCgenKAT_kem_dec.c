@@ -4,12 +4,12 @@
 //  Created by Bassham, Lawrence E (Fed) on 8/29/17.
 //  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
 //
+// changed by Tomas Antal for heap&stack measurement by valgrind (massif)
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include "../NIST/rng.h"
 #include "api.h"
-#include <time.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -36,8 +36,8 @@ main()
     int                 count;
     unsigned char       sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
-    clock_t start;
-    double time_dec, time_prepare;
+//    clock_t start;
+//    double time_dec, time_prepare;
 
     // Create the REQUEST file
 //    sprintf(fn_req, "PQCkemKAT_%d.req", CRYPTO_SECRETKEYBYTES);
@@ -83,7 +83,7 @@ main()
 
     fprintf(fp_rsp, "# %s\n\n", CRYPTO_ALGNAME);
     while (1) {
-        start = clock();
+//        start = clock();
         if ( FindMarker(fp_rsp_origin, "count = ") )
             fscanf(fp_rsp_origin, "%d", &count);
         else {
@@ -98,7 +98,7 @@ main()
         }
         fprintBstr(fp_rsp, "seed = ", seed, 48);
         randombytes_init(seed, NULL, 256);
-        time_prepare = ((double) (clock() - start));
+//        time_prepare = ((double) (clock() - start));
 
         // Generate the public/private keypair
 //        start = clock();
@@ -128,19 +128,19 @@ main()
         fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
         fprintBstr(fp_rsp, "ct = ", ct, CRYPTO_CIPHERTEXTBYTES);
         // decoding
-        start = clock();
+//        start = clock();
         if ( (ret_val = crypto_kem_dec(ss1, ct, sk)) != 0) {
             printf("PQCgenKAT ERROR: crypto_kem_dec returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
-        time_dec = ((double) (clock() - start));
+//        time_dec = ((double) (clock() - start));
 
         // write time measure to file
-        fprintf(fp_rsp, "prepare (μs) = %.0f\n", time_prepare);
+//        fprintf(fp_rsp, "prepare (μs) = %.0f\n", time_prepare);
 //        fprintf(fp_rsp, "crypto_kem_keypair (μs) = %.0f\n", time_keypair);
 //        fprintf(fp_rsp, "crypto_kem_enc (μs) = %.0f\n", time_enc);
-        fprintf(fp_rsp, "crypto_kem_dec (μs) = %.0f\n", time_dec);
-        fprintf(fp_rsp, "\n");
+//        fprintf(fp_rsp, "crypto_kem_dec (μs) = %.0f\n", time_dec);
+//        fprintf(fp_rsp, "\n");
 
         // no compare possible - dec only
 //        if ( memcmp(ss, ss1, CRYPTO_BYTES) ) {

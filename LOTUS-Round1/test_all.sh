@@ -12,31 +12,129 @@ then
   exit
 fi
 
+name=lotus128_encrypt
+baseDir=Optimized_Implementation/encrypt/lotus128
+leaveBaseDir=../../..
 
-## todo encrypt
-#cd Optimized_Implementation/encrypt/tests/lotus128
-#echo "test encrypt lotus128"
-#./PQCgenKAT_encrypt
-#cd ../../../..
-#
-#cd Optimized_Implementation/encrypt/tests/lotus192
-#echo "test encrypt lotus192"
-#./PQCgenKAT_encrypt
-#cd ../../../..
-#
-#cd Optimized_Implementation/encrypt/tests/lotus256
-#echo "test encrypt lotus256"
-#./PQCgenKAT_encrypt
-#cd ../../../..
+mkdir -p ../testresult
+mkdir -p ../testresult/$name
+rm ../testresult/$name/* 2> /dev/null
+
+cd $baseDir
+echo "test" $name
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+./PQCgenKAT_encrypt
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_encrypt done
+if [ $doValgrindFull == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./PQCgenKAT_encrypt
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+fi
+if [ $doValgrindKeygen == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./PQCgenKAT_encrypt_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+fi
+if [ $doValgrindEncDec == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_encrypt_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./PQCgenKAT_encrypt_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+fi
+mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
+mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
+cd $leaveBaseDir
+
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
+echo "done" $name
+
+
+
+name=lotus192_encrypt
+baseDir=Optimized_Implementation/encrypt/lotus192
+
+mkdir -p ../testresult/$name
+rm ../testresult/$name/* 2> /dev/null
+
+cd $baseDir
+echo "test" $name
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+./PQCgenKAT_encrypt
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_encrypt done
+if [ $doValgrindFull == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./PQCgenKAT_encrypt
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+fi
+if [ $doValgrindKeygen == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./PQCgenKAT_encrypt_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+fi
+if [ $doValgrindEncDec == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_encrypt_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./PQCgenKAT_encrypt_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+fi
+mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
+mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
+cd $leaveBaseDir
+
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
+echo "done" $name
+
+
+
+name=lotus256_encrypt
+baseDir=Optimized_Implementation/encrypt/lotus256
+
+mkdir -p ../testresult/$name
+rm ../testresult/$name/* 2> /dev/null
+
+cd $baseDir
+echo "test" $name
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+./PQCgenKAT_encrypt
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - PQCgenKAT_encrypt done
+if [ $doValgrindFull == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./PQCgenKAT_encrypt
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+fi
+if [ $doValgrindKeygen == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./PQCgenKAT_encrypt_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+fi
+if [ $doValgrindEncDec == "1" ]; then
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./PQCgenKAT_encrypt_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./PQCgenKAT_encrypt_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+fi
+mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
+mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
+cd $leaveBaseDir
+
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
+echo "done" $name
 
 
 
 
 name=lotus128_kem
 baseDir=Optimized_Implementation/kem/lotus128
-leaveBaseDir=../../..
 
-mkdir -p ../testresult
 mkdir -p ../testresult/$name
 rm ../testresult/$name/* 2> /dev/null
 
@@ -76,7 +174,6 @@ echo "done" $name
 name=lotus192_kem
 baseDir=Optimized_Implementation/kem/lotus192
 
-mkdir -p ../testresult
 mkdir -p ../testresult/$name
 rm ../testresult/$name/* 2> /dev/null
 
@@ -115,7 +212,6 @@ echo "done" $name
 name=lotus256_kem
 baseDir=Optimized_Implementation/kem/lotus256
 
-mkdir -p ../testresult
 mkdir -p ../testresult/$name
 rm ../testresult/$name/* 2> /dev/null
 
