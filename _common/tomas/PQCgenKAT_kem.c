@@ -29,8 +29,8 @@ void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
 int
 main()
 {
-    char                fn_req[32], fn_rsp[32];
-    FILE                *fp_req, *fp_rsp;
+    char                fn_req[32], fn_rsp[32], fn_time[32];
+    FILE                *fp_req, *fp_rsp, *fp_time;
     unsigned char       seed[48];
     unsigned char       entropy_input[48];
     unsigned char       ct[CRYPTO_CIPHERTEXTBYTES], ss[CRYPTO_BYTES], ss1[CRYPTO_BYTES];
@@ -43,26 +43,31 @@ main()
     start = clock();
 
     // Create the REQUEST file
-//    sprintf(fn_req, "PQCkemKAT_%d.req", CRYPTO_SECRETKEYBYTES);
     sprintf(fn_req, "PQCkemKAT.req");
     if ( (fp_req = fopen(fn_req, "w")) == NULL ) {
         printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_req);
         return KAT_FILE_OPEN_ERROR;
     }
 
-//    sprintf(fn_rsp, "PQCkemKAT_%d.rsp", CRYPTO_SECRETKEYBYTES);
     sprintf(fn_rsp, "PQCkemKAT.rsp");
     if ( (fp_rsp = fopen(fn_rsp, "w")) == NULL ) {
         printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_rsp);
         return KAT_FILE_OPEN_ERROR;
     }
-    fprintf(fp_rsp, "time since start to open rsp file (μs) = %.0f\n", ((double) (clock() - start)));
+    sprintf(fn_time, "PQCencryptKAT.time");
+    if ( (fp_time = fopen(fn_time, "w")) == NULL ) {
+        printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_time);
+        return KAT_FILE_OPEN_ERROR;
+    }
+    fprintf(fp_rsp, "# %s\n\n", CRYPTO_ALGNAME);
+    fprintf(fp_time, "# %s\n\n", CRYPTO_ALGNAME);
+    fprintf(fp_time, "time since start to open rsp file (μs) = %.0f\n", ((double) (clock() - start)));
 
     for (int i=0; i<48; i++)
         entropy_input[i] = i;
 
     randombytes_init(entropy_input, NULL, 256);
-    fprintf(fp_rsp, "time since start to randombytes_init (μs) = %.0f\n", ((double) (clock() - start)));
+    fprintf(fp_time, "time since start to randombytes_init (μs) = %.0f\n", ((double) (clock() - start)));
     for (int i=0; i<10; i++) {
         fprintf(fp_req, "count = %d\n", i);
         randombytes(seed, 48);
@@ -74,16 +79,16 @@ main()
         fprintf(fp_req, "ss =\n\n");
     }
     fclose(fp_req);
-    fprintf(fp_rsp, "time since start to req closing (μs) = %.0f\n", ((double) (clock() - start)));
+    fprintf(fp_time, "time since start to req closing (μs) = %.0f\n", ((double) (clock() - start)));
 
     //Create the RESPONSE file based on what's in the REQUEST file
     if ( (fp_req = fopen(fn_req, "r")) == NULL ) {
         printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fn_req);
         return KAT_FILE_OPEN_ERROR;
     }
-    fprintf(fp_rsp, "time since start to open req readable (μs) = %.0f\n", ((double) (clock() - start)));
+    fprintf(fp_time, "time since start to open req readable (μs) = %.0f\n", ((double) (clock() - start)));
 
-    fprintf(fp_rsp, "# %s\n\n", CRYPTO_ALGNAME);
+    fprintf(fp_time, "\n");
     while (1) {
         start = clock();
         if ( FindMarker(fp_req, "count = ") )
@@ -92,6 +97,7 @@ main()
             break;
         }
         fprintf(fp_rsp, "count = %d\n", count);
+        fprintf(fp_time, "count = %d\n", count);
 
         if ( !ReadHex(fp_req, seed, 48, "seed = ") ) {
             printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_req);
@@ -132,11 +138,11 @@ main()
         time_dec = ((double) (clock() - start));
 
         // write time measure to file
-        fprintf(fp_rsp, "prepare (μs) = %.0f\n", time_prepare);
-        fprintf(fp_rsp, "crypto_kem_keypair (μs) = %.0f\n", time_keypair);
-        fprintf(fp_rsp, "crypto_kem_enc (μs) = %.0f\n", time_enc);
-        fprintf(fp_rsp, "crypto_kem_dec (μs) = %.0f\n", time_dec);
-        fprintf(fp_rsp, "\n");
+        fprintf(fp_time, "prepare (μs) = %.0f\n", time_prepare);
+        fprintf(fp_time, "crypto_kem_keypair (μs) = %.0f\n", time_keypair);
+        fprintf(fp_time, "crypto_kem_enc (μs) = %.0f\n", time_enc);
+        fprintf(fp_time, "crypto_kem_dec (μs) = %.0f\n", time_dec);
+        fprintf(fp_time, "\n");
 
         if ( memcmp(ss, ss1, CRYPTO_BYTES) ) {
             printf("PQCgenKAT ERROR: crypto_kem_dec returned bad 'ss' value\n");

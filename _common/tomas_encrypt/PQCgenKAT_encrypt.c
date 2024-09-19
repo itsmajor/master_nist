@@ -71,8 +71,8 @@ main()
 
     randombytes_init(entropy_input, NULL, 256);
     fprintf(fp_time, "time since start to randombytes_init (μs) = %.0f\n", ((double) (clock() - start)));
-    for (i=0; i<1; i++) {
-        for (j=0; j<5; j++) {
+    for (int i=0; i<1; i++) {
+        for (int j=0; j<5; j++) {
             fprintf(fp_req, "count = %d\n", i*25+j);
             randombytes(seed, 48);
             fprintBstr(fp_req, "seed = ", seed, 48);

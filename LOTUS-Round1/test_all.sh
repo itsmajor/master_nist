@@ -43,8 +43,7 @@ if [ $doValgrindEncDec == "1" ]; then
   valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt_dec
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
 fi
-mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
-mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv PQCencryptKAT* $leaveBaseDir/../testresult/$name
 mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
 cd $leaveBaseDir
 
@@ -82,8 +81,7 @@ if [ $doValgrindEncDec == "1" ]; then
   valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt_dec
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
 fi
-mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
-mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv PQCencryptKAT* $leaveBaseDir/../testresult/$name
 mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
 cd $leaveBaseDir
 
@@ -121,8 +119,7 @@ if [ $doValgrindEncDec == "1" ]; then
   valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./PQCgenKAT_encrypt_dec
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
 fi
-mv PQCkemKAT.req $leaveBaseDir/../testresult/$name
-mv PQCkemKAT*.rsp $leaveBaseDir/../testresult/$name
+mv PQCencryptKAT* $leaveBaseDir/../testresult/$name
 mv massif.* $leaveBaseDir/../testresult/$name/ 2> /dev/null
 cd $leaveBaseDir
 
