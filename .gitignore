@@ -63,6 +63,7 @@ apih.txt
 *.rsp
 *.heap
 *.stack
+*.time
 PQCgenKAT_kem
 PQCgenKAT_kem_dec
 PQCgenKAT_kem_enc
