@@ -64,7 +64,5 @@ apih.txt
 *.heap
 *.stack
 *.time
-PQCgenKAT_kem
-PQCgenKAT_kem_dec
-PQCgenKAT_kem_enc
-PQCgenKAT_kem_keygen
+PQCgenKAT_*
+!PQCgenKAT_*.c

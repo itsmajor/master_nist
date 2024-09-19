@@ -36,7 +36,6 @@ main()
     unsigned char       *m, *c, *m1;
     unsigned long long  mlen, clen, mlen1;
     int                 count;
-    int                 done;
     unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
     int i, j;
@@ -104,7 +103,7 @@ main()
         else {
             break;
         }
-//        fprintf(fp_rsp, "count = %d\n", count);
+        fprintf(fp_rsp, "count = %d\n", count);
 //        fprintf(fp_time, "count = %d\n", count);
 
         if ( !ReadHex(fp_rsp_origin, seed, 48, "seed = ") ) {
@@ -142,6 +141,7 @@ main()
 //        time_keypair = ((double) (clock() - start));
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
         fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
+        fprintf(fp_rsp, "\n");
 
         // encoding
 //        randombytes_init(seed, NULL, 256);

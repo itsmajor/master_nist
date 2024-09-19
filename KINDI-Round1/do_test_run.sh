@@ -1,0 +1,1 @@
+../_common/script/doKat.sh 0 1 1 0 encrypt KINDI-256-3-4-2_encrypt Reference_Implementation/encrypt/KINDI-256-3-4-2 ../../..
