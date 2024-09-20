@@ -5,26 +5,35 @@ doValgrindDec=$4;
 KATTYPE=$5;
 CIPHERNAME=$6;
 KATPATH=$7;
-LEAVEDIR=$8;
 
-PARAMCOUNT=8;
+PARAMCOUNT=7;
 
 if [ ! $# -eq $PARAMCOUNT ]
 then
   echo " $PARAMCOUNT parameter expected"
-  echo " doKat doValgrindFull doValgrindKeygen doValgrindEnc doValgrindDec KATTYPE CIPHERNAME KATPATH LEAVEDIR"
-  echo " example: doKat.sh 0 0 0 0 kem kyber1024 Optimized_Implementation/crypto_kem/kyber1024 ../../.. "
-  echo " example: doKat.sh 1 1 1 1 encrypt kyber1024 Optimized_Implementation/crypto_kem/kyber1024 ../../.. "
+  echo " doKat.h doValgrindFull doValgrindKeygen doValgrindEnc doValgrindDec KATTYPE CIPHERNAME KATPATH"
+  echo " example: doKat.sh 0 0 0 0 kem kyber1024 Optimized_Implementation/crypto_kem/kyber1024 "
+  echo " example: doKat.sh 1 1 1 1 encrypt kyber1024 Optimized_Implementation/crypto_kem/kyber1024 "
+  echo " KATPATH without / at the end"
   exit
 fi
+
+# remove last / in KATPATH
+if [[ $KATPATH = */ ]]
+then
+  KATPATH=${KATPATH%?}
+fi
+
+# remove all char -> //
+LEAVEDIR=${KATPATH//[a-zA-Z0-9_-]/}
+# add dots for each slash   -> ../../..
+LEAVEDIR=${LEAVEDIR//\//\.\.\/}..
 
 # PQCgenKAT_kem PQCgenKAT_encrypt
 KATBINARY=PQCgenKAT_$KATTYPE
 # PQCkemKAT PQCencryptKAT
 OUTPUTFILE=PQC"$KATTYPE"KAT
 #echo bin: $KATBINARY output: $OUTPUTFILE
-
-echo $KATPATH/$KATBINARY
 
 if [ ! -e $KATPATH/$KATBINARY ]
 then
