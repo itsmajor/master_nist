@@ -10,6 +10,7 @@
 #include <ctype.h>
 #include "../NIST/rng.h"
 #include "api.h"
+#include <stdlib.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -50,7 +51,7 @@ main()
 //        printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_req);
 //        return KAT_FILE_OPEN_ERROR;
 //    }
-    sprintf(fn_rsp, "PQCencryptKAT_enc.rsp");
+    sprintf(fn_rsp, "PQCencryptKAT_dec.rsp");
     if ( (fp_rsp = fopen(fn_rsp, "w")) == NULL ) {
         printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_rsp);
         return KAT_FILE_OPEN_ERROR;
@@ -90,15 +91,16 @@ main()
     //Create the RESPONSE file based on what's in the REQUEST file
     sprintf(fn_rsp_origin, "PQCencryptKAT.rsp");
     if ( (fp_rsp_origin = fopen(fn_rsp_origin, "r")) == NULL ) {
-        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fp_rsp_origin);
+        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fn_rsp_origin);
         return KAT_FILE_OPEN_ERROR;
     }
+
 //    fprintf(fp_time, "time since start to open req readable (μs) = %.0f\n", ((double) (clock() - start)));
 
 //    fprintf(fp_time, "\n");
     while (1) {
 //        start = clock();
-        if ( FindMarker(fp_rsp_origin, "count = ") )
+        if ( FindMarker(fp_rsp_origin, "count = "))
             fscanf(fp_rsp_origin, "%d", &count);
         else {
             break;
@@ -124,7 +126,7 @@ main()
 //        m = (unsigned char *)calloc(mlen, sizeof(unsigned char));
         m1 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
         c = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
-        
+
 //        if ( !ReadHex(fp_rsp_origin, m, (int)mlen, "msg = ") ) {
 //            printf("ERROR: unable to read 'msg' from <%s>\n", fn_rsp_origin);
 //            return KAT_DATA_ERROR;
@@ -160,13 +162,27 @@ main()
 
         // prepare decode
         ReadHex(fp_rsp_origin, sk, CRYPTO_SECRETKEYBYTES, "sk = ");
-        ReadHex(fp_rsp_origin, c, clen, "ct = ");
+        if ( FindMarker(fp_rsp_origin, "clen = ") )
+            fscanf(fp_rsp_origin, "%llu", &clen);
+        else {
+            printf("ERROR: unable to read 'clen' from <%s>\n", fn_rsp_origin);
+            return KAT_DATA_ERROR;
+        }
+        ReadHex(fp_rsp_origin, c, clen, "c = ");
+
+//        fprintBstr(fp_rsp, "c = ", c, 16); // print just first 16
+//        fprintf(fp_rsp, "clen = %llu\n", clen);
+//        fprintBstr(fp_rsp, "sk = ", sk, 16); // print just first 16
 
 //        start = clock();
         if ( (ret_val = crypto_encrypt_open(m1, &mlen1, c, clen, sk)) != 0) {
             printf("crypto_encrypt_open returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
+        // name it as in base KAT "msg" - for verify
+        fprintBstr(fp_rsp, "msg = ", m1, mlen1);
+        fprintf(fp_rsp, "\n");
+//        printf("m1: %s\n", m1);
 //        time_dec = ((double) (clock() - start));
 
         // write time measure to file
@@ -187,8 +203,8 @@ main()
 //        }
         
 //        free(m);
-//        free(m1);
-//        free(c);
+        free(m1);
+        free(c);
 
     }
 

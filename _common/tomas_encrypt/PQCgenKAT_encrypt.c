@@ -11,6 +11,7 @@
 #include "../NIST/rng.h"
 #include "api.h"
 #include <time.h>
+#include <stdlib.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -70,7 +71,7 @@ main()
 
     randombytes_init(entropy_input, NULL, 256);
     fprintf(fp_time, "time since start to randombytes_init (μs) = %.0f\n", ((double) (clock() - start)));
-    // todo wtf?
+    // todo wtf? i is always 0 -> math useless, count is j and mlen always 16
 //    for (int i=0; i<1; i++) {
         for (int j=0; j<10; j++) {
 //            fprintf(fp_req, "count = %d\n", i*25+j);
@@ -156,6 +157,17 @@ main()
         fprintf(fp_rsp, "clen = %llu\n", clen);
         fprintBstr(fp_rsp, "c = ", c, clen);
         fprintf(fp_rsp, "\n");
+
+        /////// todo test (remove)
+//        unsigned char c2 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
+//        char *c2len;
+//
+//        if ( (ret_val = crypto_encrypt(c2, &c2len, m, mlen, pk)) != 0) {
+//            printf("PQCgenKAT ERROR: crypto_encrypt returned <%d>\n", ret_val);
+//            return KAT_CRYPTO_FAILURE;
+//        }
+//        fprintBstr(fp_rsp, "c2 = ", c2, c2len);
+        ///////
 
         start = clock();
         if ( (ret_val = crypto_encrypt_open(m1, &mlen1, c, clen, sk)) != 0) {

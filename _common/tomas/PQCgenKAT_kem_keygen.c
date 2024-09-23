@@ -10,6 +10,7 @@
 #include <ctype.h>
 #include "../NIST/rng.h"
 #include "api.h"
+#include <stdlib.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -77,7 +78,7 @@ main()
 
     sprintf(fn_rsp_origin, "PQCkemKAT.rsp");
     if ( (fp_rsp_origin = fopen(fn_rsp_origin, "r")) == NULL ) {
-        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fp_rsp_origin);
+        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fn_rsp_origin);
         return KAT_FILE_OPEN_ERROR;
     }
 
@@ -109,6 +110,7 @@ main()
 //        time_keypair = ((double) (clock() - start));
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
         fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
+        fprintf(fp_rsp, "\n");
 
         // encoding
 //        start = clock();

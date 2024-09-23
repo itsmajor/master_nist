@@ -10,6 +10,7 @@
 #include <ctype.h>
 #include "../NIST/rng.h"
 #include "api.h"
+#include <stdlib.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -77,7 +78,7 @@ main()
 
     sprintf(fn_rsp_origin, "PQCkemKAT.rsp");
     if ( (fp_rsp_origin = fopen(fn_rsp_origin, "r")) == NULL ) {
-        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fp_rsp_origin);
+        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fn_rsp_origin);
         return KAT_FILE_OPEN_ERROR;
     }
 
@@ -92,12 +93,12 @@ main()
         fprintf(fp_rsp, "count = %d\n", count);
 
         // read seed from origin
-        if ( !ReadHex(fp_rsp_origin, seed, 48, "seed = ") ) {
-            printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_rsp_origin);
-            return KAT_DATA_ERROR;
-        }
-        fprintBstr(fp_rsp, "seed = ", seed, 48);
-        randombytes_init(seed, NULL, 256);
+//        if ( !ReadHex(fp_rsp_origin, seed, 48, "seed = ") ) {
+//            printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_rsp_origin);
+//            return KAT_DATA_ERROR;
+//        }
+//        fprintBstr(fp_rsp, "seed = ", seed, 48);
+//        randombytes_init(seed, NULL, 256);
 //        time_prepare = ((double) (clock() - start));
 
         // Generate the public/private keypair
@@ -125,14 +126,17 @@ main()
         // prepare decode
         ReadHex(fp_rsp_origin, sk, CRYPTO_SECRETKEYBYTES, "sk = ");
         ReadHex(fp_rsp_origin, ct, CRYPTO_CIPHERTEXTBYTES, "ct = ");
-        fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
-        fprintBstr(fp_rsp, "ct = ", ct, CRYPTO_CIPHERTEXTBYTES);
+//        fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
+//        fprintBstr(fp_rsp, "ct = ", ct, CRYPTO_CIPHERTEXTBYTES);
+
         // decoding
 //        start = clock();
         if ( (ret_val = crypto_kem_dec(ss1, ct, sk)) != 0) {
             printf("PQCgenKAT ERROR: crypto_kem_dec returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
+        fprintBstr(fp_rsp, "ss = ", ss1, CRYPTO_BYTES);
+        fprintf(fp_rsp, "\n");
 //        time_dec = ((double) (clock() - start));
 
         // write time measure to file

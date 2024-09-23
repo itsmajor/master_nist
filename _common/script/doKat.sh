@@ -8,12 +8,33 @@ KATPATH=$7;
 
 PARAMCOUNT=7;
 
+if [ $doValgrindFull == "explain4param" ]
+  then
+    # help text for wrong test_all.sh initialisation
+    echo "4 parameter expected for valgrind control (doValgrindFull, doValgrindKeygen, doValgrindEnc, doValgrindDec)"
+    echo " doValgrind*: 0 = nothing at all (base KAT is always executed)"
+    echo " doValgrind*: 1 = run KAT without valgrind"
+    echo " doValgrind*: 2 = run KAT with valgrind"
+    echo "example: $ ./test_all.sh 0 1 0 0   --> will do only keygen KAT without valgrind"
+    echo "example: $ ./test_all.sh 0 2 0 0   --> will do only keygen KAT with valgrind"
+    echo "example: $ ./test_all.sh 0 0 0 0   --> no valgrind, only base KAT executed"
+    echo "example: $ ./test_all.sh 0 1 1 1   --> no valgrind, all KAT executed"
+    echo "example: $ ./test_all.sh 0 2 2 2   --> will do valgrind keygen, encoding and decoding"
+    echo "example: $ ./test_all.sh 0 2 2 1   --> will do valgrind keygen and encoding and no valgrind decoding"
+    echo "special: doValgrindFull = 9 will trigger call build_all.sh"
+    exit
+fi
 if [ ! $# -eq $PARAMCOUNT ]
 then
+  # help text for wrong doKat.sh initialisation
   echo " $PARAMCOUNT parameter expected"
-  echo " doKat.h doValgrindFull doValgrindKeygen doValgrindEnc doValgrindDec KATTYPE CIPHERNAME KATPATH"
+  echo ' doKat.h doValgrindFull doValgrindKeygen doValgrindEnc doValgrindDec KATTYPE CIPHERNAME KATPATH'
+  echo " doValgrind*: 0 = nothing at all"
+  echo " doValgrind*: 1 = run KAT without valgrind"
+  echo " doValgrind*: 2 = run KAT with valgrind"
   echo " example: doKat.sh 0 0 0 0 kem kyber1024 Optimized_Implementation/crypto_kem/kyber1024 "
-  echo " example: doKat.sh 1 1 1 1 encrypt kyber1024 Optimized_Implementation/crypto_kem/kyber1024 "
+  echo " example: doKat.sh 0 1 1 1 encrypt kyber1024 Optimized_Implementation/crypto_kem/kyber1024 "
+  echo " example: doKat.sh 0 2 2 2 encrypt kyber1024 Optimized_Implementation/crypto_kem/kyber1024 "
   echo " KATPATH without / at the end"
   exit
 fi
@@ -46,27 +67,46 @@ fi
 cd $KATPATH
 echo "test" $CIPHERNAME
 echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
-./$KATBINARY
-echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - $KATBINARY done
-if [ $doValgrindFull == "1" ]; then
+
+if [ $doValgrindFull == "2" ]; then
   valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./"$KATBINARY"
   valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./"$KATBINARY"
-  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind full done
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY" done"
 fi
-if [ $doValgrindKeygen == "1" ]; then
+# repeat for non valgrind time measure
+./"$KATBINARY"
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- $KATBINARY done (no valgrind)"
+
+
+if [ $doValgrindKeygen == "2" ]; then
   valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./"$KATBINARY"_keygen
   valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./"$KATBINARY"_keygen
-  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind keygen done
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_keygen done"
 fi
-if [ $doValgrindEnc == "1" ]; then
+if [ $doValgrindKeygen == "1" ]; then
+  ./"$KATBINARY"_keygen
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_keygen done (no valgrind)"
+fi
+
+if [ $doValgrindEnc == "2" ]; then
   valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./"$KATBINARY"_enc
   valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./"$KATBINARY"_enc
-  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind enc done
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_enc done"
 fi
-if [ $doValgrindDec == "1" ]; then
+if [ $doValgrindEnc == "1" ]; then
+  ./"$KATBINARY"_enc
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_enc done (no valgrind)"
+fi
+
+
+if [ $doValgrindDec == "2" ]; then
   valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./"$KATBINARY"_dec
   valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./"$KATBINARY"_dec
-  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` - valgrind dec done
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_dec done"
+fi
+if [ $doValgrindDec == "1" ]; then
+  ./"$KATBINARY"_dec
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_dec done (no valgrind)"
 fi
 
 mkdir -p "$LEAVEDIR"/../testresult/$CIPHERNAME

@@ -74,7 +74,7 @@ main()
 
     sprintf(fn_rsp_origin, "PQCkemKAT.rsp");
     if ( (fp_rsp_origin = fopen(fn_rsp_origin, "r")) == NULL ) {
-        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fp_rsp_origin);
+        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fn_rsp_origin);
         return KAT_FILE_OPEN_ERROR;
     }
 

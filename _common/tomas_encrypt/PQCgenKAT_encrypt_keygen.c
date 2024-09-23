@@ -10,6 +10,7 @@
 #include <ctype.h>
 #include "../NIST/rng.h"
 #include "api.h"
+#include <stdlib.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -90,7 +91,7 @@ main()
     //Create the RESPONSE file based on what's in the REQUEST file
     sprintf(fn_rsp_origin, "PQCencryptKAT.rsp");
     if ( (fp_rsp_origin = fopen(fn_rsp_origin, "r")) == NULL ) {
-        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fp_rsp_origin);
+        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fn_rsp_origin);
         return KAT_FILE_OPEN_ERROR;
     }
 //    fprintf(fp_time, "time since start to open req readable (μs) = %.0f\n", ((double) (clock() - start)));

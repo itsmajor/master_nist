@@ -11,6 +11,7 @@
 #include "../NIST/rng.h"
 #include "api.h"
 #include <time.h>
+#include <stdlib.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -54,7 +55,7 @@ main()
         printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_rsp);
         return KAT_FILE_OPEN_ERROR;
     }
-    sprintf(fn_time, "PQCencryptKAT.time");
+    sprintf(fn_time, "PQCkemKAT.time");
     if ( (fp_time = fopen(fn_time, "w")) == NULL ) {
         printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_time);
         return KAT_FILE_OPEN_ERROR;
@@ -143,6 +144,7 @@ main()
         fprintf(fp_time, "crypto_kem_enc (μs) = %.0f\n", time_enc);
         fprintf(fp_time, "crypto_kem_dec (μs) = %.0f\n", time_dec);
         fprintf(fp_time, "\n");
+        fprintf(fp_rsp, "\n");
 
         if ( memcmp(ss, ss1, CRYPTO_BYTES) ) {
             printf("PQCgenKAT ERROR: crypto_kem_dec returned bad 'ss' value\n");

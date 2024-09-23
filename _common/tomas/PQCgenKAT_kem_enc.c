@@ -10,6 +10,7 @@
 #include <ctype.h>
 #include "../NIST/rng.h"
 #include "api.h"
+#include <stdlib.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -77,7 +78,7 @@ main()
 
     sprintf(fn_rsp_origin, "PQCkemKAT.rsp");
     if ( (fp_rsp_origin = fopen(fn_rsp_origin, "r")) == NULL ) {
-        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fp_rsp_origin);
+        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fn_rsp_origin);
         return KAT_FILE_OPEN_ERROR;
     }
 
@@ -102,7 +103,7 @@ main()
             printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_rsp_origin);
             return KAT_DATA_ERROR;
         }
-        fprintBstr(fp_rsp, "seed = ", seed, 48);
+//        fprintBstr(fp_rsp, "seed = ", seed, 48);
         randombytes_init(seed, NULL, 256);
 //        time_prepare = ((double) (clock() - start));
 
@@ -121,7 +122,7 @@ main()
 
         // prepare decode
         ReadHex(fp_rsp_origin, pk, CRYPTO_PUBLICKEYBYTES, "pk = ");
-        fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
+//        fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
 
         // encoding
 //        start = clock();
@@ -131,7 +132,8 @@ main()
         }
 //        time_enc = ((double) (clock() - start));
         fprintBstr(fp_rsp, "ct = ", ct, CRYPTO_CIPHERTEXTBYTES);
-        fprintBstr(fp_rsp, "ss = ", ss, CRYPTO_BYTES);
+//        fprintBstr(fp_rsp, "ss = ", ss, CRYPTO_BYTES);
+        fprintf(fp_rsp, "\n");
 
         // decoding
 //        start = clock();

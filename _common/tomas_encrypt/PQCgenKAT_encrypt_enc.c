@@ -10,6 +10,7 @@
 #include <ctype.h>
 #include "../NIST/rng.h"
 #include "api.h"
+#include <stdlib.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -90,7 +91,7 @@ main()
     //Create the RESPONSE file based on what's in the REQUEST file
     sprintf(fn_rsp_origin, "PQCencryptKAT.rsp");
     if ( (fp_rsp_origin = fopen(fn_rsp_origin, "r")) == NULL ) {
-        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fp_rsp_origin);
+        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fn_rsp_origin);
         return KAT_FILE_OPEN_ERROR;
     }
 //    fprintf(fp_time, "time since start to open req readable (μs) = %.0f\n", ((double) (clock() - start)));
@@ -106,12 +107,11 @@ main()
         fprintf(fp_rsp, "count = %d\n", count);
 //        fprintf(fp_time, "count = %d\n", count);
 
-//        if ( !ReadHex(fp_rsp_origin, seed, 48, "seed = ") ) {
-//            printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_rsp_origin);
-//            return KAT_DATA_ERROR;
-//        }
+        if ( !ReadHex(fp_rsp_origin, seed, 48, "seed = ") ) {
+            printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_rsp_origin);
+            return KAT_DATA_ERROR;
+        }
 //        fprintBstr(fp_rsp, "seed = ", seed, 48);
-//        randombytes_init(seed, NULL, 256);
 
         if ( FindMarker(fp_rsp_origin, "mlen = ") )
             fscanf(fp_rsp_origin, "%llu", &mlen);
@@ -125,10 +125,10 @@ main()
 //        m1 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
         c = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
         
-//        if ( !ReadHex(fp_rsp_origin, m, (int)mlen, "msg = ") ) {
-//            printf("ERROR: unable to read 'msg' from <%s>\n", fn_rsp_origin);
-//            return KAT_DATA_ERROR;
-//        }
+        if ( !ReadHex(fp_rsp_origin, m, (int)mlen, "msg = ") ) {
+            printf("ERROR: unable to read 'msg' from <%s>\n", fn_rsp_origin);
+            return KAT_DATA_ERROR;
+        }
 //        fprintBstr(fp_rsp, "msg = ", m, mlen);
 //        time_prepare = ((double) (clock() - start));
 
@@ -149,12 +149,14 @@ main()
         // encoding
 //        randombytes_init(seed, NULL, 256);
 //        start = clock();
+        randombytes_init(seed, NULL, 256);
+
         if ( (ret_val = crypto_encrypt(c, &clen, m, mlen, pk)) != 0) {
             printf("PQCgenKAT ERROR: crypto_encrypt returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
 //        time_enc = ((double) (clock() - start));
-        fprintf(fp_rsp, "clen = %llu\n", clen);
+//        fprintf(fp_rsp, "clen = %llu\n", clen);
         fprintBstr(fp_rsp, "c = ", c, clen);
         fprintf(fp_rsp, "\n");
 
@@ -182,9 +184,9 @@ main()
 //            return KAT_CRYPTO_FAILURE;
 //        }
         
-//        free(m);
+        free(m);
 //        free(m1);
-//        free(c);
+        free(c);
 
     }
 
