@@ -64,5 +64,6 @@ apih.txt
 *.heap
 *.stack
 *.time
+*.log
 PQCgenKAT_*
 !PQCgenKAT_*.c
