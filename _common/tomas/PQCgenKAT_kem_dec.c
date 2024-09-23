@@ -31,7 +31,7 @@ main()
 {
     char                fn_rsp[32], fn_rsp_origin[32];
     FILE                *fp_rsp, *fp_rsp_origin;
-    unsigned char       seed[48];
+//    unsigned char       seed[48];
 //    unsigned char       entropy_input[48];
     unsigned char       ct[CRYPTO_CIPHERTEXTBYTES], ss1[CRYPTO_BYTES];
     int                 count;

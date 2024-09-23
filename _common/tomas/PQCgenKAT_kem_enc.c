@@ -35,7 +35,7 @@ main()
 //    unsigned char       entropy_input[48];
     unsigned char       ct[CRYPTO_CIPHERTEXTBYTES], ss[CRYPTO_BYTES];
     int                 count;
-    unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
+    unsigned char       pk[CRYPTO_PUBLICKEYBYTES];//, sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
 //    clock_t start;
 //    double time_enc, time_prepare;

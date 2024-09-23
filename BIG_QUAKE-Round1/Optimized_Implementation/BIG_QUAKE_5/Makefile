@@ -1,5 +1,5 @@
 CC = gcc-9
-CFLAGS = -W -Wall -O4
+CFLAGS = -w -O4
 LDFLAGS = -lssl -lcrypto
 CPPFLAGS =
 
