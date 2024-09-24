@@ -74,8 +74,8 @@ int main(int argc, char* argv[])
         printf("ERROR (verifyKAT): Couldn't open '%s' for write\n", fn_verifyresult);
         return KAT_FILE_OPEN_ERROR;
     }
-    fprintf(fp_verifyresult, "%s = ", argv[2]);
-    fflush(fp_verifyresult);
+//    fprintf(fp_verifyresult, "%s = ", argv[2]);
+//    fflush(fp_verifyresult);
     /* Create the VERIFY file */
     sprintf(fn_verify, pathVerify);
     if ( (fp_verify = fopen(fn_verify, "w")) == NULL ) {
@@ -175,10 +175,12 @@ int main(int argc, char* argv[])
 
 
     // write result to verifyresult.log (to end of file, keep previous content)
+    fprintf(fp_verifyresult, "%s = ", argv[2]);
     if (countErrors > 0) {
-        printf("ERRORS found: %i (%s)\n", countErrors, pathVerify);
+        printf("verifyKAT %s - ERRORS found: %i (%s)\n", argv[2], countErrors, pathVerify);
         fprintf(fp_verifyresult, "ERROR (count = %d)\n", countErrors);
     } else {
+        printf("verifyKAT %s - OK\n", argv[2]);
         fprintf(fp_verifyresult, "OK\n");
     }
 
@@ -218,6 +220,8 @@ void compareLine(FILE *file1, FILE *file2, FILE *fp_verify, char *searchString, 
         }
     } else {
         fprintf(fp_verify, "%s %sERROR \t\t not equal: '%.*s...' vs '%.*s...'\n", kattype, searchString, 20, line1, 20, line2);
+        fprintf(fp_verify, "line1: %s\n", line1);
+        fprintf(fp_verify, "line2: %s\n", line2);
         printf("%s %sERROR - not equal - '%.*s...' vs '%.*s...'\n", kattype, searchString, 20, line1, 20, line2);
         countErrors += 1;
     }

@@ -32,7 +32,7 @@ CSRC := $(subst PQCgenKAT_kem.c, ,$(CSRC)) $(notdir $(COMMON:.c=.o)) rng.c
 TARGET = PQCgenKAT_kem PQCgenKAT_kem_dec PQCgenKAT_kem_enc PQCgenKAT_kem_keygen
 
 ## all files will be created in BUILD_DIR
-BUILD_DIR = .build
+BUILD_DIR = .build/$(LIMASZ)
 
 OBJ=$(addprefix ${BUILD_DIR}/,$(CSRC:.c=.o))
 
@@ -41,15 +41,15 @@ all: cleanBuild removeOriginals $(TARGET)
 .PHONY: all clean removeOriginals cleanBuild
 
 clean:
-	rm -f -R ./.build/ ../../../bin/$(PROJECTNAME)_*
+	@rm -f -R ./.build/ $BINARYPATH/* $(TARGET)
 
 DEP=$(OBJ:.o=.d)
 
 # kem.o need to be rebuild with param -DLIMASZ=
-cleanBuild:
-	rm -f $(BUILD_DIR)/*.o
+#cleanBuild:
+#	rm -f $(BUILD_DIR)/*.o
 
-$(TARGET): $(OBJ) .build/$$(patsubst %,%.o,$$@)
+$(TARGET): $(OBJ) $$(BUILD_DIR)/$$(patsubst %,%.o,$$@)
 	mkdir -p $(BINARYPATH)
 	$(CC) $(CFLAGS) -DLIMASZ=$(LIMASZ) -o $(BINARYPATH)/$@ $^ $(LDFLAGS)
 

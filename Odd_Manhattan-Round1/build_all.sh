@@ -1,9 +1,16 @@
 MAKEOPTION=$1;
 
-mkdir -p tests
-
-cd Optimized_Implementation
+cd Optimized_Implementation/128
 echo "moved to: ${PWD}"
 make $MAKEOPTION
-mv PQCgenKAT_kem ../tests
-cd ..
+cd ../..
+
+cd Optimized_Implementation/192
+echo "moved to: ${PWD}"
+make $MAKEOPTION
+cd ../..
+
+cd Optimized_Implementation/256
+echo "moved to: ${PWD}"
+make $MAKEOPTION
+cd ../..

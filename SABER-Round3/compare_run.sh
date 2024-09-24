@@ -1,3 +1,5 @@
+echo this code is deprecated
+
 ##!/bin/bash
 #cd test_compare
 #

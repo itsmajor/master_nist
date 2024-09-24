@@ -1,3 +1,5 @@
+echo this code is deprecated
+
 #mkdir -p test_compare
 #cd Additional_Implementations/Low_Memory/crypto_kem/BabyBear
 #echo "moved to: ${PWD}"
