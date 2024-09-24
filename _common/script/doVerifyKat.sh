@@ -1,9 +1,10 @@
 KATTYPE=$1;
 CIPHERNAME=$2;
+DEBUG=$3; #not mandatory, any value enable debug log in verifyKat
 
 PARAMCOUNT=2;
 
-if [ ! $# -eq $PARAMCOUNT ]
+if [ ! $# -ge $PARAMCOUNT ]
 then
   echo " $PARAMCOUNT parameter expected"
   echo " verifyKat.h KATTYPE CIPHERNAME "
@@ -11,9 +12,11 @@ then
   exit
 fi
 
+# for debug sh example check verify_all.sh in BIG_QUAKE
+
 # called by doVerifyKat, which is called from project test_all.sh
 cd ../_common/verify/
 make
-./verifyKat $KATTYPE $CIPHERNAME
+./verifyKat $KATTYPE $CIPHERNAME $DEBUG
 
 

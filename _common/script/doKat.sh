@@ -63,10 +63,13 @@ then
 fi
 
 
-
 cd $KATPATH
-echo "test" $CIPHERNAME
-echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - start
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') "start KAT:" $CIPHERNAME
+
+# cleanup previous results
+rm -f "$OUTPUTFILE"*
+rm -f massif.*
+
 
 if [ $doValgrindFull == "2" ]; then
   valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./"$KATBINARY"
@@ -75,7 +78,7 @@ if [ $doValgrindFull == "2" ]; then
 fi
 # repeat for non valgrind time measure
 ./"$KATBINARY"
-echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- $KATBINARY done (no valgrind)"
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- $KATBINARY done (with time measurement)"
 
 
 if [ $doValgrindKeygen == "2" ]; then
@@ -87,6 +90,7 @@ if [ $doValgrindKeygen == "1" ]; then
   ./"$KATBINARY"_keygen
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_keygen done (no valgrind)"
 fi
+
 
 if [ $doValgrindEnc == "2" ]; then
   valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./"$KATBINARY"_enc
@@ -115,5 +119,4 @@ mv "$OUTPUTFILE"* "$LEAVEDIR"/../testresult/$CIPHERNAME
 mv massif.* "$LEAVEDIR"/../testresult/$CIPHERNAME/ 2> /dev/null
 cd $LEAVEDIR
 
-echo $(date +'%d.%m.%Y %H:%M:%S.%3N') - end
-echo "done" $CIPHERNAME
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') "finish KAT:" $CIPHERNAME

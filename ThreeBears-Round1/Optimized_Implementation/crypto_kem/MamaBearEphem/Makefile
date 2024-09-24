@@ -29,6 +29,7 @@ BUILD_DIR = .build
 OBJ=$(addprefix ${BUILD_DIR}/,$(CSRC:.c=.o))
 
 all: rmOriginal_PQCgenKAT_kem $(TARGET)
+	@:
 
 .PHONY: all clean rmOriginal_PQCgenKAT_kem
 

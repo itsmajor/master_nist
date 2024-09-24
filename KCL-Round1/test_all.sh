@@ -16,7 +16,7 @@ fi
 
 VALGRIND="$doValgrindFull $doValgrindKeygen $doValgrindEnc $doValgrindDec"
 
-CIPHER="encrypt AKCN-MLWE-CCA"
+CIPHER="encrypt KCL-AKCN-MLWE-CCA"
 ../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/encrypt/AKCN-MLWE-CCA/ref
 ../_common/script/doVerifyKat.sh $CIPHER
 

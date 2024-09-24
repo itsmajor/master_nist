@@ -41,10 +41,10 @@ main()
     unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
     int i, j;
-    clock_t start;
+    clock_t start, progStart;
     double time_keypair, time_enc, time_dec, time_prepare;
 
-    start = clock();
+    progStart = clock();
 
     /* Create the REQUEST file */
     sprintf(fn_req, "PQCencryptKAT.req");
@@ -64,13 +64,14 @@ main()
     }
     fprintf(fp_rsp, "# %s\n\n", CRYPTO_ALGNAME);
     fprintf(fp_time, "# %s\n\n", CRYPTO_ALGNAME);
-    fprintf(fp_time, "time since start to open rsp file (μs) = %.0f\n", ((double) (clock() - start)));
+    fprintf(fp_time, "reserved for full time output                                                  \n");
+    fprintf(fp_time, "time since start to open rsp file (μs) = %.0f\n", ((double) (clock() - progStart)));
 
     for (int i=0; i<48; i++)
         entropy_input[i] = i;
 
     randombytes_init(entropy_input, NULL, 256);
-    fprintf(fp_time, "time since start to randombytes_init (μs) = %.0f\n", ((double) (clock() - start)));
+    fprintf(fp_time, "time since start to randombytes_init (μs) = %.0f\n", ((double) (clock() - progStart)));
     // todo wtf? i is always 0 -> math useless, count is j and mlen always 16
 //    for (int i=0; i<1; i++) {
         for (int j=0; j<10; j++) {
@@ -90,16 +91,15 @@ main()
         }
 //    }
     fclose(fp_req);
-    fprintf(fp_time, "time since start to req closing (μs) = %.0f\n", ((double) (clock() - start)));
+    fprintf(fp_time, "time since start to req closing (μs) = %.0f\n", ((double) (clock() - progStart)));
 
     //Create the RESPONSE file based on what's in the REQUEST file
     if ( (fp_req = fopen(fn_req, "r")) == NULL ) {
         printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fn_req);
         return KAT_FILE_OPEN_ERROR;
     }
-    fprintf(fp_time, "time since start to open req readable (μs) = %.0f\n", ((double) (clock() - start)));
+    fprintf(fp_time, "time since start to open req readable (μs) = %.0f\n\n\n", ((double) (clock() - progStart)));
 
-    fprintf(fp_time, "\n");
     while (1) {
         start = clock();
         if ( FindMarker(fp_req, "count = ") )
@@ -198,6 +198,9 @@ main()
         free(c);
 
     }
+
+    fseek(fp_time, strlen(CRYPTO_ALGNAME) + 4, SEEK_SET);
+    fprintf(fp_time, "time from start to end (μs) = %.0f", ((double) (clock() - progStart)));
 
     fclose(fp_req);
     fclose(fp_rsp);
