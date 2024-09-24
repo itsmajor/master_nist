@@ -1,3 +1,4 @@
+# this is a custom Makefile to Lima (for LIMASZ and avoid repeated builds)
 # 6 security level: 1018, 1024, 1306, 1822, 2048, 2062
 # (make LIMASZ=1018)
 LIMASZ=1018
@@ -43,7 +44,7 @@ all: removeOriginals $(TARGET)
 .PHONY: all clean removeOriginals
 
 clean:
-	@rm -f -R ./.build/ $BINARYPATH/* $(TARGET)
+	@rm -f -R ./.build/ $BINARYPATH/*
 
 DEP=$(OBJ:.o=.d)
 

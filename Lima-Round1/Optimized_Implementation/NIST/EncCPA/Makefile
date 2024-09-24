@@ -1,3 +1,4 @@
+# this is a custom Makefile to Lima (for LIMASZ and avoid repeated builds)
 # 6 security level: 1018, 1024, 1306, 1822, 2048, 2062
 # (make LIMASZ=1018)
 LIMASZ=1018
@@ -8,9 +9,9 @@ LIMASZ=1018
 PATHTOROOT = $(shell cd ../_common/ 2> /dev/null && echo "../")$(shell cd ../../_common 2> /dev/null && echo "../../")$(shell cd ../../../_common 2> /dev/null && echo "../../../")$(shell cd ../../../../_common 2> /dev/null && echo "../../../../")$(shell cd ../../../../../_common 2> /dev/null && echo "../../../../../")$(shell cd ../../../../../../_common 2> /dev/null && echo "../../../../../../")
 PROJECTCOMMONPATH=../common
 PROJECTNAME=$(shell basename $(CURDIR))
-BINARYPATH=../../../bin/$(PROJECTNAME)_$(LIMASZ)
+BINARYPATH=../../../bin/$(PROJECTNAME)/$(LIMASZ)
 CC=gcc
-CFLAGS= -L./../../Lib -I./../../Lib -I . -I $(PATHTOROOT)_common/NIST -I $(PROJECTCOMMONPATH) -fomit-frame-pointer -Ofast -march=native -w
+CFLAGS= -L./../../Lib -I./../../Lib -I . -I $(PATHTOROOT)_common/NIST -I $(PROJECTCOMMONPATH) -I $(PATHTOROOT)_common/tomas_encrypt -fomit-frame-pointer -Ofast -march=native -w
 LDFLAGS = -lLima -lXKCP -lcrypto -lm
 
 # add make lookup pathes
@@ -20,6 +21,7 @@ vpath % $(PROJECTCOMMONPATH)
 vpath % $(PATHTOROOT)_common/NIST
 # 4kem path
 vpath %.c $(PATHTOROOT)_common/tomas_encrypt
+vpath % $(BINARYPATH)
 
 # add all c files in this directory
 CSRC := $(wildcard *.c)
@@ -42,7 +44,7 @@ all: removeOriginals $(TARGET)
 .PHONY: all clean removeOriginals
 
 clean:
-	@rm -f -R ./.build/ $BINARYPATH/* $(TARGET)
+	@rm -f -R ./.build/ $BINARYPATH/*
 
 DEP=$(OBJ:.o=.d)
 

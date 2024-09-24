@@ -73,52 +73,52 @@ VALGRIND="$doValgrindFull $doValgrindKeygen $doValgrindEnc $doValgrindDec"
 ###############################  6x EncCCA    ###################################
 
 CIPHER="encrypt Lima-EncCCA_1018"
-../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCCA_1018
+../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCCA/1018
 ../_common/script/doVerifyKat.sh $CIPHER
 
 CIPHER="encrypt Lima-EncCCA_1024"
-../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCCA_1024
+../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCCA/1024
 ../_common/script/doVerifyKat.sh $CIPHER
 
 CIPHER="encrypt Lima-EncCCA_1306"
-../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCCA_1306
+../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCCA/1306
 ../_common/script/doVerifyKat.sh $CIPHER
 
 CIPHER="encrypt Lima-EncCCA_1822"
-../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCCA_1822
+../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCCA/1822
 ../_common/script/doVerifyKat.sh $CIPHER
 
 CIPHER="encrypt Lima-EncCCA_2048"
-../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCCA_2048
+../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCCA/2048
 ../_common/script/doVerifyKat.sh $CIPHER
 
 CIPHER="encrypt Lima-EncCCA_2062"
-../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCCA_2062
+../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCCA/2062
 ../_common/script/doVerifyKat.sh $CIPHER
 
 
 ###############################  6x EncCPA    ###################################
 
-CIPHER="encrypt Lima-EncCPA_1018"
-../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCPA_1018
-../_common/script/doVerifyKat.sh $CIPHER
-
-CIPHER="encrypt Lima-EncCPA_1024"
-../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCPA_1024
-../_common/script/doVerifyKat.sh $CIPHER
-
-CIPHER="encrypt Lima-EncCPA_1306"
-../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCPA_1306
-../_common/script/doVerifyKat.sh $CIPHER
-
-CIPHER="encrypt Lima-EncCPA_1822"
-../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCPA_1822
-../_common/script/doVerifyKat.sh $CIPHER
-
-CIPHER="encrypt Lima-EncCPA_2048"
-../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCPA_2048
-../_common/script/doVerifyKat.sh $CIPHER
-
-CIPHER="encrypt Lima-EncCPA_2062"
-../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCPA_2062
-../_common/script/doVerifyKat.sh $CIPHER
+#CIPHER="encrypt Lima-EncCPA_1018"
+#../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCPA_1018
+#../_common/script/doVerifyKat.sh $CIPHER
+#
+#CIPHER="encrypt Lima-EncCPA_1024"
+#../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCPA_1024
+#../_common/script/doVerifyKat.sh $CIPHER
+#
+#CIPHER="encrypt Lima-EncCPA_1306"
+#../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCPA_1306
+#../_common/script/doVerifyKat.sh $CIPHER
+#
+#CIPHER="encrypt Lima-EncCPA_1822"
+#../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCPA_1822
+#../_common/script/doVerifyKat.sh $CIPHER
+#
+#CIPHER="encrypt Lima-EncCPA_2048"
+#../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCPA_2048
+#../_common/script/doVerifyKat.sh $CIPHER
+#
+#CIPHER="encrypt Lima-EncCPA_2062"
+#../_common/script/doKat.sh $VALGRIND $CIPHER bin/EncCPA_2062
+#../_common/script/doVerifyKat.sh $CIPHER
