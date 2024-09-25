@@ -1,37 +1,42 @@
-cd Lima-Round1
-echo "moved to: ${PWD}"
-./test_all.sh 0 2 2 2
-cd ..
-
-cd EMBLEM_R_EMBLEM-Round1
-echo "moved to: ${PWD}"
-./test_all.sh 0 1 1 1
-cd ..
-
-cd NTRUEncrypt-Round1
-echo "moved to: ${PWD}"
-./test_all.sh 9 1 1 1
-cd ..
-
 cd BIG_QUAKE-Round1
 echo "moved to: ${PWD}"
-./test_all.sh 0 1 1 1
-cd ..
-
-cd LOTUS-Round1
-echo "moved to: ${PWD}"
-./test_all.sh 9 1 1 1
-cd ..
-
-cd Odd_Manhattan-Round1
-echo "moved to: ${PWD}"
-./test_all.sh 0 1 1 1
+./test_all.sh 0 2 2 2
 cd ..
 
 cd Classic-McEliece-Round4
 echo "moved to: ${PWD}"
 ./test_all.sh 0 1 1 1
 cd ..
+
+
+#cd Lima-Round1
+#echo "moved to: ${PWD}"
+#./test_all.sh 0 2 2 2
+#cd ..
+#
+#cd EMBLEM_R_EMBLEM-Round1
+#echo "moved to: ${PWD}"
+#./test_all.sh 0 1 1 1
+#cd ..
+#
+#cd NTRUEncrypt-Round1
+#echo "moved to: ${PWD}"
+#./test_all.sh 9 1 1 1
+#cd ..
+#
+#
+#
+#cd LOTUS-Round1
+#echo "moved to: ${PWD}"
+#./test_all.sh 9 1 1 1
+#cd ..
+#
+#cd Odd_Manhattan-Round1
+#echo "moved to: ${PWD}"
+#./test_all.sh 0 1 1 1
+#cd ..
+
+
 #
 #cd CRYSTALS_Dilithium-Round3
 #echo "moved to: ${PWD}"

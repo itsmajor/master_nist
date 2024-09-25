@@ -32,14 +32,14 @@ main()
     char                fn_rsp[32], fn_rsp_origin[32];
     FILE                *fp_rsp, *fp_rsp_origin;
     unsigned char       seed[48];
-    unsigned char       msg[3300];
-    unsigned char       entropy_input[48];
-    unsigned char       *m, *c, *m1;
-    unsigned long long  mlen, clen, mlen1;
+//    unsigned char       msg[3300];
+//    unsigned char       entropy_input[48];
+//    unsigned char       *m, *c, *m1;
+//    unsigned long long  mlen, clen, mlen1;
     int                 count;
     unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
-    int i, j;
+//    int i, j;
 //    clock_t start;
 //    double time_keypair, time_enc, time_dec, time_prepare;
 
@@ -71,9 +71,10 @@ main()
 //    randombytes_init(entropy_input, NULL, 256);
 //    fprintf(fp_time, "time since start to randombytes_init (μs) = %.0f\n", ((double) (clock() - start)));
 //    for (i=0; i<1; i++) {
-//        for (j=0; j<5; j++) {
+//        for (j=0; j<10; j++) {
 //            fprintf(fp_req, "count = %d\n", i*25+j);
 //            randombytes(seed, 48);
+//            randombytes(seed, 16);
 //            fprintBstr(fp_req, "seed = ", seed, 48);
 //            mlen = 16+i*8;
 //            fprintf(fp_req, "mlen = %lld\n", mlen);
@@ -114,22 +115,22 @@ main()
         fprintBstr(fp_rsp, "seed = ", seed, 48);
         randombytes_init(seed, NULL, 256);
 
-        if ( FindMarker(fp_rsp_origin, "mlen = ") )
-            fscanf(fp_rsp_origin, "%llu", &mlen);
-        else {
-            printf("PQCgenKAT ERROR: unable to read 'mlen' from <%s>\n", fn_rsp_origin);
-            return KAT_DATA_ERROR;
-        }
+//        if ( FindMarker(fp_rsp_origin, "mlen = ") )
+//            fscanf(fp_rsp_origin, "%llu", &mlen);
+//        else {
+//            printf("PQCgenKAT ERROR: unable to read 'mlen' from <%s>\n", fn_rsp_origin);
+//            return KAT_DATA_ERROR;
+//        }
 //        fprintf(fp_rsp, "mlen = %llu\n", mlen);
         
-        m = (unsigned char *)calloc(mlen, sizeof(unsigned char));
-        m1 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
-        c = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
+//        m = (unsigned char *)calloc(mlen, sizeof(unsigned char));
+//        m1 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
+//        c = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
         
-        if ( !ReadHex(fp_rsp_origin, m, (int)mlen, "msg = ") ) {
-            printf("ERROR: unable to read 'msg' from <%s>\n", fn_rsp_origin);
-            return KAT_DATA_ERROR;
-        }
+//        if ( !ReadHex(fp_rsp_origin, m, (int)mlen, "msg = ") ) {
+//            printf("ERROR: unable to read 'msg' from <%s>\n", fn_rsp_origin);
+//            return KAT_DATA_ERROR;
+//        }
 //        fprintBstr(fp_rsp, "msg = ", m, mlen);
 //        time_prepare = ((double) (clock() - start));
 

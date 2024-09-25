@@ -5,6 +5,7 @@ doValgrindDec=$4;
 KATTYPE=$5;
 CIPHERNAME=$6;
 KATPATH=$7;
+DEBUG=$8; #not mandatory, any value enable debug log in verifyKat
 
 PARAMCOUNT=7;
 
@@ -24,7 +25,7 @@ if [ $doValgrindFull == "explain4param" ]
     echo "special: doValgrindFull = 9 will trigger call build_all.sh"
     exit
 fi
-if [ ! $# -eq $PARAMCOUNT ]
+if [ ! $# -ge $PARAMCOUNT ]
 then
   # help text for wrong doKat.sh initialisation
   echo " $PARAMCOUNT parameter expected"
@@ -77,7 +78,7 @@ if [ $doValgrindFull == "2" ]; then
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY" done"
 fi
 # repeat for non valgrind time measure
-./"$KATBINARY"
+./"$KATBINARY" $DEBUG
 echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- $KATBINARY done (with time measurement)"
 
 
@@ -87,7 +88,7 @@ if [ $doValgrindKeygen == "2" ]; then
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_keygen done"
 fi
 if [ $doValgrindKeygen == "1" ]; then
-  ./"$KATBINARY"_keygen
+  ./"$KATBINARY"_keygen $DEBUG
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_keygen done (no valgrind)"
 fi
 
@@ -98,7 +99,7 @@ if [ $doValgrindEnc == "2" ]; then
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_enc done"
 fi
 if [ $doValgrindEnc == "1" ]; then
-  ./"$KATBINARY"_enc
+  ./"$KATBINARY"_enc $DEBUG
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_enc done (no valgrind)"
 fi
 
@@ -109,7 +110,7 @@ if [ $doValgrindDec == "2" ]; then
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_dec done"
 fi
 if [ $doValgrindDec == "1" ]; then
-  ./"$KATBINARY"_dec
+  ./"$KATBINARY"_dec $DEBUG
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_dec done (no valgrind)"
 fi
 

@@ -11,6 +11,7 @@
 #include "../NIST/rng.h"
 #include "api.h"
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -26,8 +27,11 @@ int		FindMarker(FILE *infile, const char *marker);
 int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
 void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
 
+// global variable
+bool    debug = false;
+
 int
-main()
+main(int argc, char* argv[])
 {
     char                fn_rsp[32], fn_rsp_origin[32];
     FILE                *fp_rsp, *fp_rsp_origin;
@@ -44,6 +48,12 @@ main()
 //    double time_keypair, time_enc, time_dec, time_prepare;
 
 //    start = clock();
+
+    if ( argc > 1) {
+        // any param will start verbose logging
+        debug = true;
+        printf("start main PQCgenKAT_encrypt\n");
+    }
 
     /* Create the REQUEST file */
 //    sprintf(fn_req, "PQCencryptKAT.req");
@@ -112,6 +122,7 @@ main()
             return KAT_DATA_ERROR;
         }
 //        fprintBstr(fp_rsp, "seed = ", seed, 48);
+        randombytes_init(seed, NULL, 256);
 
         if ( FindMarker(fp_rsp_origin, "mlen = ") )
             fscanf(fp_rsp_origin, "%llu", &mlen);
@@ -132,7 +143,7 @@ main()
 //        fprintBstr(fp_rsp, "msg = ", m, mlen);
 //        time_prepare = ((double) (clock() - start));
 
-        // Generate the public/private keypair
+//         Generate the public/private keypair
 //        start = clock();
 //        if ( (ret_val = crypto_encrypt_keypair(pk, sk)) != 0) {
 //            printf("PQCgenKAT ERROR: crypto_encrypt_keypair returned <%d>\n", ret_val);
@@ -147,14 +158,21 @@ main()
 //        fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
 
         // encoding
-//        randombytes_init(seed, NULL, 256);
 //        start = clock();
-        randombytes_init(seed, NULL, 256);
-
+        if (debug) {
+            printf("PK: ");
+            char *cp = pk;
+            for (int i = 0; i < 30; i++) printf("%02X", *cp++);
+            printf("\nm: ");
+            char* cp2 = m;
+            for (int i = 0; *cp2 != '\0' && i < 30; i++) printf("%02X", *cp2++);
+            printf("\n");
+        }
         if ( (ret_val = crypto_encrypt(c, &clen, m, mlen, pk)) != 0) {
             printf("PQCgenKAT ERROR: crypto_encrypt returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
+
 //        time_enc = ((double) (clock() - start));
 //        fprintf(fp_rsp, "clen = %llu\n", clen);
         fprintBstr(fp_rsp, "c = ", c, clen);

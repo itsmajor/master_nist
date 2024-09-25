@@ -11,6 +11,7 @@
 #include "../NIST/rng.h"
 #include "api.h"
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -26,8 +27,11 @@ int		FindMarker(FILE *infile, const char *marker);
 int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
 void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
 
+// global variable
+bool    debug = false;
+
 int
-main()
+main(int argc, char* argv[])
 {
     char                fn_rsp[32], fn_rsp_origin[32];
     FILE                *fp_rsp, *fp_rsp_origin;
@@ -39,6 +43,12 @@ main()
     int                 ret_val;
 //    clock_t start;
 //    double time_enc, time_prepare;
+
+    if ( argc > 1) {
+        // any param will start verbose logging
+        debug = true;
+        printf("start main PQCgenKAT_kem_enc\n");
+    }
 
     // Create the REQUEST file
 //    sprintf(fn_req, "PQCkemKAT_%d.req", CRYPTO_SECRETKEYBYTES);
@@ -83,6 +93,8 @@ main()
     }
 
     fprintf(fp_rsp, "# %s\n\n", CRYPTO_ALGNAME);
+    if (debug) printf("start looping\n");
+
     while (1) {
 //        start = clock();
         if ( FindMarker(fp_rsp_origin, "count = ") )
@@ -91,6 +103,7 @@ main()
             break;
         }
         fprintf(fp_rsp, "count = %d\n", count);
+        if (debug) printf("loop count: %d\n", count);
 
 //        if ( !ReadHex(fp_req, seed, 48, "seed = ") ) {
 //            printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_req);
@@ -158,6 +171,8 @@ main()
 //        }
 
     }
+    if (debug) printf("finish looping\n");
+
 
 //    fclose(fp_req);
     fclose(fp_rsp);

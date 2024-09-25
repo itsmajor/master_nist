@@ -11,6 +11,7 @@
 #include "../NIST/rng.h"
 #include "api.h"
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -26,8 +27,11 @@ int		FindMarker(FILE *infile, const char *marker);
 int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
 void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
 
+// global variable
+bool    debug = false;
+
 int
-main()
+main(int argc, char* argv[])
 {
     char                fn_rsp[32], fn_rsp_origin[32];
     FILE                *fp_rsp, *fp_rsp_origin;
@@ -39,11 +43,17 @@ main()
     int                 count;
     unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
-    int i, j;
+//    int i, j;
 //    clock_t start;
 //    double time_keypair, time_enc, time_dec, time_prepare;
 
 //    start = clock();
+
+    if ( argc > 1) {
+        // any param will start verbose logging
+        debug = true;
+        printf("start main PQCgenKAT_encrypt\n");
+    }
 
     /* Create the REQUEST file */
 //    sprintf(fn_req, "PQCencryptKAT.req");
@@ -98,6 +108,7 @@ main()
 //    fprintf(fp_time, "time since start to open req readable (μs) = %.0f\n", ((double) (clock() - start)));
 
 //    fprintf(fp_time, "\n");
+    if (debug) printf("start looping\n");
     while (1) {
 //        start = clock();
         if ( FindMarker(fp_rsp_origin, "count = "))
@@ -107,6 +118,7 @@ main()
         }
         fprintf(fp_rsp, "count = %d\n", count);
 //        fprintf(fp_time, "count = %d\n", count);
+        if (debug) printf("loop count: %d\n", count);
 
 //        if ( !ReadHex(fp_rsp_origin, seed, 48, "seed = ") ) {
 //            printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_rsp_origin);
@@ -168,13 +180,22 @@ main()
             printf("ERROR: unable to read 'clen' from <%s>\n", fn_rsp_origin);
             return KAT_DATA_ERROR;
         }
+//        FindMarker(fp_rsp_origin, "c = ");
+//        clen = CRYPTO_CIPHERTEXTBYTES;
+        // ReadHex buggy using it one after the other,
         ReadHex(fp_rsp_origin, c, clen, "c = ");
-
-//        fprintBstr(fp_rsp, "c = ", c, 16); // print just first 16
-//        fprintf(fp_rsp, "clen = %llu\n", clen);
-//        fprintBstr(fp_rsp, "sk = ", sk, 16); // print just first 16
-
 //        start = clock();
+        if (debug) {
+            fprintBstr(fp_rsp, "sk = ", sk, 16); // print just first 16
+            fprintf(fp_rsp, "clen = %llu\n", clen);
+            fprintBstr(fp_rsp, "c = ", c, clen); // print just first 16
+            fflush(fp_rsp);
+
+            printf("SK: ");
+            char *cp = sk;
+            for (int i = 0; i < 30; i++) printf("%02X", *cp++);
+            printf("\nclen: %i\n", clen);
+        }
         if ( (ret_val = crypto_encrypt_open(m1, &mlen1, c, clen, sk)) != 0) {
             printf("crypto_encrypt_open returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
@@ -204,7 +225,7 @@ main()
         
 //        free(m);
         free(m1);
-        free(c);
+//        free(ct);
 
     }
 

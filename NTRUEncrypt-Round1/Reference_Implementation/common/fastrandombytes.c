@@ -45,6 +45,7 @@ fastrandombytes(unsigned char *r, unsigned long long rlen)
 {
   unsigned long long n=0;
   uint8_t i;
+//    printf("********* fastrandombytes used\n"); // often used
   if(!init)
   {
     randombytes(key, crypto_stream_salsa20_KEYBYTES);
@@ -76,6 +77,7 @@ void rng_cleanup()
 void
 rng_init()
 {
+//    printf("********* rng_init used\n"); // not used
   fastrandombytes(randpool, RAND_LEN_BYTES);
   randpos = 0;
 }
@@ -84,6 +86,7 @@ rng_init()
 void
 rng_uint16(uint16_t *r)
 {
+//    printf("********* rng_uint16 used\n"); // not used
   if(randpos >= (RAND_LEN_BYTES - sizeof(uint16_t)))
   {
     fastrandombytes(randpool, RAND_LEN_BYTES);
@@ -99,6 +102,7 @@ rng_uint16(uint16_t *r)
 void
 rng_uint64(uint64_t *r)
 {
+//    printf("********* rng_uint64 used\n"); // many times
   if(randpos >= RAND_LEN_BYTES - sizeof(uint64_t))
   {
     fastrandombytes(randpool, RAND_LEN_BYTES);
