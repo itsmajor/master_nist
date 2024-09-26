@@ -18,6 +18,9 @@ BUILD_DIR = .build
 OBJ=$(addprefix ${BUILD_DIR}/,$(CSRC:.c=.o))
 
 all: $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4)
+	@:
+
+.PHONY: all clean
 
 DEP=$(OBJ:.o=.d)
 

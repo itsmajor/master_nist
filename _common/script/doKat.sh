@@ -65,7 +65,7 @@ fi
 
 
 cd $KATPATH
-echo $(date +'%d.%m.%Y %H:%M:%S.%3N') "start KAT:" $CIPHERNAME
+echo $(date +'%d.%m.%Y %H:%M:%S.%3N') "start KAT ($KATTYPE):" $CIPHERNAME
 
 # cleanup previous results
 rm -f "$OUTPUTFILE"*
@@ -113,6 +113,7 @@ if [ $doValgrindDec == "1" ]; then
   ./"$KATBINARY"_dec $DEBUG
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_dec done (no valgrind)"
 fi
+
 
 mkdir -p "$LEAVEDIR"/../testresult/$CIPHERNAME
 rm "$LEAVEDIR"/../testresult/$CIPHERNAME/* 2> /dev/null

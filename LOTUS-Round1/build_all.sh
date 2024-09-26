@@ -1,10 +1,23 @@
+#! /bin/bash
 MAKEOPTION=$1;
+sec_array=(128 192 256)
+kat_array=('encrypt' 'kem')
 
-cd Optimized_Implementation/encrypt/lotus128
-echo "moved to: ${PWD}"
-make SEC=128 $MAKEOPTION
-cd ../../..
+for kat in "${kat_array[@]}"; do
+  for sec in "${sec_array[@]}"; do
+    cd Optimized_Implementation/$kat/lotus$sec
+    echo "moved to: ${PWD}"
+    make SEC=$sec $MAKEOPTION
+    cd ../../..
+  done
+done
 
+
+#cd Optimized_Implementation/encrypt/lotus128
+#echo "moved to: ${PWD}"
+#make SEC=128 $MAKEOPTION
+#cd ../../..
+#
 #cd Optimized_Implementation/encrypt/lotus192
 #echo "moved to: ${PWD}"
 #make SEC=192 $MAKEOPTION
@@ -14,7 +27,7 @@ cd ../../..
 #echo "moved to: ${PWD}"
 #make SEC=256 $MAKEOPTION
 #cd ../../..
-#
+
 #cd Optimized_Implementation/kem/lotus128
 #echo "moved to: ${PWD}"
 #make SEC=128 $MAKEOPTION

@@ -26,6 +26,7 @@
 int		FindMarker(FILE *infile, const char *marker);
 int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
 void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
+void hex_to_bin(size_t size, unsigned char *dest, const char *input);
 
 // global variable
 bool    debug = false;
@@ -52,7 +53,7 @@ main(int argc, char* argv[])
     if ( argc > 1) {
         // any param will start verbose logging
         debug = true;
-        printf("start main PQCgenKAT_encrypt\n");
+        printf("start main PQCgenKAT_encrypt_dec\n");
     }
 
     /* Create the REQUEST file */
@@ -137,7 +138,7 @@ main(int argc, char* argv[])
         
 //        m = (unsigned char *)calloc(mlen, sizeof(unsigned char));
         m1 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
-        c = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
+//        c = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char)); // todo new
 
 //        if ( !ReadHex(fp_rsp_origin, m, (int)mlen, "msg = ") ) {
 //            printf("ERROR: unable to read 'msg' from <%s>\n", fn_rsp_origin);
@@ -174,29 +175,26 @@ main(int argc, char* argv[])
 
         // prepare decode
         ReadHex(fp_rsp_origin, sk, CRYPTO_SECRETKEYBYTES, "sk = ");
+        if (debug) printHex("sk", sk, 30, true);
+
         if ( FindMarker(fp_rsp_origin, "clen = ") )
             fscanf(fp_rsp_origin, "%llu", &clen);
         else {
             printf("ERROR: unable to read 'clen' from <%s>\n", fn_rsp_origin);
             return KAT_DATA_ERROR;
         }
+        if (debug) printf("clen: %llu\n", clen);
+//        c = (unsigned char *)calloc(clen, sizeof(unsigned char)); // todo new
+
 //        FindMarker(fp_rsp_origin, "c = ");
 //        clen = CRYPTO_CIPHERTEXTBYTES;
         // ReadHex buggy using it one after the other,
-        ReadHex(fp_rsp_origin, c, clen, "c = ");
+        unsigned char ct[clen];
+        ReadHex(fp_rsp_origin, ct, clen, "c = ");
 //        start = clock();
-        if (debug) {
-            fprintBstr(fp_rsp, "sk = ", sk, 16); // print just first 16
-            fprintf(fp_rsp, "clen = %llu\n", clen);
-            fprintBstr(fp_rsp, "c = ", c, clen); // print just first 16
-            fflush(fp_rsp);
+        if (debug) printHex("c", ct, 30, true);
 
-            printf("SK: ");
-            char *cp = sk;
-            for (int i = 0; i < 30; i++) printf("%02X", *cp++);
-            printf("\nclen: %i\n", clen);
-        }
-        if ( (ret_val = crypto_encrypt_open(m1, &mlen1, c, clen, sk)) != 0) {
+        if ( (ret_val = crypto_encrypt_open(m1, &mlen1, ct, clen, sk)) != 0) {
             printf("crypto_encrypt_open returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
@@ -237,6 +235,13 @@ main(int argc, char* argv[])
     return KAT_SUCCESS;
 }
 
+void printHex(char *fieldname, char *hexstring, int printamount, bool printDots) {
+    printf("%s: ", fieldname);
+    char *cp = hexstring;
+    for (int i = 0; i < printamount /*&& *cp != '\0'*/; i++) printf("%02X", *cp++);
+    if (printDots) printf("...");
+    printf("\n");
+}
 
 //
 // ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
@@ -282,47 +287,45 @@ FindMarker(FILE *infile, const char *marker)
 // ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
 //
 int
-ReadHex(FILE *infile, unsigned char *A, int Length, char *str)
-{
-	int			i, ch, started;
-	unsigned char	ich;
+ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
+    if (debug) printf("in ReadHex (Length: %i, search: '%s')\n", Length, str);
 
-	if ( Length == 0 ) {
-		A[0] = 0x00;
-		return 1;
-	}
-	memset(A, 0x00, Length);
-	started = 0;
-	if ( FindMarker(infile, str) )
-		while ( (ch = fgetc(infile)) != EOF ) {
-			if ( !isxdigit(ch) ) {
-				if ( !started ) {
-					if ( ch == '\n' )
-						break;
-					else
-						continue;
-				}
-				else
-					break;
-			}
-			started = 1;
-			if ( (ch >= '0') && (ch <= '9') )
-				ich = ch - '0';
-			else if ( (ch >= 'A') && (ch <= 'F') )
-				ich = ch - 'A' + 10;
-			else if ( (ch >= 'a') && (ch <= 'f') )
-				ich = ch - 'a' + 10;
-            else // shouldn't ever get here
-                ich = 0;
+    if (Length == 0) {
+        A[0] = 0x00;
+        return 1;
+    }
+    memset(A, 0x00, Length);
 
-			for ( i=0; i<Length-1; i++ )
-				A[i] = (A[i] << 4) | (A[i+1] >> 4);
-			A[Length-1] = (A[Length-1] << 4) | ich;
-		}
-	else
-		return 0;
+    char *line = NULL;
+    size_t size1 = 0;
+    FindMarker(infile, str);
+    getline(&line, &size1, infile);
+    hex_to_bin(Length, A, line);
+    return 1;
+}
 
-	return 1;
+void hex_to_bin(size_t size, unsigned char *dest, const char *input) {
+    unsigned char *s = dest, digit1, digit2;
+    unsigned int ich1, ich2;
+    for (size_t i = 0; i < size; i++) {
+        digit1 = input[i*2];
+        digit2 = input[i*2 + 1];
+
+        // A = 65
+        // 0 = 48
+        if (digit1 >= 65)
+            ich1 = digit1 - 55;
+        else
+            ich1 = digit1 - 48;
+
+        if (digit2 >= 65)
+            ich2 = digit2 - 55;
+        else
+            ich2 = digit2 - 48;
+
+        *s++ = (unsigned char) ((ich1<<4) + ich2);
+    }
+    *s = '\0';
 }
 
 void

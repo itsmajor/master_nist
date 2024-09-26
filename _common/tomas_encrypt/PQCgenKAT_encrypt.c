@@ -27,6 +27,7 @@
 int		FindMarker(FILE *infile, const char *marker);
 int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
 void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
+void hex_to_bin(size_t size, unsigned char *dest, const char *input);
 
 // global variable
 bool    debug = false;
@@ -82,7 +83,7 @@ main(int argc, char* argv[])
 
     randombytes_init(entropy_input, NULL, 256);
     fprintf(fp_time, "time since start to randombytes_init (μs) = %.0f\n", ((double) (clock() - progStart)));
-    // todo wtf? i is always 0 -> math useless, count is j and mlen always 16
+    // only in NTRUEncrypt is this used (i<3), simplified here
 //    for (int i=0; i<1; i++) {
         for (int j=0; j<10; j++) {
 //            fprintf(fp_req, "count = %d\n", i*25+j);
@@ -129,11 +130,7 @@ main(int argc, char* argv[])
         }
         fprintBstr(fp_rsp, "seed = ", seed, 48);
         randombytes_init(seed, NULL, 256);
-        if (debug) {
-            printf("randombytes_init seed: ");
-            for (char* cp = seed; *cp != '\0'; ++cp) printf("%02X", *cp);
-            printf("\n");
-        }
+        if (debug) printHex("randombytes_init seed: ", seed, 48, false);
 
         if ( FindMarker(fp_req, "mlen = ") )
             fscanf(fp_req, "%llu", &mlen);
@@ -142,12 +139,13 @@ main(int argc, char* argv[])
             return KAT_DATA_ERROR;
         }
         fprintf(fp_rsp, "mlen = %llu\n", mlen);
-        if (debug) printf("read mlen: '%llu'\n", mlen);
+        if (debug) printf("mlen: %llu\n", mlen);
 
         m = (unsigned char *)calloc(mlen, sizeof(unsigned char));
         m1 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
         c = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
-        if (debug) printf("calloc\n");
+        // NTRUEncrypt use here:  c = (unsigned char *)calloc(mlen+CRYPTO_CIPHERTEXTBYTES, sizeof(unsigned char));
+        if (debug) printf("calloc (m, m1, c) done\n");
 
 
         if ( !ReadHex(fp_req, m, (int)mlen, "msg = ") ) {
@@ -155,11 +153,7 @@ main(int argc, char* argv[])
             return KAT_DATA_ERROR;
         }
         fprintBstr(fp_rsp, "msg = ", m, mlen);
-        if (debug) {
-            printf("read msg (len: %llu): ", mlen);
-            for (char* cp = m; *cp != '\0'; ++cp) printf("%02X", *cp);
-            printf("\n");
-        }
+        if (debug) printHex("msg", msg, mlen, false);
         time_prepare = ((double) (clock() - start));
 
         // Generate the public/private keypair
@@ -172,13 +166,7 @@ main(int argc, char* argv[])
         time_keypair = ((double) (clock() - start));
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
         fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
-        if (debug) {
-            printf("PK: ");
-            for (char* cp = pk; *cp != '\0'; ++cp) printf("%02X", *cp);
-            printf("\nSK: ");
-            for (char* cp = sk; *cp != '\0'; ++cp) printf("%02X", *cp);
-            printf("\n");
-        }
+        if (debug) { printHex("pk", pk, 30, true); printHex("sk", sk, 30, true); }
 
         // encoding
         // if encrypt use randombytes then we need to reinit for same results als _enc run
@@ -189,19 +177,14 @@ main(int argc, char* argv[])
             printf("PQCgenKAT ERROR: crypto_encrypt returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
-        if (debug) {
-            printf("crypto_encrypt c (clen: %llu): ", clen);
-            for (char* cp = c; *cp != '\0'; ++cp) printf("%02X", *cp);
-            printf("\n");
-        }
+
         time_enc = ((double) (clock() - start));
         fprintf(fp_rsp, "clen = %llu\n", clen);
         fprintBstr(fp_rsp, "c = ", c, clen);
         fprintf(fp_rsp, "\n");
         if (debug) {
-            printf("crypto_encrypt c (clen: %llu): ", clen);
-            for (char* cp = c; *cp != '\0'; ++cp) printf("%02X", *cp);
-            printf("\n");
+            printf("clen: %llu\n", clen);
+            printHex("c", c, (clen > 30 ? 30 : clen), true);
         }
 
         /////// todo test (remove)
@@ -222,6 +205,7 @@ main(int argc, char* argv[])
             return KAT_CRYPTO_FAILURE;
         }
         time_dec = ((double) (clock() - start));
+        if (debug) printHex("m1", m1, mlen1, false);
 
         // write time measure to file
         fprintf(fp_time, "prepare (μs) = %.0f\n", time_prepare);
@@ -240,7 +224,7 @@ main(int argc, char* argv[])
             return KAT_CRYPTO_FAILURE;
         }
 
-        if (debug) printf("free pointer\n");
+        if (debug) printf("release pointer\n");
         free(m);
         free(m1);
         free(c);
@@ -258,6 +242,13 @@ main(int argc, char* argv[])
     return KAT_SUCCESS;
 }
 
+void printHex(char *fieldname, char *hexstring, int printamount, bool printDots) {
+    printf("%s: ", fieldname);
+    char *cp = hexstring;
+    for (int i = 0; i < printamount /*&& *cp != '\0'*/; i++) printf("%02X", *cp++);
+    if (printDots) printf("...");
+    printf("\n");
+}
 
 //
 // ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
@@ -303,47 +294,45 @@ FindMarker(FILE *infile, const char *marker)
 // ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
 //
 int
-ReadHex(FILE *infile, unsigned char *A, int Length, char *str)
-{
-	int			i, ch, started;
-	unsigned char	ich;
+ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
+    if (debug) printf("in ReadHex (Length: %i, search: '%s')\n", Length, str);
 
-	if ( Length == 0 ) {
-		A[0] = 0x00;
-		return 1;
-	}
-	memset(A, 0x00, Length);
-	started = 0;
-	if ( FindMarker(infile, str) )
-		while ( (ch = fgetc(infile)) != EOF ) {
-			if ( !isxdigit(ch) ) {
-				if ( !started ) {
-					if ( ch == '\n' )
-						break;
-					else
-						continue;
-				}
-				else
-					break;
-			}
-			started = 1;
-			if ( (ch >= '0') && (ch <= '9') )
-				ich = ch - '0';
-			else if ( (ch >= 'A') && (ch <= 'F') )
-				ich = ch - 'A' + 10;
-			else if ( (ch >= 'a') && (ch <= 'f') )
-				ich = ch - 'a' + 10;
-            else // shouldn't ever get here
-                ich = 0;
+    if (Length == 0) {
+        A[0] = 0x00;
+        return 1;
+    }
+    memset(A, 0x00, Length);
 
-			for ( i=0; i<Length-1; i++ )
-				A[i] = (A[i] << 4) | (A[i+1] >> 4);
-			A[Length-1] = (A[Length-1] << 4) | ich;
-		}
-	else
-		return 0;
+    char *line = NULL;
+    size_t size1 = 0;
+    FindMarker(infile, str);
+    getline(&line, &size1, infile);
+    hex_to_bin(Length, A, line);
+    return 1;
+}
 
-	return 1;
+void hex_to_bin(size_t size, unsigned char *dest, const char *input) {
+    unsigned char *s = dest, digit1, digit2;
+    unsigned int ich1, ich2;
+    for (size_t i = 0; i < size; i++) {
+        digit1 = input[i*2];
+        digit2 = input[i*2 + 1];
+
+        // A = 65
+        // 0 = 48
+        if (digit1 >= 65)
+            ich1 = digit1 - 55;
+        else
+            ich1 = digit1 - 48;
+
+        if (digit2 >= 65)
+            ich2 = digit2 - 55;
+        else
+            ich2 = digit2 - 48;
+
+        *s++ = (unsigned char) ((ich1<<4) + ich2);
+    }
+    *s = '\0';
 }
 
 void
