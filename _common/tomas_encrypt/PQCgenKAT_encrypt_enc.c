@@ -124,7 +124,7 @@ main(int argc, char *argv[]) {
 //        fprintf(fp_rsp, "mlen = %llu\n", mlen);
         if (debug) printf("mlen: %llu\n", mlen);
 
-        m = (unsigned char *) calloc(mlen, sizeof(unsigned char));
+        m = (unsigned char *) calloc(mlen+1, sizeof(unsigned char));
 //        m1 = (unsigned char *) calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
         c = (unsigned char *) calloc(mlen + CRYPTO_BYTES, sizeof(unsigned char));
         if (debug) printf("calloc (m, c) done\n");

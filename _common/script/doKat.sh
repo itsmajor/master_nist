@@ -5,7 +5,14 @@ doValgrindDec=$4;
 KATTYPE=$5;
 CIPHERNAME=$6;
 KATPATH=$7;
-DEBUG=$8; #not mandatory, any value enable debug log in verifyKat
+
+#next are not mandatory, used by test_all2.sh (pqNTRUsign-Round1)
+REPEATS=$8
+DEBUG_KAT=$9
+DEBUG_KAT_KEYGEN=${10}
+DEBUG_KAT_ENC=${11}
+DEBUG_KAT_DEC=${12}
+#echo "repeats:" $REPEATS $DEBUG_KAT $DEBUG_KAT_KEYGEN $DEBUG_KAT_ENC $DEBUG_KAT_DEC
 
 PARAMCOUNT=7;
 
@@ -40,6 +47,16 @@ then
   exit
 fi
 
+if [[ -z $DEBUG_KAT ]]; then # -z = ! -n
+  #called by (old) test_all.sh, 8th param as debug will be ignored
+  echo blubb
+  REPEATS=10
+  DEBUG_KAT=0
+  DEBUG_KAT_KEYGEN=0
+  DEBUG_KAT_ENC=0
+  DEBUG_KAT_DEC=0
+fi
+
 # remove last / in KATPATH
 if [[ $KATPATH = */ ]]
 then
@@ -51,9 +68,9 @@ LEAVEDIR=${KATPATH//[a-zA-Z0-9_-]/}
 # add dots for each slash   -> ../../..
 LEAVEDIR=${LEAVEDIR//\//\.\.\/}..
 
-# PQCgenKAT_kem PQCgenKAT_encrypt
+# PQCgenKAT_kem PQCgenKAT_encrypt PQCgenKAT_sign
 KATBINARY=PQCgenKAT_$KATTYPE
-# PQCkemKAT PQCencryptKAT
+# PQCkemKAT PQCencryptKAT PQCsignKAT
 OUTPUTFILE=PQC"$KATTYPE"KAT
 #echo bin: $KATBINARY output: $OUTPUTFILE
 
@@ -73,44 +90,43 @@ rm -f massif.*
 
 
 if [ $doValgrindFull == "2" ]; then
-  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./"$KATBINARY"
-  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./"$KATBINARY"
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.heap --heap=yes --stacks=no ./"$KATBINARY" $REPEATS $DEBUG_KAT
+  valgrind -q --tool=massif --massif-out-file=massif.out.full.stack --heap=no --stacks=yes ./"$KATBINARY" $REPEATS $DEBUG_KAT
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY" done"
 fi
 # repeat for non valgrind time measure
-./"$KATBINARY" $DEBUG
+./"$KATBINARY" $REPEATS $DEBUG_KAT
 echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- $KATBINARY done (with time measurement)"
 
-
 if [ $doValgrindKeygen == "2" ]; then
-  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./"$KATBINARY"_keygen
-  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./"$KATBINARY"_keygen
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./"$KATBINARY"_keygen $DEBUG_KAT_KEYGEN
+  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./"$KATBINARY"_keygen $DEBUG_KAT_KEYGEN
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_keygen done"
 fi
 if [ $doValgrindKeygen == "1" ]; then
-  ./"$KATBINARY"_keygen $DEBUG
+  ./"$KATBINARY"_keygen $DEBUG_KAT_KEYGEN
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_keygen done (no valgrind)"
 fi
 
 
 if [ $doValgrindEnc == "2" ]; then
-  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./"$KATBINARY"_enc
-  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./"$KATBINARY"_enc
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --heap=yes --stacks=no ./"$KATBINARY"_enc $DEBUG_KAT_ENC
+  valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --heap=no --stacks=yes ./"$KATBINARY"_enc $DEBUG_KAT_ENC
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_enc done"
 fi
 if [ $doValgrindEnc == "1" ]; then
-  ./"$KATBINARY"_enc $DEBUG
+  ./"$KATBINARY"_enc $DEBUG_KAT_ENC
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_enc done (no valgrind)"
 fi
 
 
 if [ $doValgrindDec == "2" ]; then
-  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./"$KATBINARY"_dec
-  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./"$KATBINARY"_dec
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./"$KATBINARY"_dec $DEBUG_KAT_DEC
+  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./"$KATBINARY"_dec $DEBUG_KAT_DEC
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_dec done"
 fi
 if [ $doValgrindDec == "1" ]; then
-  ./"$KATBINARY"_dec $DEBUG
+  ./"$KATBINARY"_dec $DEBUG_KAT_DEC
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_dec done (no valgrind)"
 fi
 

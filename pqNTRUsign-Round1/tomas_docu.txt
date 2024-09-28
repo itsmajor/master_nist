@@ -1,0 +1,39 @@
+original make + original PQCgenKAT_sign
+
+major@majorpi:~/workspace/master_nist/pqNTRUsign-Round1 $ ./test_all2.sh -cbdr 1 -a "0 0 0 0"
+*** KAT debugging enabled ***
+*** do clean
+moved to: /home/major/workspace/master_nist/pqNTRUsign-Round1/Reference_Implementation/Gaussian-1024
+rm -rf PQCgenKAT_sign.o ../common/packing.o ../common/param.o ../common/pqNTRUSign.o ../common/rng.o sign.o ../common/crypto_hash_sha512.o ../common/crypto_stre                  am.o ../common/fastrandombytes.o ../common/shred.o ../common/DGS.o ../common/NTT.o ../common/misc.o ../common/poly.oPQCgenKAT_sign.d ../common/packing.d ../comm                  on/param.d ../common/pqNTRUSign.d ../common/rng.d sign.d ../common/crypto_hash_sha512.d ../common/crypto_stream.d ../common/fastrandombytes.d ../common/shred.d                   ../common/DGS.d ../common/NTT.d ../common/misc.d ../common/poly.d Gaussian-pqNTRUSign-1024
+
+moved to: /home/major/workspace/master_nist/pqNTRUsign-Round1/Reference_Implementation/Uniform-1024
+make: *** No rule to make target 'clean'.  Stop.
+*** do build
+moved to: /home/major/workspace/master_nist/pqNTRUsign-Round1/Reference_Implementation/Gaussian-1024
+cc    -c -o PQCgenKAT_sign.o PQCgenKAT_sign.c
+cc    -c -o ../common/packing.o ../common/packing.c
+cc    -c -o ../common/param.o ../common/param.c
+cc    -c -o ../common/pqNTRUSign.o ../common/pqNTRUSign.c
+cc    -c -o ../common/rng.o ../common/rng.c
+cc    -c -o sign.o sign.c
+cc    -c -o ../common/crypto_hash_sha512.o ../common/crypto_hash_sha512.c
+cc    -c -o ../common/crypto_stream.o ../common/crypto_stream.c
+cc    -c -o ../common/fastrandombytes.o ../common/fastrandombytes.c
+cc    -c -o ../common/shred.o ../common/shred.c
+cc    -c -o ../common/DGS.o ../common/DGS.c
+cc    -c -o ../common/NTT.o ../common/NTT.c
+cc    -c -o ../common/misc.o ../common/misc.c
+cc    -c -o ../common/poly.o ../common/poly.c
+Building target: Gaussian-pqNTRUSign-1024
+Invoking: Cross GCC Linker
+gcc  -o Gaussian-pqNTRUSign-1024 PQCgenKAT_sign.o ../common/packing.o ../common/param.o ../common/pqNTRUSign.o ../common/rng.o sign.o ../common/crypto_hash_sha5                  12.o ../common/crypto_stream.o ../common/fastrandombytes.o ../common/shred.o ../common/DGS.o ../common/NTT.o ../common/misc.o ../common/poly.o  -lm -lcrypto
+Finished building target: Gaussian-pqNTRUSign-1024
+
+moved to: /home/major/workspace/master_nist/pqNTRUsign-Round1/Reference_Implementation/Uniform-1024
+make: *** No targets specified and no makefile found.  Stop.
+ERROR: PQC binary not found Reference_Implementation/Gaussian-1024/PQCgenKAT_sign
+verifyKat: start
+ERROR (verifyKAT): Couldn't open '../../testresult/pqNTRUSign-Gaussian-1024/PQCsignKAT.rsp' for read
+ERROR: PQC binary not found Reference_Implementation/Uniform-1024/PQCgenKAT_sign
+verifyKat: start
+ERROR (verifyKAT): Couldn't open '../../testresult/pqNTRUSign-Uniform-1024/PQCsignKAT.rsp' for read

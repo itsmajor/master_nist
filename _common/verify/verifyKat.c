@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <stdbool.h>
 
 #pragma clang diagnostic push
@@ -19,7 +20,7 @@ int		FindMarker(FILE *infile, const char *marker);
 void    compareLine(FILE *file1, FILE *file2, FILE *fp_verify, char *searchString, char *kattype, int count);
 
 // global variable
-int     countErrors = 0;
+int     countErrors = 0, comparedLines = 0;
 bool    debug = false;
 
 
@@ -29,7 +30,7 @@ int main(int argc, char* argv[])
     FILE                *fp_rsp, *fp_rsp_keygen, *fp_rsp_enc, *fp_rsp_dec, *fp_verify, *fp_verifyresult;
     unsigned char       testpath[100], pathVerify[100], pathKatBase[100], pathKatRsp[100], pathKatRspKeygen[100], pathKatRspEnc[100], pathKatRspDec[100], verified[20];
     char                *searchCT, *searchPT, *verifyresultPath;
-    int                 count, kattypeInt = 0;
+    int                 count = 0, kattypeInt = 0;
 
     printf("verifyKat: start\n");
     countErrors = 0;
@@ -53,8 +54,9 @@ int main(int argc, char* argv[])
 
     if (strstr(argv[1], "kem")) kattypeInt = 1;
     if (strstr(argv[1], "encrypt")) kattypeInt = 2;
+    if (strstr(argv[1], "sign")) kattypeInt = 3;
     if (kattypeInt == 0) {
-        printf("parameter for KATTYPE expected to be 'kem' or 'encrypt'");
+        printf("parameter for KATTYPE expected to be 'kem', 'encrypt' or 'sign'");
         return 1;
     }
 
@@ -85,7 +87,7 @@ int main(int argc, char* argv[])
     // no verification for NTRUEncrypt
     if (strstr(argv[2], "NTRUEncrypt-ntru-")) {
         printf("verifyKat: not verifying NTRU Encrypt (use own RNG and creates new results)\n");
-        fprintf(fp_verifyresult, "%s = SKIP (own RNG / creates new results)", argv[2]);
+        fprintf(fp_verifyresult, "%s = SKIP (own RNG / creates new results)\n", argv[2]);
         fclose(fp_verifyresult);
         return 0;
     }
@@ -137,9 +139,7 @@ int main(int argc, char* argv[])
         printf("WARN (verifyKAT): Couldn't open '%s' for read. (verification will be skipped)\n", fn_rsp_dec);
     }
 
-    if (debug) {
-        printf("start looping\n");
-    }
+    if (debug) printf("start looping\n");
     fprintf(fp_verify, "Errors = ?              \n\n");
     while (1) {
         if ( FindMarker(fp_rsp, "count = ") )
@@ -148,50 +148,54 @@ int main(int argc, char* argv[])
             break;
         }
         fprintf(fp_verify, "\ncount = %d\n", count);
-        if (debug) {
-            printf("loop count: %d\n", count);
-        }
+        if (debug) printf("loop count: %d\n", count);
 
         // order for line reading important
         // 1/kem: seed, pk, sk, ct, ss
         // 2/encrypt: seed, msg, pk, sk, c
         if (kattypeInt == 1) {
-            searchCT = "ct = ";
-            searchPT = "ss = ";
-
             if (fp_rsp_keygen != NULL) {
                 compareLine(fp_rsp, fp_rsp_keygen, fp_verify, "seed = ", "key", count);
                 compareLine(fp_rsp, fp_rsp_keygen, fp_verify, "pk = ", "key", count);
                 compareLine(fp_rsp, fp_rsp_keygen, fp_verify, "sk = ", "key", count);
             }
             if (fp_rsp_enc != NULL) {
-                compareLine(fp_rsp, fp_rsp_enc, fp_verify, searchCT, "enc", count);
+                compareLine(fp_rsp, fp_rsp_enc, fp_verify, "ct = ", "enc", count);
             }
             if (fp_rsp_dec != NULL) {
-                compareLine(fp_rsp, fp_rsp_dec, fp_verify, searchPT, "dec", count);
+                compareLine(fp_rsp, fp_rsp_dec, fp_verify, "ss = ", "dec", count);
             }
         } else if (kattypeInt == 2) {
-            searchCT = "c = ";
-            searchPT = "msg = ";
-
             if (fp_rsp_keygen != NULL) {
                 compareLine(fp_rsp, fp_rsp_keygen, fp_verify, "seed = ", "key", count);
             }
             if (fp_rsp_dec != NULL) {
-                compareLine(fp_rsp, fp_rsp_dec, fp_verify, searchPT, "dec", count);
+                compareLine(fp_rsp, fp_rsp_dec, fp_verify, "msg = ", "dec", count);
             }
             if (fp_rsp_keygen != NULL) {
                 compareLine(fp_rsp, fp_rsp_keygen, fp_verify, "pk = ", "key", count);
                 compareLine(fp_rsp, fp_rsp_keygen, fp_verify, "sk = ", "key", count);
             }
             if (fp_rsp_enc != NULL) {
-                compareLine(fp_rsp, fp_rsp_enc, fp_verify, searchCT, "enc", count);
+                compareLine(fp_rsp, fp_rsp_enc, fp_verify, "c = ", "enc", count);
+            }
+        } else if (kattypeInt == 3) {
+            if (fp_rsp_keygen != NULL) {
+                compareLine(fp_rsp, fp_rsp_keygen, fp_verify, "seed = ", "key", count);
+            }
+            if (fp_rsp_dec != NULL) {
+                compareLine(fp_rsp, fp_rsp_dec, fp_verify, "msg = ", "dec", count);
+            }
+            if (fp_rsp_keygen != NULL) {
+                compareLine(fp_rsp, fp_rsp_keygen, fp_verify, "pk = ", "key", count);
+                compareLine(fp_rsp, fp_rsp_keygen, fp_verify, "sk = ", "key", count);
+            }
+            if (fp_rsp_enc != NULL) {
+                compareLine(fp_rsp, fp_rsp_enc, fp_verify, "sm = ", "enc", count);
             }
         }
     }
-    if (debug) {
-        printf("finish looping\n");
-    }
+    if (debug) printf("finish looping (repeats: %i)\n", count);
 
     if (fp_rsp_keygen != NULL) {
         strcat(verified, "keygen ");
@@ -206,15 +210,24 @@ int main(int argc, char* argv[])
     fseek(fp_verify, 0, SEEK_SET);
     fprintf(fp_verify, "Errors = %i   \nverified: %s", countErrors, verified);
 
+
     // write result to verifyresult.log (to end of file, keep previous content)
     fprintf(fp_verifyresult, "%s = ", argv[2]);
     if (countErrors > 0) {
-        printf("verifyKAT: %s - ERRORS found: %i (%s)\n", argv[2], countErrors, pathVerify);
-        fprintf(fp_verifyresult, "ERROR (count = %d) (%s)\n", countErrors, verified);
+        printf("verifyKAT: %s - ERRORS found: %i (%s)", argv[2], countErrors, pathVerify);
+        fprintf(fp_verifyresult, "ERROR (count = %d) (%s)", countErrors, verified);
+    } if (count > 0) {
+        printf("verifyKAT: %s - OK (%s)", argv[2], verified);
+        fprintf(fp_verifyresult, "OK (%s)", verified);
     } else {
-        printf("verifyKAT: %s - OK (%s)\n", argv[2], verified);
-        fprintf(fp_verifyresult, "OK (%s)\n", verified);
+        printf("verifyKAT: %s - count 0 - nothing compared", argv[2]);
+        fprintf(fp_verifyresult, "count 0 - nothing compared");
     }
+    time_t timer = time(NULL);
+    char printtime[20];
+    strftime(printtime, 20, "%d.%m.%Y %H:%M:%S", localtime(&timer));
+    printf(" (%s) (repeats: %i)\n", printtime, count+1);
+    fprintf(fp_verifyresult, " (%s) (repeats: %i)\n", printtime, count+1);
 
 
 //    printf("*********** end of verifyKat - closing files ****************\n");
@@ -224,8 +237,8 @@ int main(int argc, char* argv[])
     if (fp_rsp_keygen != NULL) fclose(fp_rsp_keygen);
     if (fp_rsp_enc != NULL) fclose(fp_rsp_enc);
     if (fp_rsp_dec != NULL) fclose(fp_rsp_dec);
-
 }
+
 
 void compareLine(FILE *file1, FILE *file2, FILE *fp_verify, char *searchString, char *kattype, int count) {
     char *line1 = NULL;
@@ -236,7 +249,7 @@ void compareLine(FILE *file1, FILE *file2, FILE *fp_verify, char *searchString, 
     if (debug) {
         printf("in compareLine (%s) search for '%s'\n", kattype, searchString);
     }
-
+    // todo improve
     int i;
     for (i = 0; i < 1000; i++) {
         getline(&line1, &size1, file1);

@@ -11,6 +11,7 @@
 #include "../NIST/rng.h"
 #include "api.h"
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -25,9 +26,13 @@
 int		FindMarker(FILE *infile, const char *marker);
 int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
 void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
+void hex_to_bin(size_t size, unsigned char *dest, const char *input);
+
+// global variable
+bool    debug = false;
 
 int
-main()
+main(int argc, char* argv[])
 {
     char                fn_rsp[32], fn_rsp_origin[32];
     FILE                *fp_rsp, *fp_rsp_origin;
@@ -39,6 +44,11 @@ main()
     int                 ret_val;
 //    clock_t start;
 //    double time_dec, time_prepare;
+    if ( argc > 1) {
+        // any param will start verbose logging
+        debug = true;
+        printf("start main PQCgenKAT_dec\n");
+    }
 
     // Create the REQUEST file
 //    sprintf(fn_req, "PQCkemKAT_%d.req", CRYPTO_SECRETKEYBYTES);
@@ -82,6 +92,7 @@ main()
         return KAT_FILE_OPEN_ERROR;
     }
 
+    if (debug) printf("start looping\n");
     fprintf(fp_rsp, "# %s\n\n", CRYPTO_ALGNAME);
     while (1) {
 //        start = clock();
@@ -91,6 +102,7 @@ main()
             break;
         }
         fprintf(fp_rsp, "count = %d\n", count);
+        if (debug) printf("loop count: %d\n", count);
 
         // read seed from origin
 //        if ( !ReadHex(fp_rsp_origin, seed, 48, "seed = ") ) {
@@ -153,6 +165,7 @@ main()
 //        }
 
     }
+    if (debug) printf("finish looping\n");
 
 //    fclose(fp_req);
     fclose(fp_rsp);
@@ -161,6 +174,13 @@ main()
     return KAT_SUCCESS;
 }
 
+void printHex(char *fieldname, char *hexstring, int printamount, bool printDots) {
+    printf("%s: ", fieldname);
+    char *cp = hexstring;
+    for (int i = 0; i < printamount /*&& *cp != '\0'*/; i++) printf("%02X", *cp++);
+    if (printDots) printf("...");
+    printf("\n");
+}
 
 //
 // ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
@@ -206,52 +226,54 @@ FindMarker(FILE *infile, const char *marker)
 // ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
 //
 int
-ReadHex(FILE *infile, unsigned char *A, int Length, char *str)
-{
-	int			i, ch, started;
-	unsigned char	ich;
+ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
+//    clock_t start = clock();
+    if (debug) printf("in ReadHex (Length: %i, search: '%s')\n", Length, str);
 
-	if ( Length == 0 ) {
-		A[0] = 0x00;
-		return 1;
-	}
-	memset(A, 0x00, Length);
-	started = 0;
-	if ( FindMarker(infile, str) )
-		while ( (ch = fgetc(infile)) != EOF ) {
-			if ( !isxdigit(ch) ) {
-				if ( !started ) {
-					if ( ch == '\n' )
-						break;
-					else
-						continue;
-				}
-				else
-					break;
-			}
-			started = 1;
-			if ( (ch >= '0') && (ch <= '9') )
-				ich = ch - '0';
-			else if ( (ch >= 'A') && (ch <= 'F') )
-				ich = ch - 'A' + 10;
-			else if ( (ch >= 'a') && (ch <= 'f') )
-				ich = ch - 'a' + 10;
-            else // shouldn't ever get here
-                ich = 0;
+    if (Length == 0) {
+        A[0] = 0x00;
+        return 1;
+    }
+    memset(A, 0x00, Length);
 
-			for ( i=0; i<Length-1; i++ )
-				A[i] = (A[i] << 4) | (A[i+1] >> 4);
-			A[Length-1] = (A[Length-1] << 4) | ich;
-		}
-	else
-		return 0;
+    char *line = NULL;
+    size_t size1 = 0;
+    FindMarker(infile, str);
+    getline(&line, &size1, infile);
+    hex_to_bin(Length, A, line);
 
-	return 1;
+//    if (debug) printf("time passed in ReadHex (Length: %i, search: '%s') (μs) = %.0f\n", Length, str, ((double) (clock() - start)));
+    return 1;
+}
+
+void hex_to_bin(size_t size, unsigned char *dest, const char *input) {
+    unsigned char *s = dest, digit1, digit2;
+    unsigned int ich1, ich2;
+    for (size_t i = 0; i < size; i++) {
+        digit1 = input[i*2];
+        digit2 = input[i*2 + 1];
+
+        // A = 65
+        // 0 = 48
+        if (digit1 >= 65)
+            ich1 = digit1 - 55;
+        else
+            ich1 = digit1 - 48;
+
+        if (digit2 >= 65)
+            ich2 = digit2 - 55;
+        else
+            ich2 = digit2 - 48;
+
+        *s++ = (unsigned char) ((ich1<<4) + ich2);
+    }
+    *s = '\0';
 }
 
 void
 fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L)
 {
+//    clock_t start = clock();
 	unsigned long long  i;
 
 	fprintf(fp, "%s", S);
@@ -263,5 +285,6 @@ fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L)
 		fprintf(fp, "00");
 
 	fprintf(fp, "\n");
+//    if (debug) printf("time passed in fprintBstr (μs) = %.0f\n", ((double) (clock() - start)));
 }
 

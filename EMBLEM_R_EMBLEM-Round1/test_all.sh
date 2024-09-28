@@ -16,10 +16,10 @@ fi
 
 VALGRIND="$doValgrindFull $doValgrindKeygen $doValgrindEnc $doValgrindDec"
 
-#CIPHER="kem EMBLEM-EMBLEM"
-#../_common/script/doKat.sh $VALGRIND $CIPHER KAT/EMBLEM
-#../_common/script/doVerifyKat.sh $CIPHER
+CIPHER="kem EMBLEM-EMBLEM"
+../_common/script/doKat.sh $VALGRIND $CIPHER KAT/EMBLEM
+../_common/script/doVerifyKat.sh $CIPHER
 
 CIPHER="kem EMBLEM-R_EMBLEM"
-../_common/script/doKat.sh $VALGRIND $CIPHER KAT/R_EMBLEM dodebug
+../_common/script/doKat.sh $VALGRIND $CIPHER KAT/R_EMBLEM
 ../_common/script/doVerifyKat.sh $CIPHER

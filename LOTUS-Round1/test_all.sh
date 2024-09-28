@@ -4,8 +4,10 @@ doValgrindFull=$1;
 doValgrindKeygen=$2;
 doValgrindEnc=$3;
 doValgrindDec=$4;
+DEBUG=$5; #not mandatory, any value enable debug log in verifyKat
 
-if [ ! $# -eq 4 ];
+
+if [ ! $# -ge 4 ];
 then
   ../_common/script/doKat.sh explain4param
   exit
@@ -24,7 +26,7 @@ kat_array=('kem' 'encrypt')
 for kat in "${kat_array[@]}"; do
   for sec in "${sec_array[@]}"; do
     CIPHER="$kat lotus"$sec"_$kat"
-    ../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/$kat/lotus$sec
+    ../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/$kat/lotus$sec $DEBUG
     ../_common/script/doVerifyKat.sh $CIPHER
   done
 done

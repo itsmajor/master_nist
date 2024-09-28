@@ -1,5 +1,6 @@
+
 //
-//  PQCgenKAT_kem.c
+//  PQCgenKAT_sign.c
 //
 //  Created by Bassham, Lawrence E (Fed) on 8/29/17.
 //  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
@@ -26,7 +27,8 @@
 int		FindMarker(FILE *infile, const char *marker);
 int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
 void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
-void hex_to_bin(size_t size, unsigned char *dest, const char *input);
+void    hex_to_bin(size_t size, unsigned char *dest, const char *input);
+void    printHex(char *fieldname, char *hexstring, int printamount, bool printDots);
 
 // global variable
 bool    debug = false;
@@ -37,29 +39,31 @@ main(int argc, char* argv[])
     char                fn_rsp[32], fn_rsp_origin[32];
     FILE                *fp_rsp, *fp_rsp_origin;
     unsigned char       seed[48];
+//    unsigned char       msg[3300];
 //    unsigned char       entropy_input[48];
-    unsigned char       ct[CRYPTO_CIPHERTEXTBYTES], ss[CRYPTO_BYTES];
+//    unsigned char       *m, *sm, *m1;
+//    unsigned long long  mlen, smlen, mlen1;
     int                 count;
-    unsigned char       pk[CRYPTO_PUBLICKEYBYTES];//, sk[CRYPTO_SECRETKEYBYTES];
+    unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
-//    clock_t start;
-//    double time_enc, time_prepare;
 
-    if ( argc > 1) {
-        // any param will start verbose logging
+    if ( argc > 1 && strcmp(argv[1], "1") == 0) {
         debug = true;
-        printf("start main PQCgenKAT_kem_enc\n");
+        printf("start main PQCgenKAT_sign (argc: %i)\n", argc);
+        if (debug) {
+            for (int i = 0; i < argc; i++) {
+                printf("argv[%d]: %s\n", i, argv[i]);
+            }
+        }
     }
 
     // Create the REQUEST file
-//    sprintf(fn_req, "PQCkemKAT_%d.req", CRYPTO_SECRETKEYBYTES);
-//    sprintf(fn_req, "PQCkemKAT_dec.req");
+//    sprintf(fn_req, "PQCsignKAT.req");
 //    if ( (fp_req = fopen(fn_req, "w")) == NULL ) {
 //        printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_req);
 //        return KAT_FILE_OPEN_ERROR;
 //    }
-//    sprintf(fn_rsp, "PQCkemKAT_%d.rsp", CRYPTO_SECRETKEYBYTES);
-    sprintf(fn_rsp, "PQCkemKAT_enc.rsp");
+    sprintf(fn_rsp, "PQCsignKAT_keygen.rsp");
     if ( (fp_rsp = fopen(fn_rsp, "w")) == NULL ) {
         printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_rsp);
         return KAT_FILE_OPEN_ERROR;
@@ -73,11 +77,14 @@ main(int argc, char* argv[])
 //        fprintf(fp_req, "count = %d\n", i);
 //        randombytes(seed, 48);
 //        fprintBstr(fp_req, "seed = ", seed, 48);
+//        mlen = 33*(i+1);
+//        fprintf(fp_req, "mlen = %llu\n", mlen);
+//        randombytes(msg, mlen);
+//        fprintBstr(fp_req, "msg = ", msg, mlen);
 //        fprintf(fp_req, "pk =\n");
 //        fprintf(fp_req, "sk =\n");
-//        fprintf(fp_req, "keygen (s) =\n");
-//        fprintf(fp_req, "ct =\n");
-//        fprintf(fp_req, "ss =\n\n");
+//        fprintf(fp_req, "smlen =\n");
+//        fprintf(fp_req, "sm =\n\n");
 //    }
 //    fclose(fp_req);
 
@@ -86,8 +93,7 @@ main(int argc, char* argv[])
 //        printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fn_req);
 //        return KAT_FILE_OPEN_ERROR;
 //    }
-
-    sprintf(fn_rsp_origin, "PQCkemKAT.rsp");
+    sprintf(fn_rsp_origin, "PQCsignKAT.rsp");
     if ( (fp_rsp_origin = fopen(fn_rsp_origin, "r")) == NULL ) {
         printf("PQCgenKAT ERROR: Couldn't open <%s> for read\n", fn_rsp_origin);
         return KAT_FILE_OPEN_ERROR;
@@ -96,7 +102,6 @@ main(int argc, char* argv[])
     if (debug) printf("start looping\n");
     fprintf(fp_rsp, "# %s\n\n", CRYPTO_ALGNAME);
     while (1) {
-//        start = clock();
         if ( FindMarker(fp_rsp_origin, "count = ") )
             fscanf(fp_rsp_origin, "%d", &count);
         else {
@@ -105,74 +110,73 @@ main(int argc, char* argv[])
         fprintf(fp_rsp, "count = %d\n", count);
         if (debug) printf("loop count: %d\n", count);
 
-//        if ( !ReadHex(fp_req, seed, 48, "seed = ") ) {
-//            printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_req);
-//            return KAT_DATA_ERROR;
-//        }
-//        fprintBstr(fp_rsp, "seed = ", seed, 48);
-//        randombytes_init(seed, NULL, 256);
-
+        // read seed from origin
         if ( !ReadHex(fp_rsp_origin, seed, 48, "seed = ") ) {
             printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_rsp_origin);
             return KAT_DATA_ERROR;
         }
-//        fprintBstr(fp_rsp, "seed = ", seed, 48);
+        fprintBstr(fp_rsp, "seed = ", seed, 48);
         randombytes_init(seed, NULL, 256);
-//        time_prepare = ((double) (clock() - start));
 
-//        ret_val = crypto_kem_keypair(pk, sk);
-
-        // Generate the public/private keypair
-//        start = clock();
-//        if ( (ret_val = crypto_kem_keypair(pk, sk)) != 0) {
-//            printf("PQCgenKAT ERROR: crypto_kem_keypair returned <%d>\n", ret_val);
-//            return KAT_CRYPTO_FAILURE;
+//        if ( FindMarker(fp_req, "mlen = ") )
+//            fscanf(fp_req, "%llu", &mlen);
+//        else {
+//            printf("PQCgenKAT ERROR: unable to read 'mlen' from <%s>\n", fn_req);
+//            return KAT_DATA_ERROR;
 //        }
-//        end = clock();
-//        time_keypair = ((double) (end - start));
-//        fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
-//        fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
-
-        // prepare decode
-        ReadHex(fp_rsp_origin, pk, CRYPTO_PUBLICKEYBYTES, "pk = ");
-//        fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
-
-        // encoding
-//        start = clock();
-        if ( (ret_val = crypto_kem_enc(ct, ss, pk)) != 0) {
-            printf("PQCgenKAT ERROR: crypto_kem_enc returned <%d>\n", ret_val);
+//        fprintf(fp_rsp, "mlen = %llu\n", mlen);
+//
+//        m = (unsigned char *)calloc(mlen, sizeof(unsigned char));
+//        m1 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
+//        sm = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
+//
+//        if ( !ReadHex(fp_req, m, (int)mlen, "msg = ") ) {
+//            printf("PQCgenKAT ERROR: unable to read 'msg' from <%s>\n", fn_req);
+//            return KAT_DATA_ERROR;
+//        }
+//        fprintBstr(fp_rsp, "msg = ", m, mlen);
+        
+        // Generate the public/private keypair
+        if ( (ret_val = crypto_sign_keypair(pk, sk)) != 0) {
+            printf("PQCgenKAT ERROR: crypto_sign_keypair returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
-//        time_enc = ((double) (clock() - start));
-        fprintBstr(fp_rsp, "ct = ", ct, CRYPTO_CIPHERTEXTBYTES);
-//        fprintBstr(fp_rsp, "ss = ", ss, CRYPTO_BYTES);
+        fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
+        fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
         fprintf(fp_rsp, "\n");
 
-        // decoding
-//        start = clock();
-//        if ( (ret_val = crypto_kem_dec(ss1, ct, sk)) != 0) {
-//            printf("PQCgenKAT ERROR: crypto_kem_dec returned <%d>\n", ret_val);
+        // signing
+//        if ( (ret_val = crypto_sign(sm, &smlen, m, mlen, sk)) != 0) {
+//            printf("PQCgenKAT ERROR: crypto_sign returned <%d>\n", ret_val);
 //            return KAT_CRYPTO_FAILURE;
 //        }
-//        end = clock();
-//        time_dec = ((double) (end - start));
-
-        // write time measure to file
-//        fprintf(fp_rsp, "prepare (μs) = %.0f\n", time_prepare);
-//        fprintf(fp_rsp, "crypto_kem_keypair (μs) = %.0f\n", time_keypair);
-//        fprintf(fp_rsp, "crypto_kem_enc (μs) = %.0f\n", time_enc);
-//        fprintf(fp_rsp, "crypto_kem_enc (μs) = %.0f\n", time_enc);
+//        fprintf(fp_rsp, "smlen = %llu\n", smlen);
+//        fprintBstr(fp_rsp, "sm = ", sm, smlen);
 //        fprintf(fp_rsp, "\n");
 
-        // no compare possible - dec only
-//        if ( memcmp(ss, ss1, CRYPTO_BYTES) ) {
-//            printf("PQCgenKAT ERROR: crypto_kem_dec returned bad 'ss' value\n");
+        // verify signing
+//        if ( (ret_val = crypto_sign_open(m1, &mlen1, sm, smlen, pk)) != 0) {
+//            printf("PQCgenKAT ERROR: crypto_sign_open returned <%d>\n", ret_val);
 //            return KAT_CRYPTO_FAILURE;
 //        }
+
+
+//        if ( mlen != mlen1 ) {
+//            printf("PQCgenKAT ERROR: crypto_sign_open returned bad 'mlen': Got <%llu>, expected <%llu>\n", mlen1, mlen);
+//            return KAT_CRYPTO_FAILURE;
+//        }
+//
+//        if ( memcmp(m, m1, mlen) ) {
+//            printf("PQCgenKAT ERROR: crypto_sign_open returned bad 'm' value\n");
+//            return KAT_CRYPTO_FAILURE;
+//        }
+
+//        free(m);
+//        free(m1);
+//        free(sm);
 
     }
     if (debug) printf("finish looping\n");
-
 
 //    fclose(fp_req);
     fclose(fp_rsp);
@@ -234,7 +238,6 @@ FindMarker(FILE *infile, const char *marker)
 //
 int
 ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
-//    clock_t start = clock();
     if (debug) printf("in ReadHex (Length: %i, search: '%s')\n", Length, str);
 
     if (Length == 0) {
@@ -248,8 +251,6 @@ ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
     FindMarker(infile, str);
     getline(&line, &size1, infile);
     hex_to_bin(Length, A, line);
-
-//    if (debug) printf("time passed in ReadHex (Length: %i, search: '%s') (μs) = %.0f\n", Length, str, ((double) (clock() - start)));
     return 1;
 }
 
@@ -280,7 +281,6 @@ void hex_to_bin(size_t size, unsigned char *dest, const char *input) {
 void
 fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L)
 {
-//    clock_t start = clock();
 	unsigned long long  i;
 
 	fprintf(fp, "%s", S);
@@ -292,6 +292,5 @@ fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L)
 		fprintf(fp, "00");
 
 	fprintf(fp, "\n");
-//    if (debug) printf("time passed in fprintBstr (μs) = %.0f\n", ((double) (clock() - start)));
 }
 

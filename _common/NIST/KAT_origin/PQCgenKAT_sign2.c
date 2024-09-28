@@ -9,9 +9,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "../common/rng.h"
+#include "rng.h"
 #include "api.h"
-#include <time.h>
+
 #define	MAX_MARKER_LEN		50
 
 #define KAT_SUCCESS          0
@@ -23,12 +23,11 @@ int		FindMarker(FILE *infile, const char *marker);
 int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
 void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
 
-char    AlgName[] = "pqNTRUSign";
+char    AlgName[] = "My Alg Name";
 
 int
 main()
 {
-
     char                fn_req[32], fn_rsp[32];
     FILE                *fp_req, *fp_rsp;
     unsigned char       seed[48];
@@ -38,14 +37,17 @@ main()
     unsigned long long  mlen, smlen, mlen1;
     int                 count;
     int                 done;
-    unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
+//    unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
+unsigned char       *pk, *sk;
     int                 ret_val;
-    
-    clock_t start, end;
-    clock_t total_keygen = 0;
-    clock_t total_sign = 0;
-    clock_t total_verify = 0;
+pk = (unsigned char *)calloc(CRYPTO_PUBLICKEYBYTES, sizeof(unsigned char));
+sk = (unsigned char *)calloc(CRYPTO_SECRETKEYBYTES, sizeof(unsigned char));
+if( (pk==NULL) || (sk==NULL) ){
+printf("alloc memory for pk/sk fail.\n");
+return -1;
+}
 
+    
     // Create the REQUEST file
     sprintf(fn_req, "PQCsignKAT_%d.req", CRYPTO_SECRETKEYBYTES);
     if ( (fp_req = fopen(fn_req, "w")) == NULL ) {
@@ -119,35 +121,28 @@ main()
             return KAT_DATA_ERROR;
         }
         fprintBstr(fp_rsp, "msg = ", m, mlen);
+        
         // Generate the public/private keypair
-        start = clock();
         if ( (ret_val = crypto_sign_keypair(pk, sk)) != 0) {
             printf("crypto_sign_keypair returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
-        end = clock();
-        total_keygen+=(end-start);
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
         fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
         
-        start = clock();
         if ( (ret_val = crypto_sign(sm, &smlen, m, mlen, sk)) != 0) {
             printf("crypto_sign returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
-        end = clock();
-        total_sign +=(end-start);
         fprintf(fp_rsp, "smlen = %llu\n", smlen);
         fprintBstr(fp_rsp, "sm = ", sm, smlen);
         fprintf(fp_rsp, "\n");
         
-        start = clock();
         if ( (ret_val = crypto_sign_open(m1, &mlen1, sm, smlen, pk)) != 0) {
             printf("crypto_sign_open returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
-        end = clock();
-        total_verify+=(end-start);
+        
         if ( mlen != mlen1 ) {
             printf("crypto_sign_open returned bad 'mlen': Got <%llu>, expected <%llu>\n", mlen1, mlen);
             return KAT_CRYPTO_FAILURE;
@@ -164,13 +159,11 @@ main()
 
     } while ( !done );
     
+free(pk);
+free(sk);
     fclose(fp_req);
     fclose(fp_rsp);
 
-    printf("finished test: keygen %fs; sign %fs; verify %fs\n",
-            (double)total_keygen/CLOCKS_PER_SEC/100,
-            (double)total_sign/CLOCKS_PER_SEC/100,
-            (double)total_verify/CLOCKS_PER_SEC/100);
     return KAT_SUCCESS;
 }
 

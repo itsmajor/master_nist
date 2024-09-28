@@ -2,7 +2,6 @@ CC=    gcc
 CXX=   g++
 LD=    gcc
 
-
 #PROJ = amd64
 #
 #ifdef REF
@@ -10,11 +9,9 @@ LD=    gcc
 #endif
 PROJ=Gui-184
 
-
 PROJ_DIR = ./$(PROJ)
 
-
-CFLAGS= -O2 -std=c99 -Wall -Wextra
+CFLAGS= -O2 -std=c99 -Wall -Wextra -w
 INCPATH= -I/usr/local/include -I/opt/local/include -I/usr/include -I$(PROJ_DIR)
 LDFLAGS=
 LIBPATH= -L/usr/local/lib -L/opt/local/lib -L/usr/lib
@@ -30,16 +27,6 @@ OBJ = $(SRCS_O_ND) utils.o
 EXE= PQCgenKAT_sign gui-genkey gui-sign gui-verify
 
 
-
-
-
-
-
-
-
-
-
-
 .PHONY: all tests tables clean
 
 all: $(OBJ) $(EXE)
@@ -51,6 +38,7 @@ all: $(OBJ) $(EXE)
 	$(LD) $(LDFLAGS) $(LIBPATH) -o $@ $^ $(LIBS)
 
 PQCgenKAT_sign: $(OBJ) PQCgenKAT_sign.o
+	mkdir -p tests/$(PROJ)
 	$(LD) $(LDFLAGS) $(LIBPATH) -o tests/$(PROJ)/$@ $^ $(LIBS)
 
 gui-genkey: $(OBJ) gui-genkey.o
@@ -84,4 +72,4 @@ tables:
 
 clean:
 #	rm *.o *-test *-benchmark PQCgenKAT_sign gui-genkey gui-sign gui-verify;
-	rm *.o PQCgenKAT_sign gui-genkey gui-sign gui-verify;
+	@rm -f *.o PQCgenKAT_sign gui-genkey gui-sign gui-verify;

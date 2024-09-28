@@ -1,5 +1,6 @@
+
 //
-//  PQCgenKAT_encrypt.c
+//  PQCgenKAT_sign.c
 //
 //  Created by Bassham, Lawrence E (Fed) on 8/29/17.
 //  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
@@ -7,8 +8,8 @@
 // changed by Tomas Antal for time measurement
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
-#include "../NIST/rng.h"
+//#include <ctype.h>
+#include "rng.h"
 #include "api.h"
 #include <time.h>
 #include <stdlib.h>
@@ -27,7 +28,8 @@
 int		FindMarker(FILE *infile, const char *marker);
 int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
 void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
-void hex_to_bin(size_t size, unsigned char *dest, const char *input);
+void    hex_to_bin(size_t size, unsigned char *dest, const char *input);
+void    printHex(char *fieldname, char *hexstring, int printamount, bool printDots);
 
 // global variable
 bool    debug = false;
@@ -40,34 +42,53 @@ main(int argc, char* argv[])
     unsigned char       seed[48];
     unsigned char       msg[3300];
     unsigned char       entropy_input[48];
-    unsigned char       *m, *c, *m1;
-    unsigned long long  mlen, clen, mlen1;
+    unsigned char       *m, *sm, *m1;
+    unsigned long long  mlen, smlen, mlen1;
     int                 count;
     unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
-    int                 ret_val;
+    int                 ret_val, repeats = 10;
     clock_t             start, progStart;
-    double              time_keypair, time_enc, time_dec, time_prepare;
+    double              time_keypair, time_sign, time_verify, time_prepare;
+//    unsigned char       *pk, *sk;
 
     progStart = clock();
 
-    if ( argc > 1) {
-        // any param will start verbose logging
-        debug = true;
-        printf("start main PQCgenKAT_encrypt\n");
+    if ( argc > 1) { //argv[0] is this binary name
+        char *output;
+        // amount of repeats for req file
+        repeats = atoi( argv[1] );
+        if ( argc > 2 && strcmp(argv[2], "1") == 0) {
+            debug = true;
+            printf("start main PQCgenKAT_sign (argc: %i)\n", argc);
+        }
+        if (debug) {
+            printf("repeats: %i\n", repeats);
+            for (int i = 0; i < argc; i++) {
+                printf("argv[%d]: %s\n", i, argv[i]);
+            }
+        }
     }
 
+    // from GUI original genKAT
+//    pk = (unsigned char *) calloc(CRYPTO_PUBLICKEYBYTES, sizeof(unsigned char));
+//    sk = (unsigned char *) calloc(CRYPTO_SECRETKEYBYTES, sizeof(unsigned char));
+//    if ((pk == NULL) || (sk == NULL)) {
+//        printf("alloc memory for pk/sk fail.\n");
+//        return -1;
+//    }
+
     // Create the REQUEST file
-    sprintf(fn_req, "PQCencryptKAT.req");
+    sprintf(fn_req, "PQCsignKAT.req");
     if ( (fp_req = fopen(fn_req, "w")) == NULL ) {
         printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_req);
         return KAT_FILE_OPEN_ERROR;
     }
-    sprintf(fn_rsp, "PQCencryptKAT.rsp");
+    sprintf(fn_rsp, "PQCsignKAT.rsp");
     if ( (fp_rsp = fopen(fn_rsp, "w")) == NULL ) {
         printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_rsp);
         return KAT_FILE_OPEN_ERROR;
     }
-    sprintf(fn_time, "PQCencryptKAT.time");
+    sprintf(fn_time, "PQCsignKAT.time");
     if ( (fp_time = fopen(fn_time, "w")) == NULL ) {
         printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_time);
         return KAT_FILE_OPEN_ERROR;
@@ -77,29 +98,24 @@ main(int argc, char* argv[])
     fprintf(fp_time, "reserved for full time output                                                  \n");
     fprintf(fp_time, "time since start to open rsp file (μs) = %.0f\n", ((double) (clock() - progStart)));
 
-    for (int i=0; i<48; i++)
+    for (int i = 0; i < 48; i++)
         entropy_input[i] = i;
 
     randombytes_init(entropy_input, NULL, 256);
     fprintf(fp_time, "time since start to randombytes_init (μs) = %.0f\n", ((double) (clock() - progStart)));
-    // only in NTRUEncrypt is this used (i<3), simplified here
-//    for (int i=0; i<1; i++) {
-        for (int j=0; j<10; j++) {
-//            fprintf(fp_req, "count = %d\n", i*25+j);
-            fprintf(fp_req, "count = %d\n", j);
-            randombytes(seed, 48);
-            fprintBstr(fp_req, "seed = ", seed, 48);
-//            mlen = 16+i*8;
-            mlen = 16;
-            fprintf(fp_req, "mlen = %lld\n", mlen);
-            randombytes(msg, mlen);
-            fprintBstr(fp_req, "msg = ", msg, mlen);
-            fprintf(fp_req, "pk =\n");
-            fprintf(fp_req, "sk =\n");
-            fprintf(fp_req, "clen =\n");
-            fprintf(fp_req, "c =\n\n");
-        }
-//    }
+    for (int i = 0; i < repeats; i++) { // todo back to 10
+        fprintf(fp_req, "count = %d\n", i);
+        randombytes(seed, 48);
+        fprintBstr(fp_req, "seed = ", seed, 48);
+        mlen = 33*(i+1);
+        fprintf(fp_req, "mlen = %llu\n", mlen);
+        randombytes(msg, mlen);
+        fprintBstr(fp_req, "msg = ", msg, mlen);
+        fprintf(fp_req, "pk =\n");
+        fprintf(fp_req, "sk =\n");
+        fprintf(fp_req, "smlen =\n");
+        fprintf(fp_req, "sm =\n\n");
+    }
     fclose(fp_req);
     fprintf(fp_time, "time since start to req closing (μs) = %.0f\n", ((double) (clock() - progStart)));
 
@@ -111,6 +127,7 @@ main(int argc, char* argv[])
     fprintf(fp_time, "time since start to open req readable (μs) = %.0f\n\n\n", ((double) (clock() - progStart)));
 
     if (debug) printf("start looping\n");
+    int x = 1;
     while (1) {
         start = clock();
         if ( FindMarker(fp_req, "count = ") )
@@ -133,104 +150,96 @@ main(int argc, char* argv[])
         if ( FindMarker(fp_req, "mlen = ") )
             fscanf(fp_req, "%llu", &mlen);
         else {
-            printf("ERROR: unable to read 'mlen' from <%s>\n", fn_req);
+            printf("PQCgenKAT ERROR: unable to read 'mlen' from <%s>\n", fn_req);
             return KAT_DATA_ERROR;
         }
         fprintf(fp_rsp, "mlen = %llu\n", mlen);
-        if (debug) printf("mlen: %llu\n", mlen);
+        if (debug) printf("loop mlen: %llu\n", mlen);
 
         m = (unsigned char *)calloc(mlen+1, sizeof(unsigned char));
-        m1 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
-        c = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
-        // NTRUEncrypt use here:  c = (unsigned char *)calloc(mlen+CRYPTO_CIPHERTEXTBYTES, sizeof(unsigned char));
-        if (debug) printf("calloc (m, m1, c) done\n");
-        memset(pk, 0x00, CRYPTO_PUBLICKEYBYTES); //todo
-        memset(sk, 0x00, CRYPTO_SECRETKEYBYTES); //todo
+        m1 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char)); // origin
+//        m1 = (unsigned char *)calloc(mlen, sizeof(unsigned char));
+        sm = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char)); // origin
+//        sm = (unsigned char *)calloc(10000, sizeof(unsigned char));
 
-
+/////////////////////////////////////////////////////////////////////
         if ( !ReadHex(fp_req, m, (int)mlen, "msg = ") ) {
-            printf("ERROR: unable to read 'msg' from <%s>\n", fn_req);
+            printf("PQCgenKAT ERROR: unable to read 'msg' from <%s>\n", fn_req);
             return KAT_DATA_ERROR;
         }
         fprintBstr(fp_rsp, "msg = ", m, mlen);
-        if (debug) printHex("msg", msg, mlen, false);
+        if (debug) printHex("msg", msg, 30, true);
         time_prepare = ((double) (clock() - start));
 
         // Generate the public/private keypair
-        if (debug) printf("do crypto_encrypt_keypair()");
+        if (debug) printf("do crypto_sign_keypair()");
         start = clock();
-        if ( (ret_val = crypto_encrypt_keypair(pk, sk)) != 0) {
-            printf("PQCgenKAT ERROR: crypto_encrypt_keypair returned <%d>\n", ret_val);
+        if (debug) printf("-----------debug 2\n"); // todo
+        int asd = 33*44+55+66+77*33;
+        if (debug) printf("-----------debug 2 %i\n", asd); // todo
+        if ( (ret_val = crypto_sign_keypair(pk, sk)) != 0) {
+            printf("PQCgenKAT ERROR: crypto_sign_keypair returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
+        if (debug) printf("-----------debug 3\n"); // todo
         time_keypair = ((double) (clock() - start));
         if (debug) printf(" (took: %.0f μs)\n", time_keypair);
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
         fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
         if (debug) { printHex("pk", pk, 30, true); printHex("sk", sk, 30, true); }
 
-        // encoding
+        // signing
         // if encrypt use randombytes then we need to reinit for same results as _enc run
         randombytes_init(seed, NULL, 256);
-        if (debug) printf("do crypto_encrypt()");
+        if (debug) printf("do crypto_sign()");
         start = clock();
-        if ( (ret_val = crypto_encrypt(c, &clen, m, mlen, pk)) != 0) {
-            printf("PQCgenKAT ERROR: crypto_encrypt returned <%d>\n", ret_val);
+        if ( (ret_val = crypto_sign(sm, &smlen, m, mlen, sk)) != 0) {
+            printf("PQCgenKAT ERROR: crypto_sign returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
-        time_enc = ((double) (clock() - start));
+        time_sign = ((double) (clock() - start));
         if (debug) printf(" (took: %.0f μs)\n", time_sign);
 
-        fprintf(fp_rsp, "clen = %llu\n", clen);
-        fprintBstr(fp_rsp, "c = ", c, clen);
+        fprintf(fp_rsp, "smlen = %llu\n", smlen);
+        fprintBstr(fp_rsp, "sm = ", sm, smlen);
         fprintf(fp_rsp, "\n");
         if (debug) {
-            printf("clen: %llu\n", clen);
-            printHex("c", c, (clen > 30 ? 30 : clen), true);
+            printf("smlen: %llu\n", smlen);
+            printHex("sm", sm, 30, true);
         }
 
-        /////// todo test (remove)
-//        unsigned char c2 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
-//        char *c2len;
-//
-//        if ( (ret_val = crypto_encrypt(c2, &c2len, m, mlen, pk)) != 0) {
-//            printf("PQCgenKAT ERROR: crypto_encrypt returned <%d>\n", ret_val);
-//            return KAT_CRYPTO_FAILURE;
-//        }
-//        fprintBstr(fp_rsp, "c2 = ", c2, c2len);
-        ///////
-
-        if (debug) printf("do crypto_encrypt_open()");
+        // verify signing
+        if (debug) printf("do crypto_sign_open()");
         start = clock();
-        if ( (ret_val = crypto_encrypt_open(m1, &mlen1, c, clen, sk)) != 0) {
-            printf("crypto_encrypt_open returned <%d>\n", ret_val);
+        if ( (ret_val = crypto_sign_open(m1, &mlen1, sm, smlen, pk)) != 0) {
+            printf("PQCgenKAT ERROR: crypto_sign_open returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
-        time_dec = ((double) (clock() - start));
+        time_verify = ((double) (clock() - start));
         if (debug) printf(" (took: %.0f μs)\n", time_verify);
-        if (debug) printHex("m1", m1, mlen1, false);
 
         // write time measure to file
         fprintf(fp_time, "prepare (μs) = %.0f\n", time_prepare);
-        fprintf(fp_time, "crypto_encrypt_keypair (μs) = %.0f\n", time_keypair);
-        fprintf(fp_time, "crypto_encrypt_enc (μs) = %.0f\n", time_enc);
-        fprintf(fp_time, "crypto_encrypt_dec (μs) = %.0f\n", time_dec);
+        fprintf(fp_time, "crypto_sign_keypair (μs) = %.0f\n", time_keypair);
+        fprintf(fp_time, "crypto_sign (μs) = %.0f\n", time_sign);
+        fprintf(fp_time, "crypto_sign_open (μs) = %.0f\n", time_verify);
         fprintf(fp_time, "\n");
-        
+        fprintf(fp_rsp, "\n");
+
         if ( mlen != mlen1 ) {
-            printf("PQCgenKAT ERROR: crypto_encrypt_open returned bad 'mlen': Got <%llu>, expected <%llu>\n", mlen1, mlen);
-//            return KAT_CRYPTO_FAILURE;
-        }
-        
-        if ( memcmp(m, m1, mlen) ) {
-            printf("PQCgenKAT ERROR: crypto_encrypt_open returned bad 'm' value\n");
+            printf("PQCgenKAT ERROR: crypto_sign_open returned bad 'mlen': Got <%llu>, expected <%llu>\n", mlen1, mlen);
             return KAT_CRYPTO_FAILURE;
         }
 
-        if (debug) printf("release pointer\n");
+        if ( memcmp(m, m1, mlen) ) {
+            printf("PQCgenKAT ERROR: crypto_sign_open returned bad 'm' value\n");
+            return KAT_CRYPTO_FAILURE;
+        }
+        fflush(fp_rsp);
+        fflush(fp_time);
         free(m);
         free(m1);
-        free(c);
+        free(sm);
 
     }
     if (debug) printf("finish looping\n");
@@ -238,12 +247,17 @@ main(int argc, char* argv[])
     fseek(fp_time, strlen(CRYPTO_ALGNAME) + 4, SEEK_SET);
     fprintf(fp_time, "time from start to end (μs) = %.0f", ((double) (clock() - progStart)));
 
+// from GUI original genKAT
+//free(pk);
+//free(sk);
+
     fclose(fp_req);
     fclose(fp_rsp);
     fclose(fp_time);
 
     return KAT_SUCCESS;
 }
+
 
 void printHex(char *fieldname, char *hexstring, int printamount, bool printDots) {
     printf("%s: ", fieldname);

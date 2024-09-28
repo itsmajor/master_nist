@@ -12,6 +12,7 @@
 #include "api.h"
 #include <time.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
@@ -26,9 +27,13 @@
 int		FindMarker(FILE *infile, const char *marker);
 int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
 void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
+void hex_to_bin(size_t size, unsigned char *dest, const char *input);
+
+// global variable
+bool    debug = false;
 
 int
-main()
+main(int argc, char* argv[])
 {
     char                fn_req[32], fn_rsp[32], fn_time[32];
     FILE                *fp_req, *fp_rsp, *fp_time;
@@ -38,10 +43,16 @@ main()
     int                 count;
     unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
-    clock_t start, progStart;
-    double time_keypair, time_enc, time_dec, time_prepare;
+    clock_t             start, progStart;
+    double              time_keypair, time_enc, time_dec, time_prepare;
 
     progStart = clock();
+
+    if ( argc > 1) {
+        // any param will start verbose logging
+        debug = true;
+        printf("start main PQCgenKAT_kem\n");
+    }
 
     // Create the REQUEST file
     sprintf(fn_req, "PQCkemKAT.req");
@@ -49,7 +60,6 @@ main()
         printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_req);
         return KAT_FILE_OPEN_ERROR;
     }
-
     sprintf(fn_rsp, "PQCkemKAT.rsp");
     if ( (fp_rsp = fopen(fn_rsp, "w")) == NULL ) {
         printf("PQCgenKAT ERROR: Couldn't open <%s> for write\n", fn_rsp);
@@ -90,6 +100,7 @@ main()
     }
     fprintf(fp_time, "time since start to open req readable (μs) = %.0f\n\n\n", ((double) (clock() - progStart)));
 
+    if (debug) printf("start looping\n");
     while (1) {
         start = clock();
         if ( FindMarker(fp_req, "count = ") )
@@ -99,6 +110,7 @@ main()
         }
         fprintf(fp_rsp, "count = %d\n", count);
         fprintf(fp_time, "count = %d\n", count);
+        if (debug) printf("loop count: %d\n", count);
 
         if ( !ReadHex(fp_req, seed, 48, "seed = ") ) {
             printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_req);
@@ -109,34 +121,48 @@ main()
         time_prepare = ((double) (clock() - start));
 
         // Generate the public/private keypair
+        if (debug) printf("do crypto_kem_keypair()");
+//        memset(pk, 0x00, CRYPTO_PUBLICKEYBYTES); //todo
+//        memset(sk, 0x00, CRYPTO_SECRETKEYBYTES); //todo
         start = clock();
+//        if (debug) printf("---------- debug 1\n"); //todo
         if ( (ret_val = crypto_kem_keypair(pk, sk)) != 0) {
             printf("PQCgenKAT ERROR: crypto_kem_keypair returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
+//        if (debug) printf("---------- debug 2\n"); //todo
         time_keypair = ((double) (clock() - start));
+        if (debug) printf(" (took: %.0f μs)\n", time_keypair);
+//        if (debug) printf("---------- debug 3\n"); //todo
+
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
         fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
+//        if (debug) exit(1); //todo
 
         // encoding
         randombytes_init(seed, NULL, 256);
+        if (debug) printf("do crypto_kem_enc()");
         start = clock();
         if ( (ret_val = crypto_kem_enc(ct, ss, pk)) != 0) {
             printf("PQCgenKAT ERROR: crypto_kem_enc returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
         time_enc = ((double) (clock() - start));
+        if (debug) printf(" (took: %.0f μs)\n", time_enc);
+
         fprintBstr(fp_rsp, "ct = ", ct, CRYPTO_CIPHERTEXTBYTES);
         fprintBstr(fp_rsp, "ss = ", ss, CRYPTO_BYTES);
 
         // decoding
         randombytes_init(seed, NULL, 256);
+        if (debug) printf("do crypto_kem_dec()");
         start = clock();
         if ( (ret_val = crypto_kem_dec(ss1, ct, sk)) != 0) {
             printf("PQCgenKAT ERROR: crypto_kem_dec returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
         time_dec = ((double) (clock() - start));
+        if (debug) printf(" (took: %.0f μs)\n", time_dec);
 
         // write time measure to file
         fprintf(fp_time, "prepare (μs) = %.0f\n", time_prepare);
@@ -151,6 +177,7 @@ main()
             return KAT_CRYPTO_FAILURE;
         }
     }
+    if (debug) printf("finish looping\n");
 
     fseek(fp_time, strlen(CRYPTO_ALGNAME) + 4, SEEK_SET);
     fprintf(fp_time, "time from start to end (μs) = %.0f", ((double) (clock() - progStart)));
@@ -162,6 +189,13 @@ main()
     return KAT_SUCCESS;
 }
 
+void printHex(char *fieldname, char *hexstring, int printamount, bool printDots) {
+    printf("%s: ", fieldname);
+    char *cp = hexstring;
+    for (int i = 0; i < printamount /*&& *cp != '\0'*/; i++) printf("%02X", *cp++);
+    if (printDots) printf("...");
+    printf("\n");
+}
 
 //
 // ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
@@ -207,52 +241,56 @@ FindMarker(FILE *infile, const char *marker)
 // ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
 //
 int
-ReadHex(FILE *infile, unsigned char *A, int Length, char *str)
-{
-	int			i, ch, started;
-	unsigned char	ich;
+ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
+    clock_t start;
+    if (debug) {
+        start = clock();
+        printf("in ReadHex (Length: %i, search: '%s')", Length, str);
+    }
 
-	if ( Length == 0 ) {
-		A[0] = 0x00;
-		return 1;
-	}
-	memset(A, 0x00, Length);
-	started = 0;
-	if ( FindMarker(infile, str) )
-		while ( (ch = fgetc(infile)) != EOF ) {
-			if ( !isxdigit(ch) ) {
-				if ( !started ) {
-					if ( ch == '\n' )
-						break;
-					else
-						continue;
-				}
-				else
-					break;
-			}
-			started = 1;
-			if ( (ch >= '0') && (ch <= '9') )
-				ich = ch - '0';
-			else if ( (ch >= 'A') && (ch <= 'F') )
-				ich = ch - 'A' + 10;
-			else if ( (ch >= 'a') && (ch <= 'f') )
-				ich = ch - 'a' + 10;
-            else // shouldn't ever get here
-                ich = 0;
+    if (Length == 0) {
+        A[0] = 0x00;
+        return 1;
+    }
+    memset(A, 0x00, Length);
 
-			for ( i=0; i<Length-1; i++ )
-				A[i] = (A[i] << 4) | (A[i+1] >> 4);
-			A[Length-1] = (A[Length-1] << 4) | ich;
-		}
-	else
-		return 0;
+    char *line = NULL;
+    size_t size1 = 0;
+    FindMarker(infile, str);
+    getline(&line, &size1, infile);
+    hex_to_bin(Length, A, line);
+    if (debug) printf(" (took: %.0f μs)\n", ((double) (clock() - start)));
+    return 1;
+}
 
-	return 1;
+void hex_to_bin(size_t size, unsigned char *dest, const char *input) {
+    unsigned char *s = dest, digit1, digit2;
+    unsigned int ich1, ich2;
+    for (size_t i = 0; i < size; i++) {
+        digit1 = input[i*2];
+        digit2 = input[i*2 + 1];
+
+        // A = 65
+        // 0 = 48
+        if (digit1 >= 65)
+            ich1 = digit1 - 55;
+        else
+            ich1 = digit1 - 48;
+
+        if (digit2 >= 65)
+            ich2 = digit2 - 55;
+        else
+            ich2 = digit2 - 48;
+
+        *s++ = (unsigned char) ((ich1<<4) + ich2);
+    }
+    *s = '\0';
 }
 
 void
 fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L)
 {
+//    clock_t start = clock();
 	unsigned long long  i;
 
 	fprintf(fp, "%s", S);
@@ -264,5 +302,6 @@ fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L)
 		fprintf(fp, "00");
 
 	fprintf(fp, "\n");
+//    if (debug) printf("time passed in fprintBstr (μs) = %.0f\n", ((double) (clock() - start)));
 }
 
