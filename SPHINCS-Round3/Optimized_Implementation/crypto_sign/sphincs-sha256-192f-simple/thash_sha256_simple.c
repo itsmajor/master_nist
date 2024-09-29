@@ -4,7 +4,7 @@
 #include "thash.h"
 #include "address.h"
 #include "params.h"
-#include <openssl/sha.h>
+#include "sha256.h"
 
 /**
  * Takes an array of inblocks concatenated arrays of SPX_N bytes.

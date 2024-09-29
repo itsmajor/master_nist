@@ -7,7 +7,7 @@
 #include <string.h>
 
 #include "utils.h"
-#include <openssl/sha.h>
+#include "sha256.h"
 
 static uint32_t load_bigendian_32(const uint8_t *x) {
     return (uint32_t)(x[3]) | (((uint32_t)(x[2])) << 8) |
@@ -357,7 +357,7 @@ void mgf1(unsigned char *out, unsigned long outlen,
     }
 }
 
-uint8_t state_seeded[40];
+//uint8_t state_seeded[40];
 
 /**
  * Absorb the constant pub_seed using one round of the compression function

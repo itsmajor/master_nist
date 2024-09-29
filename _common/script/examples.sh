@@ -79,3 +79,39 @@ for kat in "${kat_array[@]}"; do
     done
   done
 done
+
+############## build_all
+hash_array=('haraka' 'sha256' 'shake256')
+sec_array=('128' '192' '256')
+letter_array=('s' 'f')
+variant_array=('simple' 'robust')
+
+for hash in "${hash_array[@]}"; do
+  for sec in "${sec_array[@]}"; do
+    for letter in "${letter_array[@]}"; do
+      for variant in "${variant_array[@]}"; do
+        cd Optimized_Implementation/crypto_sign/sphincs-"$hash"-"$sec""$letter"-"$variant"
+        echo "moved to: ${PWD}"
+        make $MAKEOPTION
+        cd ~-
+      done
+    done
+  done
+done
+############## test_all
+sec_array=(1018 1024 1306 1822 2048 2062)
+kat_array=('Encap' 'Enc')
+kat2_array=('CCA' 'CPA')
+
+for kat in "${kat_array[@]}"; do
+  for kat2 in "${kat2_array[@]}"; do
+    for sec in "${sec_array[@]}"; do
+      KAT_TYPE=${kat//Encap/kem}
+      KAT_TYPE=${KAT_TYPE//Enc/encrypt}
+      #CIPHER="kem Lima-EncapCCA_1018"
+      CIPHER="$KAT_TYPE Lima-"$kat$kat2"_$sec"
+      ../_common/script/doKat.sh $VALGRIND $CIPHER bin/$kat$kat2/$sec
+      ../_common/script/doVerifyKat.sh $CIPHER
+    done
+  done
+done

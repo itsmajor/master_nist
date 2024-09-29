@@ -227,8 +227,8 @@ int main(int argc, char* argv[])
     char printtime[20];
     strftime(printtime, 20, "%d.%m.%Y %H:%M:%S", localtime(&timer));
     if (comparedLines > 0) {
-        printf(" (%s) (repeats: %i)\n", printtime, count + 1);
-        fprintf(fp_verifyresult, " (%s) (repeats: %i)\n", printtime, count + 1);
+        printf(" (%s) (repeats: %i, comparedLines: %i)\n", printtime, count + 1, comparedLines);
+        fprintf(fp_verifyresult, " (%s) (repeats: %i, comparedLines: %i)\n", printtime, count + 1, comparedLines);
     } else {
         printf(" (%s) (count at %i)\n", printtime, count);
         fprintf(fp_verifyresult, " (%s) (count at %i)\n", printtime, count);
