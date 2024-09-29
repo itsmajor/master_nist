@@ -1,14 +1,40 @@
-cd tests
-echo "generate kat Falcon 512 OI"
-./kat512fpu
+echo ""
+echo "**********************************************************************************************************************"
+echo "**** `pwd` use new test_all2.sh - will execute with defaults  ****"
+echo "**********************************************************************************************************************"
+echo ""
 
-echo "generate kat Falcon 1024 OI"
-./kat1024fpu
+doValgrindFull=$1;
+doValgrindKeygen=$2;
+doValgrindEnc=$3;
+doValgrindDec=$4;
 
-echo "speed Falcon"
-./speed
+if [ ! -z $doValgrindFull ] && [ $doValgrindFull -eq 9 ]; then
+  DOBUILD="-b"
+fi
 
-echo "test Falcon"
-./test_falcon
+if [ $# -eq 4 ]; then
+  VALGRIND="$doValgrindFull $doValgrindKeygen $doValgrindEnc $doValgrindDec"
+  echo "executing:" ./test_all2.sh -a \"$VALGRIND\" $DOBUILD
+  ./test_all2.sh -a "$VALGRIND" $DOBUILD
+else
+  echo "executing:" ./test_all2.sh $DOBUILD
+  ./test_all2.sh $DOBUILD
+fi
 
-cd ../..
+
+
+#cd tests
+#echo "generate kat Falcon 512 OI"
+#./kat512fpu
+#
+#echo "generate kat Falcon 1024 OI"
+#./kat1024fpu
+#
+#echo "speed Falcon"
+#./speed
+#
+#echo "test Falcon"
+#./test_falcon
+#
+#cd ../..
