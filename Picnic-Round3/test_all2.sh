@@ -58,12 +58,11 @@ fi
 OPTIONS="$REPEATS $DEBUG_KAT $DEBUG_KAT_KEYGEN $DEBUG_KAT_ENC $DEBUG_KAT_DEC"
 #echo "options:" $OPTIONS
 
-sec_array=(512 1024)
-impl_array=('fpu')
+sec_array=('3l1' '3l3' '3l5' 'l1fs' 'l1full' 'l1ur' 'l3fs' 'l3full' 'l3ur' 'l5fs' 'l5full' 'l5ur')
 
 for sec in "${sec_array[@]}"; do
-  CIPHER="sign Falcon_"$sec"_fpu"
-  ../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/falcon"$sec"/falcon"$sec"fpu $OPTIONS
+  CIPHER="sign Picnic_"$sec"_neon"
+  ../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/picnic"$sec"-neon $OPTIONS
   ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
 done
 
