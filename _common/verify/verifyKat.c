@@ -216,19 +216,23 @@ int main(int argc, char* argv[])
     if (countErrors > 0) {
         printf("verifyKAT: %s - ERRORS found: %i (%s)", argv[2], countErrors, pathVerify);
         fprintf(fp_verifyresult, "ERROR (count = %d) (%s)", countErrors, verified);
-    } if (count > 0) {
+    } if (comparedLines > 0) {
         printf("verifyKAT: %s - OK (%s)", argv[2], verified);
         fprintf(fp_verifyresult, "OK (%s)", verified);
     } else {
-        printf("verifyKAT: %s - count 0 - nothing compared", argv[2]);
-        fprintf(fp_verifyresult, "count 0 - nothing compared");
+        printf("verifyKAT: %s - nothing compared", argv[2]);
+        fprintf(fp_verifyresult, "nothing compared");
     }
     time_t timer = time(NULL);
     char printtime[20];
     strftime(printtime, 20, "%d.%m.%Y %H:%M:%S", localtime(&timer));
-    printf(" (%s) (repeats: %i)\n", printtime, count+1);
-    fprintf(fp_verifyresult, " (%s) (repeats: %i)\n", printtime, count+1);
-
+    if (comparedLines > 0) {
+        printf(" (%s) (repeats: %i)\n", printtime, count + 1);
+        fprintf(fp_verifyresult, " (%s) (repeats: %i)\n", printtime, count + 1);
+    } else {
+        printf(" (%s) (count at %i)\n", printtime, count);
+        fprintf(fp_verifyresult, " (%s) (count at %i)\n", printtime, count);
+    }
 
 //    printf("*********** end of verifyKat - closing files ****************\n");
     fclose(fp_verify);
@@ -246,26 +250,21 @@ void compareLine(FILE *file1, FILE *file2, FILE *fp_verify, char *searchString, 
     size_t size1 = 0;
     size_t size2 = 0;
 
-    if (debug) {
-        printf("in compareLine (%s) search for '%s'\n", kattype, searchString);
-    }
+    if (debug) printf("in compareLine (%s) search for '%s'\n", kattype, searchString);
+
     // todo improve
     int i;
     for (i = 0; i < 1000; i++) {
         getline(&line1, &size1, file1);
         if (strstr(line1, searchString)) break;
     }
-    if (debug) {
-        printf("read line1 (i:%d): %.*s\n", i, 20, line1);
-    }
+    if (debug) printf("read line1 (i:%d): %.*s\n", i, 20, line1);
 
     for (i = 0; i < 1000; i++) {
         getline(&line2, &size2, file2);
         if (strstr(line2, searchString)) break;
     }
-    if (debug) {
-        printf("read line2 (i:%d): %.*s\n", i, 20, line2);
-    }
+    if (debug) printf("read line2 (i:%d): %.*s\n", i, 20, line2);
 
     if (strcmp(line1, line2) == 0) {
         if (strcmp(searchString, "msg = ") == 0) {
@@ -280,6 +279,7 @@ void compareLine(FILE *file1, FILE *file2, FILE *fp_verify, char *searchString, 
         printf("%s (%i) %sERROR - not equal - '%.*s...' vs '%.*s...'\n", kattype, count, searchString, 20, line1, 20, line2);
         countErrors += 1;
     }
+    comparedLines++;
     free(line1);
     free(line2);
 }

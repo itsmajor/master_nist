@@ -80,6 +80,7 @@ then
     exit
 fi
 
+echo "*** do KAT"
 
 cd $KATPATH
 echo $(date +'%d.%m.%Y %H:%M:%S.%3N') "start KAT ($KATTYPE):" $CIPHERNAME
