@@ -22,4 +22,4 @@ cd ~-
  #make MODE=2 HASH=SHA $MAKEOPTION
  #make MODE=3 HASH=SHA $MAKEOPTION
  #make MODE=5 HASH=SHA $MAKEOPTION
- #cd ../../..
+ #cd ~-

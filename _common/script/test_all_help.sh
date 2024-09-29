@@ -1,3 +1,5 @@
+# this is help print for test_all.sh (using test_all_param.sh)
+
 echo "   usage: ./test_all2.sh -cbr 2 -a '0 1 2 2'"
 echo ""
 echo "   -a:str  pass old style 'x x x x' (0-2)"
@@ -24,4 +26,3 @@ echo "example: $ ./test_all.sh 0 0 0 0   --> no valgrind, only base KAT executed
 echo "example: $ ./test_all.sh 0 1 1 1   --> no valgrind, all KAT executed"
 echo "example: $ ./test_all.sh 0 2 2 2   --> will do valgrind keygen, encoding and decoding"
 echo "example: $ ./test_all.sh 0 2 2 1   --> will do valgrind keygen and encoding and no valgrind decoding"
-#echo "special: doValgrindFull = 9 will trigger call build_all.sh"

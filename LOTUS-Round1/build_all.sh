@@ -8,7 +8,7 @@ for kat in "${kat_array[@]}"; do
     cd Optimized_Implementation/$kat/lotus$sec
     echo "moved to: ${PWD}"
     make SEC=$sec $MAKEOPTION
-    cd ../../..
+    cd ~-
   done
 done
 
@@ -16,32 +16,32 @@ done
 #cd Optimized_Implementation/encrypt/lotus128
 #echo "moved to: ${PWD}"
 #make SEC=128 $MAKEOPTION
-#cd ../../..
+#cd ~-
 #
 #cd Optimized_Implementation/encrypt/lotus192
 #echo "moved to: ${PWD}"
 #make SEC=192 $MAKEOPTION
-#cd ../../..
+#cd ~-
 #
 #cd Optimized_Implementation/encrypt/lotus256
 #echo "moved to: ${PWD}"
 #make SEC=256 $MAKEOPTION
-#cd ../../..
+#cd ~-
 
 #cd Optimized_Implementation/kem/lotus128
 #echo "moved to: ${PWD}"
 #make SEC=128 $MAKEOPTION
-#cd ../../..
+#cd ~-
 #
 #cd Optimized_Implementation/kem/lotus192
 #echo "moved to: ${PWD}"
 #make SEC=192 $MAKEOPTION
-#cd ../../..
+#cd ~-
 #
 #cd Optimized_Implementation/kem/lotus256
 #echo "moved to: ${PWD}"
 #make SEC=256 $MAKEOPTION
-#cd ../../..
+#cd ~-
 
 ##! /bin/bash
 #sec_array=(128 192 256)

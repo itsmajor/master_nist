@@ -1,48 +1,14 @@
-echo ""
-echo "**********************************************************************************************************************"
-echo "**** `pwd` use new test_all2.sh - will execute with defaults  ****"
-echo "**********************************************************************************************************************"
-echo ""
+#! /bin/bash
 
-doValgrindFull=$1;
-doValgrindKeygen=$2;
-doValgrindEnc=$3;
-doValgrindDec=$4;
+. ../_common/script/test_all_param.sh "$@"
 
-if [ ! -z $doValgrindFull ] && [ $doValgrindFull -eq 9 ]; then
-  DOBUILD="-b"
-fi
+mode_array=(2 3 5)
+hash_array=('AES' 'SHA')
 
-if [ $# -eq 4 ]; then
-  VALGRIND="$doValgrindFull $doValgrindKeygen $doValgrindEnc $doValgrindDec"
-  echo "executing:" ./test_all2.sh -a \"$VALGRIND\" $DOBUILD
-  ./test_all2.sh -a "$VALGRIND" $DOBUILD
-else
-  echo "executing:" ./test_all2.sh $DOBUILD
-  ./test_all2.sh $DOBUILD
-fi
-
-
-
-
-
-#cd Reference_Implementation/crypto_sign/dilithium/test
-#echo "test dilithium2"
-#./test_speed2
-#
-#echo "test dilithium2aes"
-#./test_speed2aes
-#
-#echo "test dilithium3"
-#./test_speed3
-#
-#echo "test dilithium3aes"
-#./test_speed3aes
-#
-#echo "test dilithium5"
-#./test_speed5
-#
-#echo "test dilithium5aes"
-#./test_speed5aes
-#
-#cd ../../../..
+for mode in "${mode_array[@]}"; do
+  for hash in "${hash_array[@]}"; do
+    CIPHER="sign CRYSTALS-DILITHIUM_mode"$mode"_"$hash
+    ../_common/script/doKat.sh $VALGRIND $CIPHER bin/dilithium_MODE"$mode"_"$hash" $OPTIONS
+    ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
+  done
+done

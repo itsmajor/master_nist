@@ -15,7 +15,7 @@ DEBUG_KAT_DEC=0
 while getopts "h a:cb r: defgi v" flag
 do
     case "${flag}" in
-        h) ../_common/script/test_all2_help.sh
+        h) ../_common/script/test_all_help.sh
            exit;;
         a) VALGRIND=$OPTARG;;
         b) DO_BUILD=1;;
@@ -41,7 +41,7 @@ if [[ $DO_VALGRIND -eq 1 ]]; then
   VALGRIND="0 2 2 2"
 fi
 if [[ -z $VALGRIND ]]; then # -z = ! -n
-  echo "*** flag -a not set - using default '0 1 1 1' - no valgrind"
+  echo "*** flag -a not set - using default '0 1 1 1' - no valgrind - (use -h for help)"
   VALGRIND="0 1 1 1"
 fi
 #echo "valgrind options:" $VALGRIND
@@ -55,14 +55,5 @@ if [[ $DO_BUILD -eq 1 ]]; then
   ./build_all.sh
 fi
 
-OPTIONS="$REPEATS $DEBUG_KAT $DEBUG_KAT_KEYGEN $DEBUG_KAT_ENC $DEBUG_KAT_DEC"
+export OPTIONS="$REPEATS $DEBUG_KAT $DEBUG_KAT_KEYGEN $DEBUG_KAT_ENC $DEBUG_KAT_DEC"
 #echo "options:" $OPTIONS
-
-sec_array=('3l1' '3l3' '3l5' 'l1fs' 'l1full' 'l1ur' 'l3fs' 'l3full' 'l3ur' 'l5fs' 'l5full' 'l5ur')
-
-for sec in "${sec_array[@]}"; do
-  CIPHER="sign Picnic_"$sec"_neon"
-  ../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/picnic"$sec"-neon $OPTIONS
-  ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
-done
-

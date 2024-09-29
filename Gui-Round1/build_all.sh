@@ -25,4 +25,4 @@ done
 #make PROJ=Gui-448 gui-genkey
 #make PROJ=Gui-448 gui-sign
 #make PROJ=Gui-448 gui-verify
-#cd ../..
+#cd ~-

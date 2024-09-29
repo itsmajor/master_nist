@@ -1,54 +1,11 @@
-echo ""
-echo "**********************************************************************************************************************"
-echo "**** `pwd` use new test_all2.sh - will execute with defaults  ****"
-echo "**********************************************************************************************************************"
-echo ""
+#! /bin/bash
 
-doValgrindFull=$1;
-doValgrindKeygen=$2;
-doValgrindEnc=$3;
-doValgrindDec=$4;
+. ../_common/script/test_all_param.sh "$@"
 
-if [ ! -z $doValgrindFull ] && [ $doValgrindFull -eq 9 ]; then
-  DOBUILD="-b"
-fi
+sec_array=('3l1' '3l3' '3l5' 'l1fs' 'l1full' 'l1ur' 'l3fs' 'l3full' 'l3ur' 'l5fs' 'l5full' 'l5ur')
 
-if [ $# -eq 4 ]; then
-  VALGRIND="$doValgrindFull $doValgrindKeygen $doValgrindEnc $doValgrindDec"
-  echo "executing:" ./test_all2.sh -a \"$VALGRIND\" $DOBUILD
-  ./test_all2.sh -a "$VALGRIND" $DOBUILD
-else
-  echo "executing:" ./test_all2.sh $DOBUILD
-  ./test_all2.sh $DOBUILD
-fi
-
-
-
-#cd tests
-#
-#echo "test picnic3l1-neon"
-#./picnic3l1-neon
-#echo "test picnic3l3-neon"
-#./picnic3l3-neon
-#echo "test picnic3l5-neon"
-#./picnic3l5-neon
-#echo "test picnicl1fs-neon"
-#./picnicl1fs-neon
-#echo "test picnicl1full-neon"
-#./picnicl1full-neon
-#echo "test picnicl1ur-neon"
-#./picnicl1ur-neon
-#echo "test picnicl3fs-neon"
-#./picnicl3fs-neon
-#echo "test picnicl3full-neon"
-#./picnicl3full-neon
-#echo "test picnicl3ur-neon"
-#./picnicl3ur-neon
-#echo "test picnicl5fs-neon"
-#./picnicl5fs-neon
-#echo "test picnicl5full-neon"
-#./picnicl5full-neon
-#echo "test picnicl5ur-neon"
-#./picnicl5ur-neon
-#
-#cd ..
+for sec in "${sec_array[@]}"; do
+  CIPHER="sign Picnic_"$sec"_neon"
+  ../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/picnic"$sec"-neon $OPTIONS
+  ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
+done

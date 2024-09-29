@@ -20,7 +20,7 @@ done
 #cd Optimized_Implementation/Lib
 #echo "moved to: ${PWD} generate lima lib"
 #make $MAKEOPTION
-#cd ../..
+#cd ~-
 #
 #cd Optimized_Implementation/NIST/EncapCCA
 #echo "moved to: ${PWD}"
@@ -30,7 +30,7 @@ done
 #make LIMASZ=1822 $MAKEOPTION
 #make LIMASZ=2048 $MAKEOPTION
 #make LIMASZ=2062 $MAKEOPTION
-#cd ../../..
+#cd ~-
 #
 #cd Optimized_Implementation/NIST/EncapCPA
 #echo "moved to: ${PWD}"
@@ -40,7 +40,7 @@ done
 #make LIMASZ=1822 $MAKEOPTION
 #make LIMASZ=2048 $MAKEOPTION
 #make LIMASZ=2062 $MAKEOPTION
-#cd ../../..
+#cd ~-
 #
 #cd Optimized_Implementation/NIST/EncCCA
 #echo "moved to: ${PWD}"
@@ -50,7 +50,7 @@ done
 #make LIMASZ=1822 $MAKEOPTION
 #make LIMASZ=2048 $MAKEOPTION
 #make LIMASZ=2062 $MAKEOPTION
-#cd ../../..
+#cd ~-
 #
 #cd Optimized_Implementation/NIST/EncCPA
 #echo "moved to: ${PWD}"
@@ -60,4 +60,4 @@ done
 #make LIMASZ=1822 $MAKEOPTION
 #make LIMASZ=2048 $MAKEOPTION
 #make LIMASZ=2062 $MAKEOPTION
-#cd ../../..
+#cd ~-

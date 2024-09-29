@@ -1,21 +1,7 @@
-doValgrindFull=$1;
-doValgrindKeygen=$2;
-doValgrindEnc=$3;
-doValgrindDec=$4;
+#! /bin/bash
 
-if [ ! $# -eq 4 ];
-then
-  ../_common/script/doKat.sh explain4param
-  exit
-fi
-
-if [ $doValgrindFull -eq 9 ];
-then
-  ./build_all.sh
-fi
-
-VALGRIND="$doValgrindFull $doValgrindKeygen $doValgrindEnc $doValgrindDec"
+. ../_common/script/test_all_param.sh "$@"
 
 CIPHER="kem SABER"
-../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation_KEM
-../_common/script/doVerifyKat.sh $CIPHER
+../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation_KEM $OPTIONS
+../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT

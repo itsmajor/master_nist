@@ -1,13 +1,24 @@
-cd BIG_QUAKE-Round1
+cd Gravity_SPHINCS-Round1
 echo "moved to: ${PWD}"
-./test_all.sh 0 2 2 2
+./test_all2.sh -bv
 cd ..
 
-cd Classic-McEliece-Round4
+cd Gui-Round1
 echo "moved to: ${PWD}"
-./test_all.sh 0 1 1 1
+./test_all2.sh -bv
 cd ..
 
+
+#cd BIG_QUAKE-Round1
+#echo "moved to: ${PWD}"
+#./test_all.sh 0 2 2 2
+#cd ..
+#
+#cd Classic-McEliece-Round4
+#echo "moved to: ${PWD}"
+#./test_all.sh 0 1 1 1
+#cd ..
+#
 
 #cd Lima-Round1
 #echo "moved to: ${PWD}"
@@ -73,15 +84,6 @@ cd ..
 #./test_all.sh
 #cd ..
 #
-#cd Gravity_SPHINCS-Round1
-#echo "moved to: ${PWD}"
-#./test_all.sh
-#cd ..
-#
-#cd Gui-Round1
-#echo "moved to: ${PWD}"
-#./test_all.sh
-#cd ..
 #
 #cd HQC-Round4
 #echo "moved to: ${PWD}"

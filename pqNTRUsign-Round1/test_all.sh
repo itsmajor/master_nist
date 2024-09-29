@@ -1,23 +1,11 @@
-echo ""
-echo "**********************************************************************************************************************"
-echo "**** `pwd` use new test_all2.sh - will execute with defaults  ****"
-echo "**********************************************************************************************************************"
-echo ""
+#! /bin/bash
 
-doValgrindFull=$1;
-doValgrindKeygen=$2;
-doValgrindEnc=$3;
-doValgrindDec=$4;
+. ../_common/script/test_all_param.sh "$@"
 
-if [ ! -z $doValgrindFull ] && [ $doValgrindFull -eq 9 ]; then
-  DOBUILD="-b"
-fi
+CIPHER="sign pqNTRUSign-Gaussian-1024"
+../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/Gaussian-1024 $OPTIONS
+../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
 
-if [ $# -eq 4 ]; then
-  VALGRIND="$doValgrindFull $doValgrindKeygen $doValgrindEnc $doValgrindDec"
-  echo "executing:" ./test_all2.sh -a \"$VALGRIND\" $DOBUILD
-  ./test_all2.sh -a "$VALGRIND" $DOBUILD
-else
-  echo "executing:" ./test_all2.sh $DOBUILD
-  ./test_all2.sh $DOBUILD
-fi
+CIPHER="sign pqNTRUSign-Uniform-1024"
+../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/Uniform-1024 $OPTIONS
+../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT

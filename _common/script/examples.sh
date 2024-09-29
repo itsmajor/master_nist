@@ -41,8 +41,8 @@ kat_array=('encrypt' 'kem')
 for kat in "${kat_array[@]}"; do
   for sec in "${sec_array[@]}"; do
     CIPHER="$kat KINDI-"$sec"_$kat"
-    ../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/encrypt/KINDI-256-3-4-2
-    ../_common/script/doVerifyKat.sh $CIPHER
+    ../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/encrypt/KINDI-256-3-4-2 $OPTIONS
+    ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
   done
 done
 
@@ -74,8 +74,8 @@ for kat in "${kat_array[@]}"; do
       KAT_TYPE=${KAT_TYPE//Enc/encrypt}
       #CIPHER="kem Lima-EncapCCA_1018"
       CIPHER="$KAT_TYPE Lima-"$kat$kat2"_$sec"
-      ../_common/script/doKat.sh $VALGRIND $CIPHER bin/$kat$kat2/$sec
-      ../_common/script/doVerifyKat.sh $CIPHER
+      ../_common/script/doKat.sh $VALGRIND $CIPHER bin/$kat$kat2/$sec $OPTIONS
+      ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
     done
   done
 done
@@ -110,8 +110,8 @@ for kat in "${kat_array[@]}"; do
       KAT_TYPE=${KAT_TYPE//Enc/encrypt}
       #CIPHER="kem Lima-EncapCCA_1018"
       CIPHER="$KAT_TYPE Lima-"$kat$kat2"_$sec"
-      ../_common/script/doKat.sh $VALGRIND $CIPHER bin/$kat$kat2/$sec
-      ../_common/script/doVerifyKat.sh $CIPHER
+      ../_common/script/doKat.sh $VALGRIND $CIPHER bin/$kat$kat2/$sec $OPTIONS
+      ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
     done
   done
 done

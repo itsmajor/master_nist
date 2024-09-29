@@ -1,31 +1,17 @@
-doValgrindFull=$1;
-doValgrindKeygen=$2;
-doValgrindEnc=$3;
-doValgrindDec=$4;
+#! /bin/bash
 
-if [ ! $# -eq 4 ];
-then
-  ../_common/script/doKat.sh explain4param
-  exit
-fi
-
-if [ $doValgrindFull -eq 9 ];
-then
-  ./build_all.sh
-fi
-
-VALGRIND="$doValgrindFull $doValgrindKeygen $doValgrindEnc $doValgrindDec"
+. ../_common/script/test_all_param.sh "$@"
 
 CIPHER="kem FrodoKEM-640"
-../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/optimized/FrodoKEM-640
-../_common/script/doVerifyKat.sh $CIPHER
+../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/optimized/FrodoKEM-640 $OPTIONS
+../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
 
 CIPHER="kem FrodoKEM-976"
-../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/optimized/FrodoKEM-976
-../_common/script/doVerifyKat.sh $CIPHER
+../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/optimized/FrodoKEM-976 $OPTIONS
+../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
 
 CIPHER="kem FrodoKEM-1344"
-../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/optimized/FrodoKEM-1344
-../_common/script/doVerifyKat.sh $CIPHER
+../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/optimized/FrodoKEM-1344 $OPTIONS
+../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
 
 

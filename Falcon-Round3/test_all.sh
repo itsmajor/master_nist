@@ -1,40 +1,12 @@
-echo ""
-echo "**********************************************************************************************************************"
-echo "**** `pwd` use new test_all2.sh - will execute with defaults  ****"
-echo "**********************************************************************************************************************"
-echo ""
+#! /bin/bash
 
-doValgrindFull=$1;
-doValgrindKeygen=$2;
-doValgrindEnc=$3;
-doValgrindDec=$4;
+. ../_common/script/test_all_param.sh "$@"
 
-if [ ! -z $doValgrindFull ] && [ $doValgrindFull -eq 9 ]; then
-  DOBUILD="-b"
-fi
+sec_array=(512 1024)
+impl_array=('fpu')
 
-if [ $# -eq 4 ]; then
-  VALGRIND="$doValgrindFull $doValgrindKeygen $doValgrindEnc $doValgrindDec"
-  echo "executing:" ./test_all2.sh -a \"$VALGRIND\" $DOBUILD
-  ./test_all2.sh -a "$VALGRIND" $DOBUILD
-else
-  echo "executing:" ./test_all2.sh $DOBUILD
-  ./test_all2.sh $DOBUILD
-fi
-
-
-
-#cd tests
-#echo "generate kat Falcon 512 OI"
-#./kat512fpu
-#
-#echo "generate kat Falcon 1024 OI"
-#./kat1024fpu
-#
-#echo "speed Falcon"
-#./speed
-#
-#echo "test Falcon"
-#./test_falcon
-#
-#cd ../..
+for sec in "${sec_array[@]}"; do
+  CIPHER="sign Falcon_"$sec"_fpu"
+  ../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/falcon"$sec"/falcon"$sec"fpu $OPTIONS
+  ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
+done
