@@ -29,28 +29,26 @@ int main(int argc, char* argv[])
     char                fn_rsp[100], fn_rsp_keygen[100], fn_rsp_enc[100], fn_rsp_dec[100], fn_verify[100], fn_verifyresult[100];
     FILE                *fp_rsp, *fp_rsp_keygen, *fp_rsp_enc, *fp_rsp_dec, *fp_verify, *fp_verifyresult;
     unsigned char       testpath[100], pathVerify[100], pathKatBase[100], pathKatRsp[100], pathKatRspKeygen[100], pathKatRspEnc[100], pathKatRspDec[100], verified[20];
-    char                *searchCT, *searchPT, *verifyresultPath;
+    char                *verifyresultPath;
     int                 count = 0, kattypeInt = 0;
 
     printf("verifyKat: start\n");
     countErrors = 0;
 
-    // test main parameter
-    if ( argc > 3) {
-        // 3rd param, any value, will enable debug logging
-        debug = true;
-        printf("argc: %d\n", argc);
-        for (int i = 0; i < argc; i++) {
-            printf("argv[%d]: %s\n", i, argv[i]);
-        }
-    }
-    if ( argc < 3) {
-        // first param is binary name ("./verifyKat")
-        // second is KATTYPE argv[1], "encrypt" or "kem"
-        // third is CIPHERNAME argv[2], eg. "kyber1024"
-        printf("ERROR: expect 2 param KATTYPE and CIPHERNAME\n");
+    if (argc < 3) {
+        printf("ERROR (verifyKAT): expect 2 param KATTYPE and CIPHERNAME \n(3rd param =1 will enable debug)\n");
         return 1;
     }
+    if (argc == 4) {
+        if (strcmp(argv[3], "1") == 0) {
+            debug = true;
+            printf("start main verifyKat (argc: %i)\n", argc);
+            for (int i = 0; i < argc; i++) {
+                printf("argv[%d]: %s\n", i, argv[i]);
+            }
+        }
+    }
+
 
     if (strstr(argv[1], "kem")) kattypeInt = 1;
     if (strstr(argv[1], "encrypt")) kattypeInt = 2;
@@ -252,19 +250,26 @@ void compareLine(FILE *file1, FILE *file2, FILE *fp_verify, char *searchString, 
 
     if (debug) printf("in compareLine (%s) search for '%s'\n", kattype, searchString);
 
-    // todo improve
-    int i;
-    for (i = 0; i < 1000; i++) {
-        getline(&line1, &size1, file1);
-        if (strstr(line1, searchString)) break;
+    if (FindMarker(file1, searchString)) {
+        getline(&line1, &size1, file1); //size is alloc, not real length
+        size1 = strlen(line1)-1; //do not count '\0'
+    } else {
+        printf("%s (%i) %sERROR - line1 not found\n", kattype, count, searchString);
+        countErrors++;
+        return;
     }
-    if (debug) printf("read line1 (i:%d): %.*s\n", i, 20, line1);
+    if (debug) printf("line1 (size: %llu): %.*s\n", size1, (int)(size1 < 100 ? size1 : 100), line1);
 
-    for (i = 0; i < 1000; i++) {
+    if (FindMarker(file2, searchString)) {
         getline(&line2, &size2, file2);
-        if (strstr(line2, searchString)) break;
+        size2 = strlen(line2)-1;
+    } else {
+        printf("%s (%i) %sERROR - line1 not found\n", kattype, count, searchString);
+        countErrors++;
+        return;
     }
-    if (debug) printf("read line2 (i:%d): %.*s\n", i, 20, line2);
+    if (debug) printf("line2 (size: %llu): %.*s\n", size2, (int)(size2 < 100 ? size2 : 100), line2);
+
 
     if (strcmp(line1, line2) == 0) {
         if (strcmp(searchString, "msg = ") == 0) {
@@ -272,12 +277,13 @@ void compareLine(FILE *file1, FILE *file2, FILE *fp_verify, char *searchString, 
         } else {
             fprintf(fp_verify, "%s %sOK \t\t '%.*s...'\n", kattype, searchString, 40, line1);
         }
+        if (debug) printf("lines are equal\n");
     } else {
         fprintf(fp_verify, "%s %sERROR \t\t not equal: '%.*s...' vs '%.*s...'\n", kattype, searchString, 20, line1, 20, line2);
         fprintf(fp_verify, "line1: %s", line1);
         fprintf(fp_verify, "line2: %s", line2);
         printf("%s (%i) %sERROR - not equal - '%.*s...' vs '%.*s...'\n", kattype, count, searchString, 20, line1, 20, line2);
-        countErrors += 1;
+        countErrors++;
     }
     comparedLines++;
     free(line1);
@@ -290,38 +296,38 @@ void compareLine(FILE *file1, FILE *file2, FILE *fp_verify, char *searchString, 
 int
 FindMarker(FILE *infile, const char *marker)
 {
-	char	line[MAX_MARKER_LEN];
-	int		i, len;
-	int curr_line;
+    char	line[MAX_MARKER_LEN];
+    int		i, len;
+    int curr_line;
 
-	len = (int)strlen(marker);
-	if ( len > MAX_MARKER_LEN-1 )
-		len = MAX_MARKER_LEN-1;
+    len = (int)strlen(marker);
+    if ( len > MAX_MARKER_LEN-1 )
+        len = MAX_MARKER_LEN-1;
 
-	for ( i=0; i<len; i++ )
-	  {
-	    curr_line = fgetc(infile);
-	    line[i] = curr_line;
-	    if (curr_line == EOF )
-	      return 0;
-	  }
-	line[len] = '\0';
+    for ( i=0; i<len; i++ )
+    {
+        curr_line = fgetc(infile);
+        line[i] = curr_line;
+        if (curr_line == EOF )
+            return 0;
+    }
+    line[len] = '\0';
 
-	while ( 1 ) {
-		if ( !strncmp(line, marker, len) )
-			return 1;
+    while ( 1 ) {
+        if ( !strncmp(line, marker, len) )
+            return 1;
 
-		for ( i=0; i<len-1; i++ )
-			line[i] = line[i+1];
-		curr_line = fgetc(infile);
-		line[len-1] = curr_line;
-		if (curr_line == EOF )
-		    return 0;
-		line[len] = '\0';
-	}
+        for ( i=0; i<len-1; i++ )
+            line[i] = line[i+1];
+        curr_line = fgetc(infile);
+        line[len-1] = curr_line;
+        if (curr_line == EOF )
+            return 0;
+        line[len] = '\0';
+    }
 
-	// shouldn't get here
-	return 0;
+    // shouldn't get here
+    return 0;
 }
 
 

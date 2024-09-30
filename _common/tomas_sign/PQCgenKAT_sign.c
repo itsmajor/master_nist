@@ -60,12 +60,10 @@ main(int argc, char* argv[])
         if ( argc > 2 && strcmp(argv[2], "1") == 0) {
             debug = true;
             printf("start main PQCgenKAT_sign (argc: %i)\n", argc);
-        }
-        if (debug) {
-            printf("repeats: %i\n", repeats);
             for (int i = 0; i < argc; i++) {
                 printf("argv[%d]: %s\n", i, argv[i]);
             }
+            printf("repeats: %i\n", repeats);
         }
     }
 

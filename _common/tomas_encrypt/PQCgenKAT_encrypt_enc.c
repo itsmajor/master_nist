@@ -46,11 +46,14 @@ main(int argc, char *argv[]) {
     int ret_val;
     int i, j;
 
-
-    if (argc > 1) {
-        // any param will start verbose logging
+    if ( argc > 1 && strcmp(argv[1], "1") == 0) {
         debug = true;
-        printf("start main PQCgenKAT_encrypt_enc\n");
+        printf("start main PQCgenKAT_encrypt_enc (argc: %i)\n", argc);
+        if (debug) {
+            for (int i = 0; i < argc; i++) {
+                printf("argv[%d]: %s\n", i, argv[i]);
+            }
+        }
     }
 
     /* Create the REQUEST file */

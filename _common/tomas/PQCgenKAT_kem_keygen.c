@@ -42,13 +42,15 @@ main(int argc, char* argv[])
     int                 count;
     unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
-//    clock_t start;
-//    double time_keypair, time_prepare;
 
-    if ( argc > 1) {
-        // any param will start verbose logging
+    if ( argc > 1 && strcmp(argv[1], "1") == 0) {
         debug = true;
-        printf("start main PQCgenKAT_kem_keygen\n");
+        printf("start main PQCgenKAT_kem_keygen (argc: %i)\n", argc);
+        if (debug) {
+            for (int i = 0; i < argc; i++) {
+                printf("argv[%d]: %s\n", i, argv[i]);
+            }
+        }
     }
 
     // Create the REQUEST file

@@ -45,15 +45,15 @@ main(int argc, char* argv[])
     unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
 //    int i, j;
-//    clock_t start;
-//    double time_keypair, time_enc, time_dec, time_prepare;
 
-//    start = clock();
-
-    if ( argc > 1) {
-        // any param will start verbose logging
+    if ( argc > 1 && strcmp(argv[1], "1") == 0) {
         debug = true;
-        printf("start main PQCgenKAT_encrypt_dec\n");
+        printf("start main PQCgenKAT_encrypt_dec (argc: %i)\n", argc);
+        if (debug) {
+            for (int i = 0; i < argc; i++) {
+                printf("argv[%d]: %s\n", i, argv[i]);
+            }
+        }
     }
 
     /* Create the REQUEST file */

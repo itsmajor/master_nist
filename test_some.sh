@@ -8,6 +8,7 @@ echo "moved to: ${PWD}"
 ./test_all2.sh -bv
 cd ..
 
+./build_all.sh > /dev/null
 
 #cd BIG_QUAKE-Round1
 #echo "moved to: ${PWD}"

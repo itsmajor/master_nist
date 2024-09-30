@@ -49,7 +49,6 @@ fi
 
 if [[ -z $DEBUG_KAT ]]; then # -z = ! -n
   #called by (old) test_all.sh, 8th param as debug will be ignored
-  echo blubb
   REPEATS=10
   DEBUG_KAT=0
   DEBUG_KAT_KEYGEN=0
@@ -79,8 +78,6 @@ then
     echo "ERROR: PQC binary not found" $KATPATH/$KATBINARY
     exit
 fi
-
-echo "*** do KAT"
 
 cd $KATPATH
 echo $(date +'%d.%m.%Y %H:%M:%S.%3N') "start KAT ($KATTYPE):" $CIPHERNAME

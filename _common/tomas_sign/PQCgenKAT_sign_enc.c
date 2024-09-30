@@ -49,7 +49,7 @@ main(int argc, char* argv[])
 
     if ( argc > 1 && strcmp(argv[1], "1") == 0) {
         debug = true;
-        printf("start main PQCgenKAT_sign (argc: %i)\n", argc);
+        printf("start main PQCgenKAT_sign_enc (argc: %i)\n", argc);
         if (debug) {
             for (int i = 0; i < argc; i++) {
                 printf("argv[%d]: %s\n", i, argv[i]);

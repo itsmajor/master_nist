@@ -32,7 +32,7 @@ void hex_to_bin(size_t size, unsigned char *dest, const char *input);
 bool    debug = false;
 
 int
-main()
+main(int argc, char* argv[])
 {
     char                fn_rsp[32], fn_rsp_origin[32];
     FILE                *fp_rsp, *fp_rsp_origin;
@@ -45,10 +45,16 @@ main()
     unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
 //    int i, j;
-//    clock_t start;
-//    double time_keypair, time_enc, time_dec, time_prepare;
 
-//    start = clock();
+    if ( argc > 1 && strcmp(argv[1], "1") == 0) {
+        debug = true;
+        printf("start main PQCgenKAT_encrypt_keygen (argc: %i)\n", argc);
+        if (debug) {
+            for (int i = 0; i < argc; i++) {
+                printf("argv[%d]: %s\n", i, argv[i]);
+            }
+        }
+    }
 
     /* Create the REQUEST file */
 //    sprintf(fn_req, "PQCencryptKAT.req");
@@ -101,7 +107,7 @@ main()
         return KAT_FILE_OPEN_ERROR;
     }
 //    fprintf(fp_time, "time since start to open req readable (μs) = %.0f\n", ((double) (clock() - start)));
-
+    if (debug) printf("start looping\n");
 //    fprintf(fp_time, "\n");
     while (1) {
 //        start = clock();
@@ -111,7 +117,7 @@ main()
             break;
         }
         fprintf(fp_rsp, "count = %d\n", count);
-//        fprintf(fp_time, "count = %d\n", count);
+        if (debug) printf("loop count: %d\n", count);
 
         if ( !ReadHex(fp_rsp_origin, seed, 48, "seed = ") ) {
             printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_rsp_origin);
@@ -200,6 +206,13 @@ main()
     return KAT_SUCCESS;
 }
 
+void printHex(char *fieldname, char *hexstring, int printamount, bool printDots) {
+    printf("%s: ", fieldname);
+    char *cp = hexstring;
+    for (int i = 0; i < printamount /*&& *cp != '\0'*/; i++) printf("%02X", *cp++);
+    if (printDots) printf("...");
+    printf("\n");
+}
 
 //
 // ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)

@@ -42,16 +42,24 @@ main(int argc, char* argv[])
     unsigned char       ct[CRYPTO_CIPHERTEXTBYTES], ss[CRYPTO_BYTES], ss1[CRYPTO_BYTES];
     int                 count;
     unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
-    int                 ret_val;
+    int                 ret_val, repeats = 10;
     clock_t             start, progStart;
     double              time_keypair, time_enc, time_dec, time_prepare;
 
     progStart = clock();
 
-    if ( argc > 1) {
-        // any param will start verbose logging
-        debug = true;
-        printf("start main PQCgenKAT_kem\n");
+    if ( argc > 1) { //argv[0] is this binary name
+        char *output;
+        // amount of repeats for req file
+        repeats = atoi( argv[1] );
+        if ( argc > 2 && strcmp(argv[2], "1") == 0) {
+            debug = true;
+            printf("start main PQCgenKAT_kem (argc: %i)\n", argc);
+            for (int i = 0; i < argc; i++) {
+                printf("argv[%d]: %s\n", i, argv[i]);
+            }
+            printf("repeats: %i\n", repeats);
+        }
     }
 
     // Create the REQUEST file
@@ -80,7 +88,7 @@ main(int argc, char* argv[])
 
     randombytes_init(entropy_input, NULL, 256);
     fprintf(fp_time, "time since start to randombytes_init (μs) = %.0f\n", ((double) (clock() - progStart)));
-    for (int i=0; i<10; i++) {
+    for (int i=0; i<repeats; i++) {
         fprintf(fp_req, "count = %d\n", i);
         randombytes(seed, 48);
         fprintBstr(fp_req, "seed = ", seed, 48);

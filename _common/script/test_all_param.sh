@@ -57,3 +57,5 @@ fi
 
 export OPTIONS="$REPEATS $DEBUG_KAT $DEBUG_KAT_KEYGEN $DEBUG_KAT_ENC $DEBUG_KAT_DEC"
 #echo "options:" $OPTIONS
+
+echo "*** do KAT/VERIFY"

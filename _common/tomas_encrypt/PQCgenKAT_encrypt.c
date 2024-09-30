@@ -44,16 +44,24 @@ main(int argc, char* argv[])
     unsigned long long  mlen, clen, mlen1;
     int                 count;
     unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
-    int                 ret_val;
+    int                 ret_val, repeats = 10;
     clock_t             start, progStart;
     double              time_keypair, time_enc, time_dec, time_prepare;
 
     progStart = clock();
 
-    if ( argc > 1) {
-        // any param will start verbose logging
-        debug = true;
-        printf("start main PQCgenKAT_encrypt\n");
+    if ( argc > 1) { //argv[0] is this binary name
+        char *output;
+        // amount of repeats for req file
+        repeats = atoi( argv[1] );
+        if ( argc > 2 && strcmp(argv[2], "1") == 0) {
+            debug = true;
+            printf("start main PQCgenKAT_encrypt (argc: %i)\n", argc);
+            for (int i = 0; i < argc; i++) {
+                printf("argv[%d]: %s\n", i, argv[i]);
+            }
+            printf("repeats: %i\n", repeats);
+        }
     }
 
     // Create the REQUEST file
@@ -84,7 +92,7 @@ main(int argc, char* argv[])
     fprintf(fp_time, "time since start to randombytes_init (μs) = %.0f\n", ((double) (clock() - progStart)));
     // only in NTRUEncrypt is this used (i<3), simplified here
 //    for (int i=0; i<1; i++) {
-        for (int j=0; j<10; j++) {
+        for (int j=0; j<repeats; j++) {
 //            fprintf(fp_req, "count = %d\n", i*25+j);
             fprintf(fp_req, "count = %d\n", j);
             randombytes(seed, 48);
@@ -179,7 +187,7 @@ main(int argc, char* argv[])
             return KAT_CRYPTO_FAILURE;
         }
         time_enc = ((double) (clock() - start));
-        if (debug) printf(" (took: %.0f μs)\n", time_sign);
+        if (debug) printf(" (took: %.0f μs)\n", time_enc);
 
         fprintf(fp_rsp, "clen = %llu\n", clen);
         fprintBstr(fp_rsp, "c = ", c, clen);
@@ -207,7 +215,7 @@ main(int argc, char* argv[])
             return KAT_CRYPTO_FAILURE;
         }
         time_dec = ((double) (clock() - start));
-        if (debug) printf(" (took: %.0f μs)\n", time_verify);
+        if (debug) printf(" (took: %.0f μs)\n", time_dec);
         if (debug) printHex("m1", m1, mlen1, false);
 
         // write time measure to file

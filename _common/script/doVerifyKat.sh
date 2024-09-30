@@ -1,14 +1,15 @@
 KATTYPE=$1;
 CIPHERNAME=$2;
-DEBUG=$3; #not mandatory, any value enable debug log in verifyKat
+DEBUG=$3; #optional
 
 PARAMCOUNT=2;
 
 if [ ! $# -ge $PARAMCOUNT ]
 then
   echo " $PARAMCOUNT parameter expected"
-  echo " verifyKat.h KATTYPE CIPHERNAME "
-  echo " example: verifyKat.sh kem kyber1024 "
+  echo " verifyKat.h KATTYPE CIPHERNAME DEBUG"
+  echo " example: verifyKat.sh kem kyber1024 0"
+  echo " DEBUG 0 disable, 1 enable"
   exit
 fi
 
