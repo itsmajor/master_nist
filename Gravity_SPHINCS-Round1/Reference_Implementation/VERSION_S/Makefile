@@ -39,9 +39,9 @@ BUILD_DIR = .build
 OBJ=$(addprefix ${BUILD_DIR}/,$(CSRC:.c=.o))
 
 all: $(TARGET)
+	@:
 
 .PHONY: all clean
-	@:
 
 clean:
 	@rm -f -R ./.build/ $(TARGET)

@@ -26,6 +26,7 @@ OBJNAMES3 = $(SRCS3:.cpp=.o)
 OBJNAMES4 = $(SRCS4:.cpp=.o)
 
 all: PQCgenKAT_kem PQCgenKAT_kem_dec PQCgenKAT_kem_enc PQCgenKAT_kem_keygen
+	@:
 
 %.o: %.cpp
 	$(CXX) $(XFLAGS) $(DEFINES) -o$@ -c $<

@@ -5,7 +5,7 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
-cd BIKE-Round4
+cd bike-kem
 echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
@@ -30,10 +30,11 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
-cd DualModeMS-Round1
-echo "moved to: ${PWD}"
-./build_all.sh $MAKEOPTION
-cd ~-
+# removed
+#cd DualModeMS-Round1
+#echo "moved to: ${PWD}"
+#./build_all.sh $MAKEOPTION
+#cd ~-
 
 cd EMBLEM_R_EMBLEM-Round1
 echo "moved to: ${PWD}"
@@ -140,10 +141,11 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
-cd Titanium-Round1
-echo "moved to: ${PWD}"
-./build_all.sh $MAKEOPTION
-cd ~-
+# removed
+#cd Titanium-Round1
+#echo "moved to: ${PWD}"
+#./build_all.sh $MAKEOPTION
+#cd ~-
 
 
-echo "**** done ****"
+echo "**** root build_all.sh done ****"
