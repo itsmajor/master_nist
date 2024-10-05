@@ -66,9 +66,9 @@ main(int argc, char* argv[])
 
     progStart = clock();
 
-    ct = malloc(CRYPTO_CIPHERTEXTBYTES);
-    pk = malloc(CRYPTO_PUBLICKEYBYTES);
-    sk = malloc(CRYPTO_SECRETKEYBYTES);
+    ct = (unsigned char *) calloc(CRYPTO_CIPHERTEXTBYTES, sizeof(unsigned char));
+    pk = (unsigned char *) calloc(CRYPTO_PUBLICKEYBYTES, sizeof(unsigned char));
+    sk = (unsigned char *) calloc(CRYPTO_SECRETKEYBYTES, sizeof(unsigned char));
 
     // Create the REQUEST file
     sprintf(fn_req, "PQCkemKAT.req");

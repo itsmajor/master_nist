@@ -57,8 +57,8 @@ main(int argc, char* argv[])
         }
     }
 
-    ct = malloc(CRYPTO_CIPHERTEXTBYTES);
-    pk = malloc(CRYPTO_PUBLICKEYBYTES);
+    ct = (unsigned char *) calloc(CRYPTO_CIPHERTEXTBYTES, sizeof(unsigned char));
+    pk = (unsigned char *) calloc(CRYPTO_PUBLICKEYBYTES, sizeof(unsigned char));
 
     // Create the REQUEST file
 //    sprintf(fn_req, "PQCkemKAT_%d.req", CRYPTO_SECRETKEYBYTES);
