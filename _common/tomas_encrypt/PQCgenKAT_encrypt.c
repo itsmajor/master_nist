@@ -27,7 +27,8 @@
 int		FindMarker(FILE *infile, const char *marker);
 int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
 void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
-void hex_to_bin(size_t size, unsigned char *dest, const char *input);
+void    hex_to_bin(size_t size, unsigned char *dest, const char *input);
+void    printHex(char *fieldname, char *hexstring, int printamount, int maxamount);
 
 // global variable
 bool    debug = false;
@@ -136,7 +137,7 @@ main(int argc, char* argv[])
         }
         fprintBstr(fp_rsp, "seed = ", seed, 48);
         randombytes_init(seed, NULL, 256);
-        if (debug) printHex("randombytes_init seed: ", seed, 48, false);
+        if (debug) printHex("randombytes_init seed: ", seed, 48, 48);
 
         if ( FindMarker(fp_req, "mlen = ") )
             fscanf(fp_req, "%llu", &mlen);
@@ -157,7 +158,7 @@ main(int argc, char* argv[])
             return KAT_DATA_ERROR;
         }
         fprintBstr(fp_rsp, "msg = ", m, mlen);
-        if (debug) printHex("msg", msg, mlen, false);
+        if (debug) printHex("msg", msg, mlen, 60);
         time_prepare = ((double) (clock() - start));
 
         // Generate the public/private keypair
@@ -171,7 +172,7 @@ main(int argc, char* argv[])
         if (debug) printf(" (took: %.0f μs)\n", time_keypair);
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
         fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
-        if (debug) { printHex("pk", pk, CRYPTO_PUBLICKEYBYTES, false); printHex("sk", sk, CRYPTO_SECRETKEYBYTES, false); }
+        if (debug) { printHex("pk", pk, CRYPTO_PUBLICKEYBYTES, 60); printHex("sk", sk, CRYPTO_SECRETKEYBYTES, 60); }
 
         // encoding
         // if encrypt use randombytes then we need to reinit for same results as _enc run
@@ -184,7 +185,7 @@ main(int argc, char* argv[])
         }
         time_enc = ((double) (clock() - start));
         if (debug) printf(" (took: %.0f μs)\n", time_enc);
-        if (debug) printHex("c", c, clen, false);
+        if (debug) printHex("c", c, clen, 60);
 
 
         fprintf(fp_rsp, "clen = %llu\n", clen);
@@ -192,7 +193,7 @@ main(int argc, char* argv[])
         fprintf(fp_rsp, "\n");
         if (debug) {
             printf("clen: %llu\n", clen);
-            printHex("c", c, (clen > 30 ? 30 : clen), true);
+            printHex("c", c, clen, 30);
         }
 
         if (debug) printf("do crypto_encrypt_open()");
@@ -203,7 +204,7 @@ main(int argc, char* argv[])
         }
         time_dec = ((double) (clock() - start));
         if (debug) printf(" (took: %.0f μs)\n", time_dec);
-        if (debug) printHex("m1", m1, mlen1, false);
+        if (debug) printHex("m1", m1, mlen1, 60);
 
         // write time measure to file
         fprintf(fp_time, "prepare (μs) = %.0f\n", time_prepare);
@@ -240,11 +241,12 @@ main(int argc, char* argv[])
     return KAT_SUCCESS;
 }
 
-void printHex(char *fieldname, char *hexstring, int printamount, bool printDots) {
+void printHex(char *fieldname, char *hexstring, int printamount, int maxamount) {
     printf("%s: ", fieldname);
     char *cp = hexstring;
-    for (int i = 0; i < printamount /*&& *cp != '\0'*/; i++) printf("%02X", *cp++);
-    if (printDots) printf("...");
+    int amount = printamount > maxamount ? maxamount : printamount;
+    for (int i = 0; i < amount; i++) printf("%02X", *cp++);
+    if (printamount > maxamount) printf("...");
     printf("\n");
 }
 
@@ -335,7 +337,6 @@ void hex_to_bin(size_t size, unsigned char *dest, const char *input) {
 
         *s++ = (unsigned char) ((ich1<<4) + ich2);
     }
-    *s = '\0';
 }
 
 void

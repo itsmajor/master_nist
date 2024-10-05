@@ -28,7 +28,7 @@ int		FindMarker(FILE *infile, const char *marker);
 int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
 void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
 void    hex_to_bin(size_t size, unsigned char *dest, const char *input);
-void    printHex(char *fieldname, char *hexstring, int printamount, bool printDots);
+void    printHex(char *fieldname, char *hexstring, int printamount, int maxamount);
 
 // global variable
 bool    debug = false;
@@ -147,7 +147,7 @@ main(int argc, char* argv[])
 
         // prepare signing
         ReadHex(fp_rsp_origin, pk, CRYPTO_PUBLICKEYBYTES, "pk = ");
-        if (debug) printHex("pk", pk, 30, true);
+        if (debug) printHex("pk", pk, CRYPTO_PUBLICKEYBYTES, 60);
 
         // signing
 //        if ( (ret_val = crypto_sign(sm, &smlen, m, mlen, sk)) != 0) {
@@ -167,7 +167,7 @@ main(int argc, char* argv[])
         }
         unsigned char sm[smlen];
         ReadHex(fp_rsp_origin, sm, smlen, "sm = ");
-        if (debug) printHex("sm", sm, 30, true);
+        if (debug) printHex("sm", sm, smlen, 60);
 
         // verify signing
         if ( (ret_val = crypto_sign_open(m1, &mlen1, sm, smlen, pk)) != 0) {
@@ -202,11 +202,12 @@ main(int argc, char* argv[])
     return KAT_SUCCESS;
 }
 
-void printHex(char *fieldname, char *hexstring, int printamount, bool printDots) {
+void printHex(char *fieldname, char *hexstring, int printamount, int maxamount) {
     printf("%s: ", fieldname);
     char *cp = hexstring;
-    for (int i = 0; i < printamount /*&& *cp != '\0'*/; i++) printf("%02X", *cp++);
-    if (printDots) printf("...");
+    int amount = printamount > maxamount ? maxamount : printamount;
+    for (int i = 0; i < amount; i++) printf("%02X", *cp++);
+    if (printamount > maxamount) printf("...");
     printf("\n");
 }
 
@@ -292,7 +293,6 @@ void hex_to_bin(size_t size, unsigned char *dest, const char *input) {
 
         *s++ = (unsigned char) ((ich1<<4) + ich2);
     }
-    *s = '\0';
 }
 
 void

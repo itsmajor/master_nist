@@ -336,7 +336,7 @@ void hex_to_bin(size_t size, unsigned char *dest, const char *input) {
 
         *s++ = (unsigned char) ((ich1<<4) + ich2);
     }
-    *s = '\0';
+//    *s = '\0';
 }
 
 void
