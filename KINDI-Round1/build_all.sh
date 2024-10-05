@@ -5,7 +5,7 @@ kat_array=('encrypt' 'kem')
 
 for kat in "${kat_array[@]}"; do
   for sec in "${sec_array[@]}"; do
-    cd Reference_Implementation/$kat/KINDI-$sec
+    cd Reference_Implementation/"$kat"/KINDI-"$sec"
     echo "moved to: ${PWD}"
     make $MAKEOPTION
     cd ~-

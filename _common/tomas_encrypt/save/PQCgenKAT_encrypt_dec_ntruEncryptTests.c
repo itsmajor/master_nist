@@ -241,9 +241,9 @@ main(int argc, char* argv[])
     return KAT_SUCCESS;
 }
 
-void printHex(char *fieldname, char *hexstring, int printamount, bool printDots) {
+void printHex(char *fieldname, unsigned char *hexstring, int printamount, bool printDots) {
     printf("%s: ", fieldname);
-    char *cp = hexstring;
+    unsigned char *cp = hexstring;
     for (int i = 0; i < printamount /*&& *cp != '\0'*/; i++) printf("%02X", *cp++);
     if (printDots) printf("...");
     printf("\n");

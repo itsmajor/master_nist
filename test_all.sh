@@ -1,5 +1,8 @@
 #! /bin/bash
 
+# clean or build would be done for all!
+#. ./_common/script/test_all_param.sh "$@"
+
 OPTIONS=$@
 #OPTIONS="-bv"
 #OPTIONS="-b"
@@ -36,12 +39,6 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
-# removed from testing
-#cd DualModeMS-Round1
-#echo "moved to: ${PWD}"
-#./test_all.sh $OPTIONS
-#cd ..
-
 cd EMBLEM_R_EMBLEM-Round1
 echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
@@ -53,16 +50,6 @@ echo "moved to: ${PWD}"
 cd ..
 
 cd FrodoKEM-Round3
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
-
-cd Gravity_SPHINCS-Round1
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
-
-cd Gui-Round1
 echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
@@ -147,11 +134,5 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
-# removed from testing
-#cd Titanium-Round1
-#echo "moved to: ${PWD}"
-#./test_all.sh $OPTIONS
-#cd ..
 
-
-echo "**** done ****"
+echo "**** done test_all.sh (long running excluded) ****"

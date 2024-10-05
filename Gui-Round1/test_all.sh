@@ -2,8 +2,8 @@
 
 . ../_common/script/test_all_param.sh "$@"
 
-#sec_array=(184 312 448)
-sec_array=(184)
+sec_array=(184 312 448)
+#sec_array=(184)
 
 for sec in "${sec_array[@]}"; do
   CIPHER="sign Gui-"$sec

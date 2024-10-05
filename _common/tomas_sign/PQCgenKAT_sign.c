@@ -29,7 +29,7 @@ int		FindMarker(FILE *infile, const char *marker);
 int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
 void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
 void    hex_to_bin(size_t size, unsigned char *dest, const char *input);
-void    printHex(char *fieldname, char *hexstring, int printamount, int maxamount);
+void    printHex(char *fieldname, unsigned char *hexstring, int printamount, int maxamount);
 
 // global variable
 bool    debug = false;
@@ -51,8 +51,6 @@ main(int argc, char* argv[])
     double              time_keypair, time_sign, time_verify, time_prepare;
 //    unsigned char       *pk, *sk;
 
-    progStart = clock();
-
     if ( argc > 1) { //argv[0] is this binary name
         char *output;
         // amount of repeats for req file
@@ -66,6 +64,8 @@ main(int argc, char* argv[])
             printf("repeats: %i\n", repeats);
         }
     }
+
+    progStart = clock();
 
     // from GUI original genKAT
 //    pk = (unsigned char *) calloc(CRYPTO_PUBLICKEYBYTES, sizeof(unsigned char));
@@ -260,9 +260,9 @@ main(int argc, char* argv[])
 }
 
 
-void printHex(char *fieldname, char *hexstring, int printamount, int maxamount) {
+void printHex(char *fieldname, unsigned char *hexstring, int printamount, int maxamount) {
     printf("%s: ", fieldname);
-    char *cp = hexstring;
+    unsigned char *cp = hexstring;
     int amount = printamount > maxamount ? maxamount : printamount;
     for (int i = 0; i < amount; i++) printf("%02X", *cp++);
     if (printamount > maxamount) printf("...");
