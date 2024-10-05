@@ -2,7 +2,7 @@
 #include <libopencm3/stm32/rng.h>
 #include "randombytes.h"
 
-//TODO Maybe we do not want to use the hardware RNG for all randomness, but instead only read a seed and then expand that using fips202.
+//xTODO Maybe we do not want to use the hardware RNG for all randomness, but instead only read a seed and then expand that using fips202.
 
 int randombytes(uint8_t *obuf, size_t len)
 {

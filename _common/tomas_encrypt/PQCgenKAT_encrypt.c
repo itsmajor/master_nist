@@ -149,12 +149,8 @@ main(int argc, char* argv[])
 
         m = (unsigned char *)calloc(mlen+1, sizeof(unsigned char));
         m1 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
-        c = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
-        // NTRUEncrypt use here:  c = (unsigned char *)calloc(mlen+CRYPTO_CIPHERTEXTBYTES, sizeof(unsigned char));
+        c = (unsigned char *)calloc(mlen + CRYPTO_BYTES, sizeof(unsigned char));
         if (debug) printf("calloc (m, m1, c) done\n");
-        memset(pk, 0x00, CRYPTO_PUBLICKEYBYTES); //todo
-        memset(sk, 0x00, CRYPTO_SECRETKEYBYTES); //todo
-
 
         if ( !ReadHex(fp_req, m, (int)mlen, "msg = ") ) {
             printf("ERROR: unable to read 'msg' from <%s>\n", fn_req);
@@ -175,7 +171,7 @@ main(int argc, char* argv[])
         if (debug) printf(" (took: %.0f μs)\n", time_keypair);
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
         fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
-        if (debug) { printHex("pk", pk, 30, true); printHex("sk", sk, 30, true); }
+        if (debug) { printHex("pk", pk, CRYPTO_PUBLICKEYBYTES, false); printHex("sk", sk, CRYPTO_SECRETKEYBYTES, false); }
 
         // encoding
         // if encrypt use randombytes then we need to reinit for same results as _enc run
@@ -188,6 +184,8 @@ main(int argc, char* argv[])
         }
         time_enc = ((double) (clock() - start));
         if (debug) printf(" (took: %.0f μs)\n", time_enc);
+        if (debug) printHex("c", c, clen, false);
+
 
         fprintf(fp_rsp, "clen = %llu\n", clen);
         fprintBstr(fp_rsp, "c = ", c, clen);
@@ -196,17 +194,6 @@ main(int argc, char* argv[])
             printf("clen: %llu\n", clen);
             printHex("c", c, (clen > 30 ? 30 : clen), true);
         }
-
-        /////// todo test (remove)
-//        unsigned char c2 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
-//        char *c2len;
-//
-//        if ( (ret_val = crypto_encrypt(c2, &c2len, m, mlen, pk)) != 0) {
-//            printf("PQCgenKAT ERROR: crypto_encrypt returned <%d>\n", ret_val);
-//            return KAT_CRYPTO_FAILURE;
-//        }
-//        fprintBstr(fp_rsp, "c2 = ", c2, c2len);
-        ///////
 
         if (debug) printf("do crypto_encrypt_open()");
         start = clock();

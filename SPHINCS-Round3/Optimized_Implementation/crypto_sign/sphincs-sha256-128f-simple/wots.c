@@ -8,9 +8,9 @@
 #include "address.h"
 #include "params.h"
 
-// TODO clarify address expectations, and make them more uniform.
-// TODO i.e. do we expect types to be set already?
-// TODO and do we expect modifications or copies?
+// xTODO clarify address expectations, and make them more uniform.
+// xTODO i.e. do we expect types to be set already?
+// xTODO and do we expect modifications or copies?
 
 /**
  * Computes the starting value for a chain, i.e. the secret key.

@@ -10,18 +10,21 @@ CIPHER="kem NTRUEncrypt-ntru-kem-743"
 ../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/ntru-kem-743 $OPTIONS
 ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
 
-#bad mlen in
+#bad mlen
 echo "skip NTRUEncrypt-ntru-kem-1024 - 'PQCgenKAT ERROR: crypto_kem_dec returned <-1>' in PQCgenKAT_kem and in PQCgenKAT_kem_dec"
 #CIPHER="kem NTRUEncrypt-ntru-kem-1024"
 #../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/ntru-kem-1024 $OPTIONS
 #../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
 
-echo "skip NTRUEncrypt-ntru-pke-443 (Segmentation fault in PQCgenKAT_kem_dec)"
+#echo "skip NTRUEncrypt-ntru-pke-443 (Segmentation fault in PQCgenKAT_kem_dec)"
+echo "skip NTRUEncrypt-ntru-pke-443 - reading CT cause errors (Segmentation fault in PQCgenKAT_kem_dec)"
 #CIPHER="encrypt NTRUEncrypt-ntru-pke-443"
+#../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/ntru-pke-443 $OPTIONS
 #../_common/script/doKat.sh $doValgrindFull $doValgrindKeygen $doValgrindEnc 0 $CIPHER Reference_Implementation/ntru-pke-443 $OPTIONS
 #../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
 
-echo "skip NTRUEncrypt-ntru-pke-743 (Segmentation fault in PQCgenKAT_kem_dec)"
+echo "skip NTRUEncrypt-ntru-pke-743 - reading CT cause errors (Segmentation fault in PQCgenKAT_kem_dec)"
+#echo "skip NTRUEncrypt-ntru-pke-743 (Segmentation fault in PQCgenKAT_kem_dec)"
 #CIPHER="encrypt NTRUEncrypt-ntru-pke-743"
 #../_common/script/doKat.sh $doValgrindFull $doValgrindKeygen $doValgrindEnc 0 $CIPHER Reference_Implementation/ntru-pke-443 $OPTIONS
 #../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT

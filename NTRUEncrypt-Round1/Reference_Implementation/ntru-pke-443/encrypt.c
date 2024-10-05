@@ -157,7 +157,7 @@ int crypto_encrypt_open(
     unpack_public_key (c, param, cpoly);
 
     unpack_secret_key_CCA (sk, param, F, h);
-
+    printf("**** blubb1 *****\n");
     /* decryption */
     *mlen = decrypt_cca((char*) m,  F, h, cpoly,  buf, param);
 

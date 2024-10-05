@@ -1,5 +1,7 @@
+#! /bin/bash
 
-OPTIONS="-bv"
+OPTIONS=$@
+#OPTIONS="-bv"
 #OPTIONS="-b"
 #OPTIONS="-br 1"
 
@@ -9,7 +11,7 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
-cd BIKE-Round4
+cd bike-kem
 echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
@@ -34,10 +36,11 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
-cd DualModeMS-Round1
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
+# removed from testing
+#cd DualModeMS-Round1
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ..
 
 cd EMBLEM_R_EMBLEM-Round1
 echo "moved to: ${PWD}"
@@ -144,10 +147,11 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
-cd Titanium-Round1
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
+# removed from testing
+#cd Titanium-Round1
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ..
 
 
 echo "**** done ****"

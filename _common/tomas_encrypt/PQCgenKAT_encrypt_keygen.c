@@ -259,7 +259,11 @@ FindMarker(FILE *infile, const char *marker)
 //
 int
 ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
-    if (debug) printf("in ReadHex (Length: %i, search: '%s')\n", Length, str);
+    clock_t start;
+    if (debug) {
+        start = clock();
+        printf("in ReadHex (Length: %i, search: '%s')", Length, str);
+    }
 
     if (Length == 0) {
         A[0] = 0x00;
@@ -272,6 +276,7 @@ ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
     FindMarker(infile, str);
     getline(&line, &size1, infile);
     hex_to_bin(Length, A, line);
+    if (debug) printf(" (took: %.0f μs)\n", ((double) (clock() - start)));
     return 1;
 }
 

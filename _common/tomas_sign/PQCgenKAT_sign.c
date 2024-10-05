@@ -101,7 +101,7 @@ main(int argc, char* argv[])
 
     randombytes_init(entropy_input, NULL, 256);
     fprintf(fp_time, "time since start to randombytes_init (μs) = %.0f\n", ((double) (clock() - progStart)));
-    for (int i = 0; i < repeats; i++) { // todo back to 10
+    for (int i = 0; i < repeats; i++) { // xTODO back to 10
         fprintf(fp_req, "count = %d\n", i);
         randombytes(seed, 48);
         fprintBstr(fp_req, "seed = ", seed, 48);
@@ -172,14 +172,14 @@ main(int argc, char* argv[])
         // Generate the public/private keypair
         if (debug) printf("do crypto_sign_keypair()");
         start = clock();
-        if (debug) printf("-----------debug 2\n"); // todo
+        if (debug) printf("-----------debug 2\n"); // xTODO
         int asd = 33*44+55+66+77*33;
-        if (debug) printf("-----------debug 2 %i\n", asd); // todo
+        if (debug) printf("-----------debug 2 %i\n", asd); // xTODO
         if ( (ret_val = crypto_sign_keypair(pk, sk)) != 0) {
             printf("PQCgenKAT ERROR: crypto_sign_keypair returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
-        if (debug) printf("-----------debug 3\n"); // todo
+        if (debug) printf("-----------debug 3\n"); // xTODO
         time_keypair = ((double) (clock() - start));
         if (debug) printf(" (took: %.0f μs)\n", time_keypair);
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);

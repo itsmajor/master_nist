@@ -127,7 +127,7 @@ main(int argc, char *argv[]) {
 //        fprintf(fp_rsp, "mlen = %llu\n", mlen);
         if (debug) printf("mlen: %llu\n", mlen);
 
-        m = (unsigned char *) calloc(mlen+1, sizeof(unsigned char));
+        m = (unsigned char *) calloc(mlen, sizeof(unsigned char));
 //        m1 = (unsigned char *) calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
         c = (unsigned char *) calloc(mlen + CRYPTO_BYTES, sizeof(unsigned char));
         if (debug) printf("calloc (m, c) done\n");
@@ -167,14 +167,17 @@ main(int argc, char *argv[]) {
 //            for (int i = 0; *cp2 != '\0' && i < 30; i++) printf("%02X", *cp2++);
 //            printf("\n");
 //        }
+
         if ((ret_val = crypto_encrypt(c, &clen, m, mlen, pk)) != 0) {
             printf("PQCgenKAT ERROR: crypto_encrypt returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
+        if (debug) printf("clen x: %llu\n", clen);
 
-//        fprintf(fp_rsp, "clen = %llu\n", clen);
+        fprintf(fp_rsp, "clen = %llu\n", clen);
         fprintBstr(fp_rsp, "c = ", c, clen);
         fprintf(fp_rsp, "\n");
+        fflush(fp_rsp);
 
 //        if ( (ret_val = crypto_encrypt_open(m1, &mlen1, c, clen, sk)) != 0) {
 //            printf("crypto_encrypt_open returned <%d>\n", ret_val);
@@ -257,7 +260,11 @@ FindMarker(FILE *infile, const char *marker) {
 //
 int
 ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
-    if (debug) printf("in ReadHex (Length: %i, search: '%s')\n", Length, str);
+    clock_t start;
+    if (debug) {
+        start = clock();
+        printf("in ReadHex (Length: %i, search: '%s')", Length, str);
+    }
 
     if (Length == 0) {
         A[0] = 0x00;
@@ -270,6 +277,7 @@ ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
     FindMarker(infile, str);
     getline(&line, &size1, infile);
     hex_to_bin(Length, A, line);
+    if (debug) printf(" (took: %.0f μs)\n", ((double) (clock() - start)));
     return 1;
 }
 

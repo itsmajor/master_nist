@@ -130,22 +130,16 @@ main(int argc, char* argv[])
 
         // Generate the public/private keypair
         if (debug) printf("do crypto_kem_keypair()");
-//        memset(pk, 0x00, CRYPTO_PUBLICKEYBYTES); //todo
-//        memset(sk, 0x00, CRYPTO_SECRETKEYBYTES); //todo
         start = clock();
-//        if (debug) printf("---------- debug 1\n"); //todo
         if ( (ret_val = crypto_kem_keypair(pk, sk)) != 0) {
             printf("PQCgenKAT ERROR: crypto_kem_keypair returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
-//        if (debug) printf("---------- debug 2\n"); //todo
         time_keypair = ((double) (clock() - start));
         if (debug) printf(" (took: %.0f μs)\n", time_keypair);
-//        if (debug) printf("---------- debug 3\n"); //todo
 
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
         fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
-//        if (debug) exit(1); //todo
 
         // encoding
         randombytes_init(seed, NULL, 256);
