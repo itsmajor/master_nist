@@ -40,10 +40,12 @@ main(int argc, char* argv[])
     FILE                *fp_rsp, *fp_rsp_origin;
     unsigned char       seed[48];
 //    unsigned char       entropy_input[48];
-    unsigned char       ct[CRYPTO_CIPHERTEXTBYTES], ss[CRYPTO_BYTES];
+    unsigned char       /*ct[CRYPTO_CIPHERTEXTBYTES],*/ ss[CRYPTO_BYTES];
     int                 count;
-    unsigned char       pk[CRYPTO_PUBLICKEYBYTES];//, sk[CRYPTO_SECRETKEYBYTES];
+//    unsigned char       pk[CRYPTO_PUBLICKEYBYTES];//, sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
+
+    unsigned char       *ct, *pk; // replaced because segmentation fault of large array declaration
 
     if ( argc > 1 && strcmp(argv[1], "1") == 0) {
         debug = true;
@@ -54,6 +56,9 @@ main(int argc, char* argv[])
             }
         }
     }
+
+    ct = malloc(CRYPTO_CIPHERTEXTBYTES);
+    pk = malloc(CRYPTO_PUBLICKEYBYTES);
 
     // Create the REQUEST file
 //    sprintf(fn_req, "PQCkemKAT_%d.req", CRYPTO_SECRETKEYBYTES);

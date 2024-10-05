@@ -1,16 +1,10 @@
 MAKEOPTION=$1;
 
-#cd Optimized_Implementation/128
-#echo "moved to: ${PWD}"
-#make $MAKEOPTION
-#cd ~-
-#
-#cd Optimized_Implementation/192
-#echo "moved to: ${PWD}"
-#make $MAKEOPTION
-#cd ~-
+sec_array=(128 192 256)
 
-cd Optimized_Implementation/256
-echo "moved to: ${PWD}"
-make $MAKEOPTION
-cd ~-
+for sec in "${sec_array[@]}"; do
+  cd Optimized_Implementation/$sec
+  echo "moved to: ${PWD}"
+  make $MAKEOPTION
+  cd ~-
+done

@@ -2,19 +2,21 @@
 
 . ../_common/script/test_all_param.sh "$@"
 
-CIPHER="kem NTRUEncrypt-ntru-kem-443"
-../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/ntru-kem-443 $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
+#sec_array=(443 743 1024)
+sec_array=(443 743)
+#kat_array=('kem' 'encrypt')
+kat_array=('kem')
 
-CIPHER="kem NTRUEncrypt-ntru-kem-743"
-../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/ntru-kem-743 $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
+for kat in "${kat_array[@]}"; do
+  for sec in "${sec_array[@]}"; do
+    CIPHER="$kat NTRUEncrypt-ntru-"$kat"-$sec"
+    ../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/ntru-$kat-$sec $OPTIONS
+    ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
+  done
+done
 
-#bad mlen
+
 echo "skip NTRUEncrypt-ntru-kem-1024 - 'PQCgenKAT ERROR: crypto_kem_dec returned <-1>' in PQCgenKAT_kem and in PQCgenKAT_kem_dec"
-#CIPHER="kem NTRUEncrypt-ntru-kem-1024"
-#../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/ntru-kem-1024 $OPTIONS
-#../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
 
 #echo "skip NTRUEncrypt-ntru-pke-443 (Segmentation fault in PQCgenKAT_kem_dec)"
 echo "skip NTRUEncrypt-ntru-pke-443 - reading CT cause errors (Segmentation fault in PQCgenKAT_kem_dec)"

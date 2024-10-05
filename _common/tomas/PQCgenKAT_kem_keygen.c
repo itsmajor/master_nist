@@ -42,8 +42,10 @@ main(int argc, char* argv[])
 //    unsigned char       entropy_input[48];
 //    unsigned char       ct[CRYPTO_CIPHERTEXTBYTES], ss[CRYPTO_BYTES], ss1[CRYPTO_BYTES];
     int                 count;
-    unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
+//    unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
+
+    unsigned char       *sk, *pk; // replaced because segmentation fault of large array declaration
 
     if ( argc > 1 && strcmp(argv[1], "1") == 0) {
         debug = true;
@@ -54,6 +56,9 @@ main(int argc, char* argv[])
             }
         }
     }
+
+    pk = malloc(CRYPTO_PUBLICKEYBYTES);
+    sk = malloc(CRYPTO_SECRETKEYBYTES);
 
     // Create the REQUEST file
 //    sprintf(fn_req, "PQCkemKAT_%d.req", CRYPTO_SECRETKEYBYTES);

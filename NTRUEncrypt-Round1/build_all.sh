@@ -1,36 +1,16 @@
 MAKEOPTION=$1;
 
+#sec_array=(443 743 1024)
+sec_array=(443 743)
+#kat_array=('kem' 'encrypt')
+kat_array=('kem')
 
-cd Reference_Implementation/ntru-kem-443
-echo "moved to: ${PWD}"
-make $MAKEOPTION
-cd ~-
+for kat in "${kat_array[@]}"; do
+  for sec in "${sec_array[@]}"; do
+    cd Reference_Implementation/ntru-$kat-$sec
+    echo "moved to: ${PWD}"
+    make $MAKEOPTION
+    cd ~-
+  done
+done
 
-cd Reference_Implementation/ntru-kem-743
-echo "moved to: ${PWD}"
-make $MAKEOPTION
-cd ~-
-
-# fails in origin
-#cd Reference_Implementation/ntru-kem-1024
-#echo "moved to: ${PWD}"
-#make $MAKEOPTION
-#cd ~-
-
-# fails when CT read from file, decrypt does not work
-#cd Reference_Implementation/ntru-pke-443
-#echo "moved to: ${PWD}"
-#make $MAKEOPTION
-#cd ~-
-
-# fails when CT read from file, decrypt does not work
-#cd Reference_Implementation/ntru-pke-743
-#echo "moved to: ${PWD}"
-#make $MAKEOPTION
-#cd ~-
-
-# fails in origin
-#cd Reference_Implementation/ntru-pke-1024
-#echo "moved to: ${PWD}"
-#make $MAKEOPTION
-#cd ~-
