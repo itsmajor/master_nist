@@ -31,6 +31,7 @@ BUILD_DIR = .build
 OBJ=$(addprefix ${BUILD_DIR}/,$(CSRC:.c=.o))
 
 all: $(TARGET)
+	@:
 
 .PHONY: all clean
 

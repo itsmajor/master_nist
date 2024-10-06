@@ -44,10 +44,12 @@ main(int argc, char* argv[])
     unsigned char       *m, *c, *m1;
     unsigned long long  mlen, clen, mlen1;
     int                 count;
-    unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
+//    unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val, repeats = 10;
     clock_t             start, progStart;
     double              time_keypair, time_enc, time_dec, time_prepare;
+
+    unsigned char       *sk, *pk; // replaced because segmentation fault of large array declaration
 
     if ( argc > 1) { //argv[0] is this binary name
         char *output;
@@ -64,6 +66,9 @@ main(int argc, char* argv[])
     }
 
     progStart = clock();
+
+    pk = (unsigned char *) calloc(CRYPTO_PUBLICKEYBYTES, sizeof(unsigned char));
+    sk = (unsigned char *) calloc(CRYPTO_SECRETKEYBYTES, sizeof(unsigned char));
 
     // Create the REQUEST file
     sprintf(fn_req, "PQCencryptKAT.req");

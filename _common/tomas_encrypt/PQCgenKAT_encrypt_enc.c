@@ -43,9 +43,10 @@ main(int argc, char *argv[]) {
     unsigned char *m, *c, *m1;
     unsigned long long mlen, clen, mlen1;
     int count;
-    unsigned char pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
+//    unsigned char pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int ret_val;
-    int i, j;
+
+    unsigned char       *pk; // replaced because segmentation fault of large array declaration
 
     if ( argc > 1 && strcmp(argv[1], "1") == 0) {
         debug = true;
@@ -56,6 +57,8 @@ main(int argc, char *argv[]) {
             }
         }
     }
+
+    pk = (unsigned char *) calloc(CRYPTO_PUBLICKEYBYTES, sizeof(unsigned char));
 
     /* Create the REQUEST file */
 //    sprintf(fn_req, "PQCencryptKAT.req");

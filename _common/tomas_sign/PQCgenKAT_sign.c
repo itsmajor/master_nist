@@ -45,11 +45,13 @@ main(int argc, char* argv[])
     unsigned char       *m, *sm, *m1;
     unsigned long long  mlen, smlen, mlen1;
     int                 count;
-    unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
+//    unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val, repeats = 10;
     clock_t             start, progStart;
     double              time_keypair, time_sign, time_verify, time_prepare;
 //    unsigned char       *pk, *sk;
+
+    unsigned char       *sk, *pk; // replaced because segmentation fault of large array declaration
 
     if ( argc > 1) { //argv[0] is this binary name
         char *output;
@@ -66,6 +68,9 @@ main(int argc, char* argv[])
     }
 
     progStart = clock();
+
+    pk = (unsigned char *) calloc(CRYPTO_PUBLICKEYBYTES, sizeof(unsigned char));
+    sk = (unsigned char *) calloc(CRYPTO_SECRETKEYBYTES, sizeof(unsigned char));
 
     // from GUI original genKAT
 //    pk = (unsigned char *) calloc(CRYPTO_PUBLICKEYBYTES, sizeof(unsigned char));
@@ -155,12 +160,9 @@ main(int argc, char* argv[])
         if (debug) printf("loop mlen: %llu\n", mlen);
 
         m = (unsigned char *)calloc(mlen+1, sizeof(unsigned char));
-        m1 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char)); // origin
-//        m1 = (unsigned char *)calloc(mlen, sizeof(unsigned char));
-        sm = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char)); // origin
-//        sm = (unsigned char *)calloc(10000, sizeof(unsigned char));
+        m1 = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
+        sm = (unsigned char *)calloc(mlen+CRYPTO_BYTES, sizeof(unsigned char));
 
-/////////////////////////////////////////////////////////////////////
         if ( !ReadHex(fp_req, m, (int)mlen, "msg = ") ) {
             printf("PQCgenKAT ERROR: unable to read 'msg' from <%s>\n", fn_req);
             return KAT_DATA_ERROR;
@@ -172,14 +174,10 @@ main(int argc, char* argv[])
         // Generate the public/private keypair
         if (debug) printf("do crypto_sign_keypair()");
         start = clock();
-        if (debug) printf("-----------debug 2\n"); // xTODO
-        int asd = 33*44+55+66+77*33;
-        if (debug) printf("-----------debug 2 %i\n", asd); // xTODO
         if ( (ret_val = crypto_sign_keypair(pk, sk)) != 0) {
             printf("PQCgenKAT ERROR: crypto_sign_keypair returned <%d>\n", ret_val);
             return KAT_CRYPTO_FAILURE;
         }
-        if (debug) printf("-----------debug 3\n"); // xTODO
         time_keypair = ((double) (clock() - start));
         if (debug) printf(" (took: %.0f μs)\n", time_keypair);
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);

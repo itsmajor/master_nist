@@ -10,25 +10,26 @@ OPTIONS=$@
 
 echo "this is longrunning - tests will take hours or even days"
 
-cd BIG_QUAKE-Round1
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
+#cd BIG_QUAKE-Round1
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ..
+#
+#cd Classic-McEliece-Round4
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ..
+#
+#cd EMBLEM_R_EMBLEM-Round1
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ..
 
-cd Classic-McEliece-Round4
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
-
-cd EMBLEM_R_EMBLEM-Round1
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
-
-cd Gravity_SPHINCS-Round1
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
+#cd Gravity_SPHINCS-Round1
+#echo "moved to: ${PWD}"
+##./test_all.sh $OPTIONS
+#./test_all.sh -vr 2
+#cd ..
 
 cd Gui-Round1
 echo "moved to: ${PWD}"

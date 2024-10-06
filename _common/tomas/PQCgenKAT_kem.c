@@ -40,15 +40,15 @@ main(int argc, char* argv[])
     FILE                *fp_req, *fp_rsp, *fp_time;
     unsigned char       seed[48];
     unsigned char       entropy_input[48];
-    unsigned char       /*ct[CRYPTO_CIPHERTEXTBYTES],*/ ss[CRYPTO_BYTES], ss1[CRYPTO_BYTES];
+//    unsigned char       ct[CRYPTO_CIPHERTEXTBYTES], ss[CRYPTO_BYTES], ss1[CRYPTO_BYTES];
     int                 count;
 //    unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val, repeats = 10;
     clock_t             start, progStart;
     double              time_keypair, time_enc, time_dec, time_prepare;
 
-    unsigned char       *ct, *sk, *pk; // replaced because segmentation fault of large array declaration
     // https://stackoverflow.com/questions/30034215/segmentation-fault-on-large-array-declaration
+    unsigned char       *ct, *sk, *pk, *ss, *ss1; // replaced because segmentation fault of large array declaration
 
     if ( argc > 1) { //argv[0] is this binary name
         char *output;
@@ -69,6 +69,8 @@ main(int argc, char* argv[])
     ct = (unsigned char *) calloc(CRYPTO_CIPHERTEXTBYTES, sizeof(unsigned char));
     pk = (unsigned char *) calloc(CRYPTO_PUBLICKEYBYTES, sizeof(unsigned char));
     sk = (unsigned char *) calloc(CRYPTO_SECRETKEYBYTES, sizeof(unsigned char));
+    ss = (unsigned char *) calloc(CRYPTO_BYTES, sizeof(unsigned char));
+    ss1 = (unsigned char *) calloc(CRYPTO_BYTES, sizeof(unsigned char));
 
     // Create the REQUEST file
     sprintf(fn_req, "PQCkemKAT.req");

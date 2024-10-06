@@ -44,8 +44,10 @@ main(int argc, char* argv[])
     unsigned char       *m, *sm, *m1;
     unsigned long long  mlen, smlen, mlen1;
     int                 count;
-    unsigned char       /*pk[CRYPTO_PUBLICKEYBYTES],*/ sk[CRYPTO_SECRETKEYBYTES];
+//    unsigned char       /*pk[CRYPTO_PUBLICKEYBYTES],*/ sk[CRYPTO_SECRETKEYBYTES];
     int                 ret_val;
+
+    unsigned char       *sk; // replaced because segmentation fault of large array declaration
 
     if ( argc > 1 && strcmp(argv[1], "1") == 0) {
         debug = true;
@@ -56,6 +58,8 @@ main(int argc, char* argv[])
             }
         }
     }
+
+    sk = (unsigned char *) calloc(CRYPTO_SECRETKEYBYTES, sizeof(unsigned char));
 
     // Create the REQUEST file
 //    sprintf(fn_req, "PQCsignKAT.req");
