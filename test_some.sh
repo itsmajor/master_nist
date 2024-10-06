@@ -8,6 +8,30 @@ OPTIONS=$@
 #OPTIONS="-b"
 #OPTIONS="-br 1"
 
+#copy - can be removed
+cd LOTUS-Round1
+echo "moved to: ${PWD}"
+./test_all.sh $OPTIONS
+cd ~-
+
+cd Odd_Manhattan-Round1
+echo "moved to: ${PWD}"
+./test_all.sh $OPTIONS
+cd ~-
+
+cd SPHINCS-Round3
+echo "moved to: ${PWD}"
+./test_all.sh $OPTIONS
+cd ~-
+
+cd Classic-McEliece-Round4
+echo "moved to: ${PWD}"
+./test_all.sh $OPTIONS
+cd ~-
+
+
+
+
 
 #cd Gravity_SPHINCS-Round1
 #echo "moved to: ${PWD}"
@@ -19,22 +43,20 @@ OPTIONS=$@
 #./test_all.sh $OPTIONS
 #cd ~-
 
-cd bike-kem
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ~-
-
+#cd bike-kem
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ~-
 
 #cd BIG_QUAKE-Round1
 #echo "moved to: ${PWD}"
 #./test_all.sh $OPTIONS
 #cd ~-
-#
+
 #cd Classic-McEliece-Round4
 #echo "moved to: ${PWD}"
 #./test_all.sh $OPTIONS
 #cd ~-
-#
 
 #cd Lima-Round1
 #echo "moved to: ${PWD}"
@@ -51,8 +73,7 @@ cd ~-
 #./test_all.sh $OPTIONS
 #cd ~-
 #
-#
-#
+
 #cd LOTUS-Round1
 #echo "moved to: ${PWD}"
 #./test_all.sh $OPTIONS
@@ -90,10 +111,10 @@ cd ~-
 #./test_all.sh $OPTIONS
 #cd ~-
 
-cd FrodoKEM-Round3
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ~-
+#cd FrodoKEM-Round3
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ~-
 
 #cd HQC-Round4
 #echo "moved to: ${PWD}"
@@ -135,15 +156,15 @@ cd ~-
 #./test_all.sh $OPTIONS
 #cd ~-
 
-cd NTRU-Prime-Round3
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ~-
-
-cd NTRU-Round3
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ~-
+#cd NTRU-Prime-Round3
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ~-
+#
+#cd NTRU-Round3
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ~-
 
 #cd Odd_Manhattan-Round1
 #echo "moved to: ${PWD}"
@@ -160,20 +181,20 @@ cd ~-
 #./test_all.sh $OPTIONS
 #cd ~-
 
-cd SABER-Round3
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ~-
-
+#cd SABER-Round3
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ~-
+#
 #cd SPHINCS-Round3
 #echo "moved to: ${PWD}"
 #./test_all.sh $OPTIONS
 #cd ~-
 
-cd ThreeBears-Round1
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ~-
+#cd ThreeBears-Round1
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ~-
 
 
 echo "**** test_some.sh done (param: "$@") ****"

@@ -1,43 +1,20 @@
 #! /bin/bash
 
 . ../_common/script/test_all_param.sh "$@"
+OPTIONS_ARRAY=($OPTIONS)
 
-CIPHER="kem mceliece348864"
-../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/kem/mceliece348864/vec $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
+#name_array=('mceliece348864' 'mceliece348864f' 'mceliece460896' 'mceliece460896f' 'mceliece6688128' 'mceliece6688128f' 'mceliece6960119' 'mceliece6960119f' 'mceliece8192128' 'mceliece8192128f')
+name_array=('mceliece6960119')
+#repeat_array=(10 10 5 10 3 10 3 5 3 5)
+repeat_array=(3)
 
-CIPHER="kem mceliece348864f"
-../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/kem/mceliece348864f/vec $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
-
-CIPHER="kem mceliece460896"
-../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/kem/mceliece460896/vec $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
-
-CIPHER="kem mceliece460896f"
-../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/kem/mceliece460896f/vec $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
-
-CIPHER="kem mceliece6688128"
-../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/kem/mceliece6688128/vec $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
-
-CIPHER="kem mceliece6688128f"
-../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/kem/mceliece348864/vec $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
-
-CIPHER="kem mceliece6960119"
-../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/kem/mceliece6960119/vec $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
-
-CIPHER="kem mceliece6960119f"
-../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/kem/mceliece6960119f/vec $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
-
-CIPHER="kem mceliece8192128"
-../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/kem/mceliece8192128/vec $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
-
-CIPHER="kem mceliece8192128f"
-../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/kem/mceliece8192128f/vec $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
+for name in "${name_array[@]}"; do
+  CIPHER="kem $name"
+  REPEATS=${repeat_array[i++]}
+  if [ ${OPTIONS_ARRAY[0]} -gt $REPEATS ]; then
+    OPTIONS="$REPEATS ${OPTIONS_ARRAY[1]} ${OPTIONS_ARRAY[2]} ${OPTIONS_ARRAY[3]} ${OPTIONS_ARRAY[4]}"
+    echo "*** reduced repeats to $REPEATS for $CIPHER ***"
+  fi
+  ../_common/script/doKat.sh $VALGRIND $CIPHER Additional_Implementations/kem/$name/vec $OPTIONS
+  ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
+done

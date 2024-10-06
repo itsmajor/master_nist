@@ -1,51 +1,10 @@
 MAKEOPTION=$1;
 
-cd Additional_Implementations/kem/mceliece348864/vec
-echo "moved to: ${PWD}"
-make $MAKEOPTION
-cd ~-
+name_array=('mceliece348864' 'mceliece348864f' 'mceliece460896' 'mceliece460896f' 'mceliece6688128' 'mceliece6688128f' 'mceliece6960119' 'mceliece6960119f' 'mceliece8192128' 'mceliece8192128f')
 
-cd Additional_Implementations/kem/mceliece348864f/vec
-echo "moved to: ${PWD}"
-make $MAKEOPTION
-cd ~-
-
-cd Additional_Implementations/kem/mceliece460896/vec
-echo "moved to: ${PWD}"
-make $MAKEOPTION
-cd ~-
-
-cd Additional_Implementations/kem/mceliece460896f/vec
-echo "moved to: ${PWD}"
-make $MAKEOPTION
-cd ~-
-
-cd Additional_Implementations/kem/mceliece6688128/vec
-echo "moved to: ${PWD}"
-make $MAKEOPTION
-cd ~-
-
-cd Additional_Implementations/kem/mceliece6688128f/vec
-echo "moved to: ${PWD}"
-make $MAKEOPTION
-cd ~-
-
-cd Additional_Implementations/kem/mceliece6960119/vec
-echo "moved to: ${PWD}"
-make $MAKEOPTION
-cd ~-
-
-cd Additional_Implementations/kem/mceliece6960119f/vec
-echo "moved to: ${PWD}"
-make $MAKEOPTION
-cd ~-
-
-cd Additional_Implementations/kem/mceliece8192128/vec
-echo "moved to: ${PWD}"
-make $MAKEOPTION
-cd ~-
-
-cd Additional_Implementations/kem/mceliece8192128f/vec
-echo "moved to: ${PWD}"
-make $MAKEOPTION
-cd ~-
+for name in "${name_array[@]}"; do
+  cd Additional_Implementations/kem/$name/vec
+  echo "moved to: ${PWD}"
+  make $MAKEOPTION
+  cd ~-
+done

@@ -1,6 +1,33 @@
 echo "read file for examples"
 exit 1
 
+############## reduce repeats
+OPTIONS_ARRAY=($OPTIONS)
+
+CIPHER="kem BIG_QUAKE_1"
+REPEATS=5
+if [ ${OPTIONS_ARRAY[0]} -gt $REPEATS ]; then
+  OPTIONS="$REPEATS ${OPTIONS_ARRAY[1]} ${OPTIONS_ARRAY[2]} ${OPTIONS_ARRAY[3]} ${OPTIONS_ARRAY[4]}"
+  echo "*** reduced repeats to $REPEATS for $CIPHER ***"
+fi
+
+############## reduce repeats for arrays
+OPTIONS_ARRAY=($OPTIONS)
+
+sec_array=(184 312 448)
+repeat_array=(3 1 1)
+
+i=0
+for sec in "${sec_array[@]}"; do
+  CIPHER="sign Gui-"$sec
+  REPEATS=${repeat_array[i++]}
+  if [ ${OPTIONS_ARRAY[0]} -gt $REPEATS ]; then
+    OPTIONS="$REPEATS ${OPTIONS_ARRAY[1]} ${OPTIONS_ARRAY[2]} ${OPTIONS_ARRAY[3]} ${OPTIONS_ARRAY[4]}"
+    echo "*** reduced repeats to $REPEATS for $CIPHER ***"
+  fi
+  ../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/amd64/Gui-$sec $OPTIONS
+  ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
+done
 
 ############## build_all
 sec_array=('VERSION_S' 'VERSION_M' 'VERSION_L')

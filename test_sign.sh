@@ -30,11 +30,10 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
-echo "**** continue test_sign.sh with longrunning Gravity_SPHINCS-Round1 ****"
-cd Gravity_SPHINCS-Round1
+echo "**** continue test_sign.sh with longrunning SPHINCS-Round3 ****"
+cd SPHINCS-Round3
 echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
-#./test_all.sh -vr 2
 cd ..
 
 echo "**** continue test_sign.sh with longrunning Gui-Round1 ****"
@@ -43,11 +42,11 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
-echo "**** continue test_sign.sh with longrunning SPHINCS-Round3 ****"
-cd SPHINCS-Round3
+echo "**** continue test_sign.sh with longrunning Gravity_SPHINCS-Round1 ****"
+cd Gravity_SPHINCS-Round1
 echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
+#./test_all.sh -vr 2
 cd ..
-
 
 echo "**** done test_sign.sh ****"
