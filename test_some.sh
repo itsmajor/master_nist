@@ -8,36 +8,6 @@ OPTIONS=$@
 #OPTIONS="-b"
 #OPTIONS="-br 1"
 
-#copy - can be removed
-cd LOTUS-Round1
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ~-
-
-cd Odd_Manhattan-Round1
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ~-
-
-cd SPHINCS-Round3
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ~-
-
-#cd Classic-McEliece-Round4
-#echo "moved to: ${PWD}"
-#./test_all.sh $OPTIONS
-#cd ~-
-
-cd Gravity_SPHINCS-Round1
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
-
-cd Classic-McEliece-Round4
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ~-
 
 #cd Gravity_SPHINCS-Round1
 #echo "moved to: ${PWD}"
