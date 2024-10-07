@@ -1,5 +1,10 @@
 #! /bin/bash
 MAKEOPTION=$1;
+
+cd Optimized_Implementation/Lib
+make
+cd ~-
+
 sec_array=(1018 1024 1306 1822 2048 2062)
 kat_array=('Encap' 'Enc')
 kat2_array=('CCA' 'CPA')
