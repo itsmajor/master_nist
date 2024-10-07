@@ -28,5 +28,3 @@ for hash in "${hash_array[@]}"; do
     done
   done
 done
-
-

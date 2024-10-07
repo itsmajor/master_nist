@@ -24,14 +24,20 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ~-
 
+#cd Classic-McEliece-Round4
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ~-
+
+cd Gravity_SPHINCS-Round1
+echo "moved to: ${PWD}"
+./test_all.sh $OPTIONS
+cd ..
+
 cd Classic-McEliece-Round4
 echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ~-
-
-
-
-
 
 #cd Gravity_SPHINCS-Round1
 #echo "moved to: ${PWD}"
