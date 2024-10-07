@@ -1,6 +1,7 @@
 MAKEOPTION=$1;
 
-sec_array=('VERSION_S' 'VERSION_M' 'VERSION_L')
+#disabled  'VERSION_M' 'VERSION_L'
+sec_array=('VERSION_S')
 
 for sec in "${sec_array[@]}"; do
   cd Reference_Implementation/$sec

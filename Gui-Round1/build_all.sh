@@ -1,7 +1,8 @@
 #! /bin/bash
 
 MAKEOPTION=$1;
-sec_array=(184 312 448)
+#312 448 disabled
+sec_array=(184)
 
 for sec in "${sec_array[@]}"; do
   cd Optimized_Implementation/amd64/Gui-$sec
