@@ -1,5 +1,10 @@
 MAKEOPTION=$1;
 
+if [ "clean" == $MAKEOPTION ]; then
+  rm -f -R build/ bin/
+  exit 0;
+fi
+
 mkdir -p build
 mkdir -p bin
 mkdir -p bin/bike-1_sha3
