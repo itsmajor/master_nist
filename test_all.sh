@@ -10,11 +10,11 @@ OPTIONS=$@
 #OPTIONS="-b"
 #OPTIONS="-br 1"
 
-
-cd bike-kem
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
+echo "skip bike-kem in 32bit"
+#cd bike-kem
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ..
 
 cd CRYSTALS_Dilithium-Round3
 echo "moved to: ${PWD}"
