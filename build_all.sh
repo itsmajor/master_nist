@@ -10,7 +10,7 @@ cd ~-
 if [ -f "bike-kem/bin/bike-5_aes/PQCgenKAT_kem" ]; then
   echo "moved to: ./bike-kem - found KAT binary, remove bin/ for rebuild"
 else
-  if [ $MAKEOPTION == "clean" ]; then
+  if [ "clean" == $MAKEOPTION ]; then
     echo "no clean for bike_kem - clean it yourself"
   else
     cd bike-kem
