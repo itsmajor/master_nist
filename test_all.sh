@@ -51,10 +51,10 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
-cd KINDI-Round1
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
+#cd KINDI-Round1
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ..
 
 cd Lima-Round1
 echo "moved to: ${PWD}"

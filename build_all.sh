@@ -82,10 +82,10 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
-cd KINDI-Round1
-echo "moved to: ${PWD}"
-./build_all.sh $MAKEOPTION
-cd ~-
+#cd KINDI-Round1
+#echo "moved to: ${PWD}"
+#./build_all.sh $MAKEOPTION
+#cd ~-
 
 cd Lima-Round1
 echo "moved to: ${PWD}"
