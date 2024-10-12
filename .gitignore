@@ -46,6 +46,9 @@
 *.idb
 *.pdb
 
+# joe backup
+*~
+
 # Kernel Module Compile Results
 *.mod*
 *.cmd
