@@ -51,6 +51,7 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
+echo "skip KINDI-Round1 in 32bit"
 #cd KINDI-Round1
 #echo "moved to: ${PWD}"
 #./test_all.sh $OPTIONS
@@ -101,6 +102,7 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
+echo "skip ThreeBears-Round1 in 32bit"
 #cd ThreeBears-Round1
 #echo "moved to: ${PWD}"
 #./test_all.sh $OPTIONS
