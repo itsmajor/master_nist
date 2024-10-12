@@ -147,10 +147,10 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
-cd ThreeBears-Round1
-echo "moved to: ${PWD}"
-./build_all.sh $MAKEOPTION
-cd ~-
+#cd ThreeBears-Round1
+#echo "moved to: ${PWD}"
+#./build_all.sh $MAKEOPTION
+#cd ~-
 
 # removed
 #cd Titanium-Round1

@@ -101,10 +101,10 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
-cd ThreeBears-Round1
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
+#cd ThreeBears-Round1
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ..
 
 
 echo "**** done test_all.sh (long running excluded) ****"
