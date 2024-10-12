@@ -68,3 +68,4 @@ apih.txt
 *.log
 PQCgenKAT_*
 !PQCgenKAT_*.c
+verifyKat
