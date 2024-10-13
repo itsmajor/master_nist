@@ -13,7 +13,7 @@ LIBS= -lntl -lgmp -lssl -lcrypto
 
 DEFINES=$(INCLUDES) $(DEFS)
 
-XFLAGS = -Ofast -march=native -w
+XFLAGS = -Ofast -march=native #-w
 
 SRCS = kem.c ../../_common/NIST/rng.c ../../_common/tomas/PQCgenKAT_kem.c
 SRCS2 = kem.c ../../_common/NIST/rng.c ../../_common/tomas/PQCgenKAT_kem_dec.c

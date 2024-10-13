@@ -19,16 +19,17 @@
 #define KAT_FILE_OPEN_ERROR -1
 #define KAT_DATA_ERROR      -3
 #define KAT_CRYPTO_FAILURE  -4
+#define MAX_PRINT           80
 
 #ifndef CRYPTO_ALGNAME
 #define CRYPTO_ALGNAME = "unset"
 #endif
 
 int		FindMarker(FILE *infile, const char *marker);
-int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
-void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
+int		ReadHex(FILE *infile, unsigned char *A, int Length, const char *str);
+void	fprintBstr(FILE *fp, const char *S, unsigned char *A, unsigned long long L);
 void    hex_to_bin(size_t size, unsigned char *dest, const char *input);
-void    printHex(char *fieldname, unsigned char *hexstring, int printamount, int maxamount);
+void    printHex(const char *fieldname, unsigned char *hexstring, int printamount, int maxamount);
 
 // global variable
 bool    debug = false;
@@ -38,26 +39,23 @@ main(int argc, char* argv[])
 {
     char                fn_req[32], fn_rsp[32], fn_time[32];
     FILE                *fp_req, *fp_rsp, *fp_time;
-    unsigned char       seed[48];
-    unsigned char       msg[3300];
-    unsigned char       entropy_input[48];
+    unsigned char       seed[48], msg[17], entropy_input[48];
     unsigned char       *m, *c, *m1;
     unsigned long long  mlen, clen, mlen1;
-    int                 count;
-//    unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
-    int                 ret_val, repeats = 10;
+    int                 count, ret_val, repeats = 10;
     clock_t             start, progStart;
     double              time_keypair, time_enc, time_dec, time_prepare;
 
     unsigned char       *sk, *pk; // replaced because segmentation fault of large array declaration
 
-    if ( argc > 1) { //argv[0] is this binary name
+    printf(" ");
+    if (argc > 1) {
         char *output;
         // amount of repeats for req file
-        repeats = atoi( argv[1] );
-        if ( argc > 2 && strcmp(argv[2], "1") == 0) {
+        repeats = atoi(argv[1]);
+        if (argc > 2 && strcmp(argv[2], "1") == 0) {
             debug = true;
-            printf("start main PQCgenKAT_encrypt (argc: %i)\n", argc);
+            printf("start main(argc: %i) %s\n", argc, argv[0]);
             for (int i = 0; i < argc; i++) {
                 printf("argv[%d]: %s\n", i, argv[i]);
             }
@@ -163,7 +161,7 @@ main(int argc, char* argv[])
             return KAT_DATA_ERROR;
         }
         fprintBstr(fp_rsp, "msg = ", m, mlen);
-        if (debug) printHex("msg", msg, mlen, 60);
+        if (debug) printHex("msg", msg, mlen, MAX_PRINT);
         time_prepare = ((double) (clock() - start));
 
         // Generate the public/private keypair
@@ -177,7 +175,7 @@ main(int argc, char* argv[])
         if (debug) printf(" (took: %.0f μs)\n", time_keypair);
         fprintBstr(fp_rsp, "pk = ", pk, CRYPTO_PUBLICKEYBYTES);
         fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
-        if (debug) { printHex("pk", pk, CRYPTO_PUBLICKEYBYTES, 60); printHex("sk", sk, CRYPTO_SECRETKEYBYTES, 60); }
+        if (debug) { printHex("pk", pk, CRYPTO_PUBLICKEYBYTES, MAX_PRINT); printHex("sk", sk, CRYPTO_SECRETKEYBYTES, MAX_PRINT); }
 
         // encoding
         // if encrypt use randombytes then we need to reinit for same results as _enc run
@@ -190,7 +188,7 @@ main(int argc, char* argv[])
         }
         time_enc = ((double) (clock() - start));
         if (debug) printf(" (took: %.0f μs)\n", time_enc);
-        if (debug) printHex("c", c, clen, 60);
+        if (debug) printHex("c", c, clen, MAX_PRINT);
 
 
         fprintf(fp_rsp, "clen = %llu\n", clen);
@@ -209,7 +207,7 @@ main(int argc, char* argv[])
         }
         time_dec = ((double) (clock() - start));
         if (debug) printf(" (took: %.0f μs)\n", time_dec);
-        if (debug) printHex("m1", m1, mlen1, 60);
+        if (debug) printHex("m1", m1, mlen1, MAX_PRINT);
 
         // write time measure to file
         fprintf(fp_time, "prepare (μs) = %.0f\n", time_prepare);
@@ -220,7 +218,7 @@ main(int argc, char* argv[])
         
         if ( mlen != mlen1 ) {
             printf("PQCgenKAT ERROR: crypto_encrypt_open returned bad 'mlen': Got <%llu>, expected <%llu>\n", mlen1, mlen);
-//            return KAT_CRYPTO_FAILURE;
+            return KAT_CRYPTO_FAILURE;
         }
         
         if ( memcmp(m, m1, mlen) ) {
@@ -246,7 +244,7 @@ main(int argc, char* argv[])
     return KAT_SUCCESS;
 }
 
-void printHex(char *fieldname, unsigned char *hexstring, int printamount, int maxamount) {
+void printHex(const char *fieldname, unsigned char *hexstring, int printamount, int maxamount) {
     printf("%s: ", fieldname);
     unsigned char *cp = hexstring;
     int amount = printamount > maxamount ? maxamount : printamount;
@@ -299,7 +297,7 @@ FindMarker(FILE *infile, const char *marker)
 // ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
 //
 int
-ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
+ReadHex(FILE *infile, unsigned char *A, int Length, const char *str) {
     clock_t start;
     if (debug) {
         start = clock();
@@ -318,6 +316,7 @@ ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
     getline(&line, &size1, infile);
     hex_to_bin(Length, A, line);
     if (debug) printf(" (took: %.0f μs)\n", ((double) (clock() - start)));
+//    if (debug) printf("ReadHex line length: %llu, size: %llu\n", strlen(line), size1);
     return 1;
 }
 
@@ -342,11 +341,13 @@ void hex_to_bin(size_t size, unsigned char *dest, const char *input) {
 
         *s++ = (unsigned char) ((ich1<<4) + ich2);
     }
+//    if (debug) printf(" (hex_to_bin i: %llu)", i);
 }
 
 void
-fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L)
+fprintBstr(FILE *fp, const char *S, unsigned char *A, unsigned long long L)
 {
+//    clock_t start = clock();
 	unsigned long long  i;
 
 	fprintf(fp, "%s", S);
@@ -358,5 +359,6 @@ fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L)
 		fprintf(fp, "00");
 
 	fprintf(fp, "\n");
+//    if (debug) printf("time passed in fprintBstr (μs) = %.0f\n", ((double) (clock() - start)));
 }
 
