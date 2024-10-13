@@ -19,16 +19,17 @@
 #define KAT_FILE_OPEN_ERROR -1
 #define KAT_DATA_ERROR      -3
 #define KAT_CRYPTO_FAILURE  -4
+#define MAX_PRINT           80
 
 #ifndef CRYPTO_ALGNAME
 #define CRYPTO_ALGNAME = "unset"
 #endif
 
 int		FindMarker(FILE *infile, const char *marker);
-int		ReadHex(FILE *infile, unsigned char *A, int Length, char *str);
-void	fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);
+int		ReadHex(FILE *infile, unsigned char *A, int Length, const char *str);
+void	fprintBstr(FILE *fp, const char *S, unsigned char *A, unsigned long long L);
 void    hex_to_bin(size_t size, unsigned char *dest, const char *input);
-void    printHex(char *fieldname, unsigned char *hexstring, int printamount, int maxamount);
+void    printHex(const char *fieldname, unsigned char *hexstring, int printamount, int maxamount);
 
 // global variable
 bool    debug = false;
@@ -38,25 +39,22 @@ main(int argc, char* argv[])
 {
     char                fn_req[32], fn_rsp[32], fn_time[32];
     FILE                *fp_req, *fp_rsp, *fp_time;
-    unsigned char       seed[48];
-    unsigned char       entropy_input[48];
-//    unsigned char       ct[CRYPTO_CIPHERTEXTBYTES], ss[CRYPTO_BYTES], ss1[CRYPTO_BYTES];
-    int                 count;
-//    unsigned char       pk[CRYPTO_PUBLICKEYBYTES], sk[CRYPTO_SECRETKEYBYTES];
-    int                 ret_val, repeats = 10;
+    unsigned char       seed[48], entropy_input[48];
+    int                 count, ret_val, repeats = 10;
     clock_t             start, progStart;
     double              time_keypair, time_enc, time_dec, time_prepare;
 
     // https://stackoverflow.com/questions/30034215/segmentation-fault-on-large-array-declaration
     unsigned char       *ct, *sk, *pk, *ss, *ss1; // replaced because segmentation fault of large array declaration
 
-    if ( argc > 1) { //argv[0] is this binary name
+    printf(" ");
+    if (argc > 1) {
         char *output;
         // amount of repeats for req file
-        repeats = atoi( argv[1] );
-        if ( argc > 2 && strcmp(argv[2], "1") == 0) {
+        repeats = atoi(argv[1]);
+        if (argc > 2 && strcmp(argv[2], "1") == 0) {
             debug = true;
-            printf("start main PQCgenKAT_kem (argc: %i)\n", argc);
+            printf("start main(argc: %i) %s\n", argc, argv[0]);
             for (int i = 0; i < argc; i++) {
                 printf("argv[%d]: %s\n", i, argv[i]);
             }
@@ -65,12 +63,6 @@ main(int argc, char* argv[])
     }
 
     progStart = clock();
-
-    ct = (unsigned char *) calloc(CRYPTO_CIPHERTEXTBYTES, sizeof(unsigned char));
-    pk = (unsigned char *) calloc(CRYPTO_PUBLICKEYBYTES, sizeof(unsigned char));
-    sk = (unsigned char *) calloc(CRYPTO_SECRETKEYBYTES, sizeof(unsigned char));
-    ss = (unsigned char *) calloc(CRYPTO_BYTES, sizeof(unsigned char));
-    ss1 = (unsigned char *) calloc(CRYPTO_BYTES, sizeof(unsigned char));
 
     // Create the REQUEST file
     sprintf(fn_req, "PQCkemKAT.req");
@@ -130,6 +122,12 @@ main(int argc, char* argv[])
         fprintf(fp_time, "count = %d\n", count);
         if (debug) printf("loop count: %d\n", count);
 
+        ct = (unsigned char *) calloc(CRYPTO_CIPHERTEXTBYTES, sizeof(unsigned char));
+        pk = (unsigned char *) calloc(CRYPTO_PUBLICKEYBYTES, sizeof(unsigned char));
+        sk = (unsigned char *) calloc(CRYPTO_SECRETKEYBYTES, sizeof(unsigned char));
+        ss = (unsigned char *) calloc(CRYPTO_BYTES, sizeof(unsigned char));
+        ss1 = (unsigned char *) calloc(CRYPTO_BYTES, sizeof(unsigned char));
+
         if ( !ReadHex(fp_req, seed, 48, "seed = ") ) {
             printf("PQCgenKAT ERROR: unable to read 'seed' from <%s>\n", fn_req);
             return KAT_DATA_ERROR;
@@ -188,6 +186,12 @@ main(int argc, char* argv[])
             printf("PQCgenKAT ERROR: crypto_kem_dec returned bad 'ss' value\n");
             return KAT_CRYPTO_FAILURE;
         }
+
+        free(ct);
+        free(pk);
+        free(sk);
+        free(ss);
+        free(ss1);
     }
     if (debug) printf("finish looping\n");
 
@@ -201,7 +205,7 @@ main(int argc, char* argv[])
     return KAT_SUCCESS;
 }
 
-void printHex(char *fieldname, unsigned char *hexstring, int printamount, int maxamount) {
+void printHex(const char *fieldname, unsigned char *hexstring, int printamount, int maxamount) {
     printf("%s: ", fieldname);
     unsigned char *cp = hexstring;
     int amount = printamount > maxamount ? maxamount : printamount;
@@ -254,7 +258,7 @@ FindMarker(FILE *infile, const char *marker)
 // ALLOW TO READ HEXADECIMAL ENTRY (KEYS, DATA, TEXT, etc.)
 //
 int
-ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
+ReadHex(FILE *infile, unsigned char *A, int Length, const char *str) {
     clock_t start;
     if (debug) {
         start = clock();
@@ -273,6 +277,7 @@ ReadHex(FILE *infile, unsigned char *A, int Length, char *str) {
     getline(&line, &size1, infile);
     hex_to_bin(Length, A, line);
     if (debug) printf(" (took: %.0f μs)\n", ((double) (clock() - start)));
+//    if (debug) printf("ReadHex line length: %llu, size: %llu\n", strlen(line), size1);
     return 1;
 }
 
@@ -297,10 +302,11 @@ void hex_to_bin(size_t size, unsigned char *dest, const char *input) {
 
         *s++ = (unsigned char) ((ich1<<4) + ich2);
     }
+//    if (debug) printf(" (hex_to_bin i: %llu)", i);
 }
 
 void
-fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L)
+fprintBstr(FILE *fp, const char *S, unsigned char *A, unsigned long long L)
 {
 //    clock_t start = clock();
 	unsigned long long  i;

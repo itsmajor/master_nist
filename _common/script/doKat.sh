@@ -80,7 +80,7 @@ then
 fi
 
 cd $KATPATH
-echo $(date +'%d.%m.%Y %H:%M:%S.%3N') "start KAT ($KATTYPE):" $CIPHERNAME
+echo " "$(date +'%d.%m.%Y %H:%M:%S.%3N') "start KAT ($KATTYPE):" $CIPHERNAME
 
 # cleanup previous results
 rm -f "$OUTPUTFILE"*
@@ -135,4 +135,4 @@ mv "$OUTPUTFILE"* "$LEAVEDIR"/../testresult/$CIPHERNAME
 mv massif.* "$LEAVEDIR"/../testresult/$CIPHERNAME/ 2> /dev/null
 cd $LEAVEDIR
 
-echo $(date +'%d.%m.%Y %H:%M:%S.%3N') "finish KAT:" $CIPHERNAME "-" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+echo " "$(date +'%d.%m.%Y %H:%M:%S.%3N') "finish KAT:" $CIPHERNAME "-" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`

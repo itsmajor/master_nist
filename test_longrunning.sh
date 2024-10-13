@@ -4,9 +4,6 @@
 #. ./_common/script/test_all_param.sh "$@"
 
 OPTIONS=$@
-#OPTIONS="-bv"
-#OPTIONS="-b"
-#OPTIONS="-br 1"
 
 echo "this is longrunning - tests will take hours or even days"
 
@@ -27,8 +24,7 @@ cd ..
 
 cd Gravity_SPHINCS-Round1
 echo "moved to: ${PWD}"
-#./test_all.sh $OPTIONS
-./test_all.sh -vr 2
+./test_all.sh $OPTIONS
 cd ..
 
 cd Gui-Round1

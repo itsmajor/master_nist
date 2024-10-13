@@ -214,7 +214,7 @@ int main(int argc, char* argv[])
     if (countErrors > 0) {
         printf("verifyKAT: %s - ERRORS found: %i (%s)", argv[2], countErrors, pathVerify);
         fprintf(fp_verifyresult, "ERROR (count = %d) (%s)", countErrors, verified);
-    } if (comparedLines > 0) {
+    } else if (comparedLines > 0) {
         printf("verifyKAT: %s - OK (%s)", argv[2], verified);
         fprintf(fp_verifyresult, "OK (%s)", verified);
     } else {
