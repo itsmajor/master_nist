@@ -7,5 +7,8 @@ else
 fi
 
 mkdir -p testresult
-./test_all.sh $PARAM > testresult/test_all.log 2>&1 &
-tail -f testresult/test_all.log
+touch testresult/host_`hostname`
+#./test_all.sh $PARAM > testresult/test_all.log 2>&1 &
+#tail -f testresult/test_all.log
+
+mv testresult testresult_`hostname`
