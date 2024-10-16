@@ -1,4 +1,4 @@
 #! /bin/bash
 
-rm -f -R testresult/
-echo "removed testresult/"
+rm -f -r testresult*/
+echo "removed testresult"
