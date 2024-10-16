@@ -80,7 +80,7 @@ then
 fi
 
 cd $KATPATH
-echo " "$(date +'%d.%m.%Y %H:%M:%S.%3N') "start KAT ($KATTYPE):" $CIPHERNAME
+echo "  "$(date +'%d.%m.%Y %H:%M:%S.%3N') "start KAT ($KATTYPE):" $CIPHERNAME
 
 # cleanup previous results
 rm -f "$OUTPUTFILE"*
@@ -94,7 +94,7 @@ if [ $doValgrindFull == "2" ]; then
 fi
 # repeat for non valgrind time measure
 ./"$KATBINARY" $REPEATS $DEBUG_KAT
-echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- $KATBINARY done (with time measurement) -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+echo " "`date +'%d.%m.%Y %H:%M:%S.%3N'` "- $KATBINARY done (with time measurement) -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
 
 if [ $doValgrindKeygen == "2" ]; then
   valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./"$KATBINARY"_keygen $DEBUG_KAT_KEYGEN
@@ -103,7 +103,7 @@ if [ $doValgrindKeygen == "2" ]; then
 fi
 if [ $doValgrindKeygen == "1" ]; then
   ./"$KATBINARY"_keygen $DEBUG_KAT_KEYGEN
-  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_keygen done (no valgrind) -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+  echo " "`date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_keygen done (no valgrind) -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
 fi
 
 
@@ -114,7 +114,7 @@ if [ $doValgrindEnc == "2" ]; then
 fi
 if [ $doValgrindEnc == "1" ]; then
   ./"$KATBINARY"_enc $DEBUG_KAT_ENC
-  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_enc done (no valgrind) -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+  echo " "`date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_enc done (no valgrind) -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
 fi
 
 
@@ -125,7 +125,7 @@ if [ $doValgrindDec == "2" ]; then
 fi
 if [ $doValgrindDec == "1" ]; then
   ./"$KATBINARY"_dec $DEBUG_KAT_DEC
-  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_dec done (no valgrind) -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+  echo " "`date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_dec done (no valgrind) -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
 fi
 
 
@@ -135,4 +135,4 @@ mv "$OUTPUTFILE"* "$LEAVEDIR"/../testresult/$CIPHERNAME
 mv massif.* "$LEAVEDIR"/../testresult/$CIPHERNAME/ 2> /dev/null
 cd $LEAVEDIR
 
-echo " "$(date +'%d.%m.%Y %H:%M:%S.%3N') "finish KAT:" $CIPHERNAME "-" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+echo "  "$(date +'%d.%m.%Y %H:%M:%S.%3N') "finish KAT:" $CIPHERNAME "-" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
