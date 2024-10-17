@@ -195,8 +195,9 @@ int main(int argc, char* argv[])
     strcpy(knownError, "");
     // known errors - mark with 'KNOWN'
     if (strstr(argv[2], "pqNTRUSign-")
+        || strstr(argv[2], "NTRUEncrypt-ntru-kem-")
         || strstr(argv[2], "Picnic_")
-        || strstr(argv[2], "sphincs-sha256-")
+        || strstr(argv[2], "KCL-AKCN-MLWE")
             ) {
         printf("this is a known error cancidate!\n");
         strcpy(knownError, "(KNOWN ERROR) ");
