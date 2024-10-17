@@ -109,3 +109,5 @@ cd ..
 
 echo "**** done test_all.sh (long running excluded) ****"
 ./test_longrunning.sh $@
+
+mv testresult testresult_`hostname`_$(date +'%Y.%m.%d_%H.%M')
