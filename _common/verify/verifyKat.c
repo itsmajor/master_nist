@@ -26,11 +26,12 @@ bool    debug = false;
 
 int main(int argc, char* argv[])
 {
-    char                fn_rsp[100], fn_rsp_keygen[100], fn_rsp_enc[100], fn_rsp_dec[100], fn_verify[100], fn_verifyresult[100];
-    FILE                *fp_rsp, *fp_rsp_keygen, *fp_rsp_enc, *fp_rsp_dec, *fp_verify, *fp_verifyresult;
-    unsigned char       testpath[100], pathVerify[100], pathKatBase[100], pathKatRsp[100], pathKatRspKeygen[100], pathKatRspEnc[100], pathKatRspDec[100], verified[20];
-    char                *verifyresultPath;
-    int                 count = 0, kattypeInt = 0;
+    char        fn_rsp[100], fn_rsp_keygen[100], fn_rsp_enc[100], fn_rsp_dec[100], fn_verify[100], fn_verifyresult[100];
+    FILE        *fp_rsp, *fp_rsp_keygen, *fp_rsp_enc, *fp_rsp_dec, *fp_verify, *fp_verifyresult;
+    char        testpath[100], pathVerify[100], pathKatBase[100], pathKatRsp[100], pathKatRspKeygen[100],
+                pathKatRspEnc[100], pathKatRspDec[100], verified[100], knownError[100];
+    char        *verifyresultPath;
+    int         count = 0, kattypeInt = 0;
 
     printf("verifyKat: start\n");
     countErrors = 0;
@@ -77,24 +78,14 @@ int main(int argc, char* argv[])
     }
 
     /* Create the VERIFYRESULT file in /testresult/ */
-    sprintf(fn_verifyresult, verifyresultPath);
+    sprintf(fn_verifyresult, "%s", verifyresultPath);
     if ( (fp_verifyresult = fopen(fn_verifyresult, "a")) == NULL ) {
         printf("ERROR (verifyKAT): Couldn't open '%s' for write\n", fn_verifyresult);
         return KAT_FILE_OPEN_ERROR;
     }
-    // no verification for NTRUEncrypt
-    if (strstr(argv[2], "NTRUEncrypt-ntru-")) {
-        printf("verifyKat: not verifying NTRU Encrypt (use own RNG and creates new results)\n");
-        fprintf(fp_verifyresult, "%s = SKIP (own RNG / creates new results)\n", argv[2]);
-        fclose(fp_verifyresult);
-        return 0;
-    }
 
-
-//    fprintf(fp_verifyresult, "%s = ", argv[2]);
-//    fflush(fp_verifyresult);
     /* Create the VERIFY file */
-    sprintf(fn_verify, pathVerify);
+    sprintf(fn_verify, "%s", pathVerify);
     if ( (fp_verify = fopen(fn_verify, "w")) == NULL ) {
         printf("ERROR (verifyKAT): Couldn't open '%s' for write\n", fn_verify);
         return KAT_FILE_OPEN_ERROR;
@@ -103,8 +94,7 @@ int main(int argc, char* argv[])
     // read PQC*KAT.rsp (* kem or encrypt)
     strcpy(pathKatRsp, pathKatBase);
     strcat(pathKatRsp, "KAT.rsp");
-//    printf("path of KAT.rsp is %s\n", pathKatRsp);
-    sprintf(fn_rsp, pathKatRsp);
+    sprintf(fn_rsp, "%s", pathKatRsp);
     if ( (fp_rsp = fopen(fn_rsp, "r")) == NULL ) {
         printf("ERROR (verifyKAT): Couldn't open '%s' for read\n", fn_rsp);
         return KAT_FILE_OPEN_ERROR;
@@ -113,8 +103,7 @@ int main(int argc, char* argv[])
     // read PQC*KAT_keygen.rsp (* kem or encrypt)
     strcpy(pathKatRspKeygen, pathKatBase);
     strcat(pathKatRspKeygen, "KAT_keygen.rsp");
-//    printf("path of KAT_keygen.rsp is %s\n", pathKatRspKeygen);
-    sprintf(fn_rsp_keygen, pathKatRspKeygen);
+    sprintf(fn_rsp_keygen, "%s", pathKatRspKeygen);
     if ( (fp_rsp_keygen = fopen(fn_rsp_keygen, "r")) == NULL ) {
         printf("WARN (verifyKAT): Couldn't open '%s' for read. (verification will be skipped)\n", fn_rsp_keygen);
     }
@@ -122,8 +111,7 @@ int main(int argc, char* argv[])
     // read PQC*KAT_enc.rsp (* kem or encrypt)
     strcpy(pathKatRspEnc, pathKatBase);
     strcat(pathKatRspEnc, "KAT_enc.rsp");
-//    printf("path of KAT_enc.rsp is %s\n", pathKatRspEnc);
-    sprintf(fn_rsp_enc, pathKatRspEnc);
+    sprintf(fn_rsp_enc, "%s", pathKatRspEnc);
     if ( (fp_rsp_enc = fopen(fn_rsp_enc, "r")) == NULL ) {
         printf("WARN (verifyKAT): Couldn't open '%s' for read. (verification will be skipped)\n", fn_rsp_enc);
     }
@@ -131,14 +119,13 @@ int main(int argc, char* argv[])
     // read PQC*KAT_dec.rsp (* kem or encrypt)
     strcpy(pathKatRspDec, pathKatBase);
     strcat(pathKatRspDec, "KAT_dec.rsp");
-//    printf("path of KAT_dec.rsp is %s\n", pathKatRspDec);
-    sprintf(fn_rsp_dec, pathKatRspDec);
+    sprintf(fn_rsp_dec, "%s", pathKatRspDec);
     if ( (fp_rsp_dec = fopen(fn_rsp_dec, "r")) == NULL ) {
         printf("WARN (verifyKAT): Couldn't open '%s' for read. (verification will be skipped)\n", fn_rsp_dec);
     }
 
     if (debug) printf("start looping\n");
-    fprintf(fp_verify, "Errors = ?              \n\n");
+    fprintf(fp_verify, "Errors = ?       \n                                                  \n");
     while (1) {
         if ( FindMarker(fp_rsp, "count = ") )
             fscanf(fp_rsp, "%d", &count);
@@ -205,6 +192,21 @@ int main(int argc, char* argv[])
         strcat(verified, "dec");
     }
 
+    strcpy(knownError, "");
+    // known errors - mark with 'KNOWN'
+    if (strstr(argv[2], "pqNTRUSign-")
+        || strstr(argv[2], "Picnic_")
+        || strstr(argv[2], "sphincs-sha256-")
+            ) {
+        printf("this is a known error cancidate!\n");
+        strcpy(knownError, "(KNOWN ERROR) ");
+
+//        fprintf(fp_verifyresult, "%s = SKIP (own RNG / creates new results)\n", argv[2]);
+//        fclose(fp_verifyresult);
+//        return 0;
+    }
+
+    // replace first 2 lines (written before loop)
     fseek(fp_verify, 0, SEEK_SET);
     fprintf(fp_verify, "Errors = %i   \nverified: %s", countErrors, verified);
 
@@ -212,11 +214,11 @@ int main(int argc, char* argv[])
     // write result to verifyresult.log (to end of file, keep previous content)
     fprintf(fp_verifyresult, "%s = ", argv[2]);
     if (countErrors > 0) {
-        printf("verifyKAT: %s - ERRORS found: %i (%s)", argv[2], countErrors, pathVerify);
-        fprintf(fp_verifyresult, "ERROR (count = %d) (%s)", countErrors, verified);
+        printf("verifyKAT: %s - ERRORS %sfound: %i (%s)", argv[2], knownError, countErrors, pathVerify);
+        fprintf(fp_verifyresult, "ERROR %s(count = %d) (%s)", knownError, countErrors, verified);
     } else if (comparedLines > 0) {
-        printf("verifyKAT: %s - OK (%s)", argv[2], verified);
-        fprintf(fp_verifyresult, "OK (%s)", verified);
+        printf("verifyKAT: %s - OK %s(%s)", argv[2], knownError, verified);
+        fprintf(fp_verifyresult, "OK %s(%s)", knownError, verified);
     } else {
         printf("verifyKAT: %s - nothing compared", argv[2]);
         fprintf(fp_verifyresult, "nothing compared");
@@ -258,7 +260,7 @@ void compareLine(FILE *file1, FILE *file2, FILE *fp_verify, char *searchString, 
         countErrors++;
         return;
     }
-    if (debug) printf("line1 (size: %llu): %.*s\n", size1, (int)(size1 < 100 ? size1 : 100), line1);
+    if (debug) printf("line1 (size: %zu): %.*s\n", size1, (int)(size1 < 100 ? size1 : 100), line1);
 
     if (FindMarker(file2, searchString)) {
         getline(&line2, &size2, file2);
@@ -268,7 +270,7 @@ void compareLine(FILE *file1, FILE *file2, FILE *fp_verify, char *searchString, 
         countErrors++;
         return;
     }
-    if (debug) printf("line2 (size: %llu): %.*s\n", size2, (int)(size2 < 100 ? size2 : 100), line2);
+    if (debug) printf("line2 (size: %zu): %.*s\n", size2, (int)(size2 < 100 ? size2 : 100), line2);
 
 
     if (strcmp(line1, line2) == 0) {
