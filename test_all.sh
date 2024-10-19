@@ -112,6 +112,9 @@ echo "skip ThreeBears-Round1 in 32bit"
 echo "**** done test_all.sh (long running excluded) ****"
 ./test_longrunning.sh $@
 
-cat testresult/test_all.log | grep -i "error" | grep -v "not equal" | grep -i -v "known error" | grep -i -v "skip " > test_all_errors.log
-cat testresult/verifyresult.log | grep -i error > verifyresult_errors.log
+cd testresult
+cat test_all.log | grep -i "error" | grep -v "not equal" | grep -i -v "known error" | grep -i -v "skip " > test_all_errors.log
+cat verifyresult.log | grep -i error > verifyresult_errors.log
+cd ..
+
 mv testresult testresult_`hostname`_$(date +'%Y.%m.%d_%H.%M')_`echo $@ | sed 's/ /_/g'`
