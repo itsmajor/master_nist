@@ -197,7 +197,7 @@ int main(int argc, char* argv[])
     if (strstr(argv[2], "pqNTRUSign-")
         || strstr(argv[2], "NTRUEncrypt-ntru-kem-")
         || strstr(argv[2], "Picnic_")
-        || strstr(argv[2], "KCL-AKCN-MLWE")
+        || strstr("KCL-AKCN-MLWE", argv[2])
             ) {
         printf("this is a known error cancidate!\n");
         strcpy(knownError, "(KNOWN ERROR) ");
