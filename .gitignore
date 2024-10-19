@@ -60,6 +60,7 @@ dkms.conf
 apih.txt
 
 /testresult
+/testresult_*
 .build/
 /__this*
 
