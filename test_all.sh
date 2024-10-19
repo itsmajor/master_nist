@@ -113,8 +113,8 @@ echo "**** done test_all.sh (long running excluded) ****"
 ./test_longrunning.sh $@
 
 cd testresult
-cat test_all.log | grep -i "error" | grep -v "not equal" | grep -i -v "known error" | grep -i -v "skip " > test_all_errors.log
-cat verifyresult.log | grep -i error > verifyresult_errors.log
+cat test_all.log | grep -i -a "error" | grep -v -a "not equal" | grep -i -v -a "known error" | grep -i -v -a "skip " > test_all_errors.log
+cat verifyresult.log | grep -i -a "error" > verifyresult_errors.log
 cd ..
 
 mv testresult testresult_`hostname`_$(date +'%Y.%m.%d_%H.%M')_`echo $@ | sed 's/ /_/g'`
