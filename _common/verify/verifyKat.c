@@ -182,6 +182,7 @@ int main(int argc, char* argv[])
     }
     if (debug) printf("finish looping (repeats: %i)\n", count);
 
+    strcpy(verified, "");
     if (fp_rsp_keygen != NULL) {
         strcat(verified, "keygen ");
     }
