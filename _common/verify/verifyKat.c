@@ -199,7 +199,7 @@ int main(int argc, char* argv[])
         || strstr(argv[2], "Picnic_")
         || strstr("KCL-AKCN-MLWE", argv[2])
             ) {
-        printf("this is a known error cancidate!\n");
+        printf("this is a known error candidate!\n");
         strcpy(knownError, "(KNOWN ERROR) ");
 
 //        fprintf(fp_verifyresult, "%s = SKIP (own RNG / creates new results)\n", argv[2]);
