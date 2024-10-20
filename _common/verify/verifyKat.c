@@ -222,8 +222,8 @@ int main(int argc, char* argv[])
         printf("verifyKAT: %s - OK %s(%s)", argv[2], knownError, verified);
         fprintf(fp_verifyresult, "OK %s(%s)", knownError, verified);
     } else {
-        printf("verifyKAT: %s - nothing compared", argv[2]);
-        fprintf(fp_verifyresult, "nothing compared");
+        printf("verifyKAT: %s - ERROR - nothing compared", argv[2]);
+        fprintf(fp_verifyresult, "ERROR - nothing compared");
     }
     time_t timer = time(NULL);
     char printtime[20];
