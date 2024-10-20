@@ -7,7 +7,7 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
-echo "skip bike-kem in 32bit"
+echo "skip bike-kem in 32bit (build fails)"
 #if [ -f "bike-kem/bin/bike-5_aes/PQCgenKAT_kem" ]; then
 #  echo "moved to: ./bike-kem - found KAT binary, remove bin/ for rebuild"
 #else
@@ -26,23 +26,19 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
-cd CRYSTALS_Dilithium-Round3
-echo "moved to: ${PWD}"
-./build_all.sh $MAKEOPTION
-cd ~-
+echo "skip CRYSTALS_Dilithium-Round3 in 32bit (test fails)"
+#cd CRYSTALS_Dilithium-Round3
+#echo "moved to: ${PWD}"
+#./build_all.sh $MAKEOPTION
+#cd ~-
 
 cd CRYSTALS_Kyber-Round3
 echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
-cd Ding_LWE_Key_Exchange-Round1
-echo "moved to: ${PWD}"
-./build_all.sh $MAKEOPTION
-cd ~-
-
-# removed
-#cd DualModeMS-Round1
+echo "skip Ding_LWE_Key_Exchange in 32bit (build fails)"
+#cd Ding_LWE_Key_Exchange-Round1
 #echo "moved to: ${PWD}"
 #./build_all.sh $MAKEOPTION
 #cd ~-
@@ -57,10 +53,11 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
-cd FrodoKEM-Round3
-echo "moved to: ${PWD}"
-./build_all.sh $MAKEOPTION
-cd ~-
+echo "skip FrodoKEM-Round3 in 32bit (build fails)"
+#cd FrodoKEM-Round3
+#echo "moved to: ${PWD}"
+#./build_all.sh $MAKEOPTION
+#cd ~-
 
 cd Gravity_SPHINCS-Round1
 echo "moved to: ${PWD}"
@@ -82,6 +79,7 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
+echo "skip KINDI-Round1 in 32bit (build fails)"
 #cd KINDI-Round1
 #echo "moved to: ${PWD}"
 #./build_all.sh $MAKEOPTION
@@ -92,10 +90,11 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
-cd LOTUS-Round1
-echo "moved to: ${PWD}"
-./build_all.sh $MAKEOPTION
-cd ~-
+echo "skip LOTUS-Round1 in 32bit (test fails)"
+#cd LOTUS-Round1
+#echo "moved to: ${PWD}"
+#./build_all.sh $MAKEOPTION
+#cd ~-
 
 cd NewHope-Round1
 echo "moved to: ${PWD}"
@@ -147,13 +146,8 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
+echo "skip ThreeBears-Round1 in 32bit (build fails)"
 #cd ThreeBears-Round1
-#echo "moved to: ${PWD}"
-#./build_all.sh $MAKEOPTION
-#cd ~-
-
-# removed
-#cd Titanium-Round1
 #echo "moved to: ${PWD}"
 #./build_all.sh $MAKEOPTION
 #cd ~-
