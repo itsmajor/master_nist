@@ -21,7 +21,7 @@
 #define KAT_CRYPTO_FAILURE  -4
 
 #ifndef CRYPTO_ALGNAME
-#define CRYPTO_ALGNAME = "unset"
+#define CRYPTO_ALGNAME "unset"
 #endif
 
 int		FindMarker(FILE *infile, const char *marker);
