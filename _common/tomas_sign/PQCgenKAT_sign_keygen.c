@@ -23,7 +23,7 @@
 #define MAX_PRINT           80
 
 #ifndef CRYPTO_ALGNAME
-#define CRYPTO_ALGNAME = "unset"
+#define CRYPTO_ALGNAME "unset"
 #endif
 
 int		FindMarker(FILE *infile, const char *marker);
