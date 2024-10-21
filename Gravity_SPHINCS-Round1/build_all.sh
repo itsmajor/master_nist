@@ -1,10 +1,10 @@
 MAKEOPTION=$1;
 
-#disabled  'VERSION_M' 'VERSION_L'
-sec_array=('VERSION_S')
+#disabled  'M' 'L'
+sec_array=('S' 'M' 'L')
 
 for sec in "${sec_array[@]}"; do
-  cd Reference_Implementation/$sec
+  cd Reference_Implementation/VERSION_$sec
   echo "moved to: ${PWD}"
   make $MAKEOPTION
   cd ~-
