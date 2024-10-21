@@ -1,9 +1,4 @@
-#ifndef RANDOMBYTES_H
-#define RANDOMBYTES_H
+#pragma once
 
-#include <stddef.h>
-#include <stdint.h>
+void randombytes (unsigned char *x, unsigned long long xlen);
 
-void randombytes(uint8_t *out, size_t outlen);
-
-#endif
