@@ -4,7 +4,7 @@
 OPTIONS_ARRAY=($OPTIONS)
 
 # 'M' 'L' disabled - segfault/too long running
-sec_array=('S' 'M' 'L')
+sec_array=('S')
 
 for sec in "${sec_array[@]}"; do
   CIPHER="sign Gravity_SPHINCS_VERSION_"$sec

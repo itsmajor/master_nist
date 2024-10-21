@@ -1,7 +1,7 @@
 MAKEOPTION=$1;
 
 #disabled  'M' 'L'
-sec_array=('S' 'M' 'L')
+sec_array=('S')
 
 for sec in "${sec_array[@]}"; do
   cd Reference_Implementation/VERSION_$sec
