@@ -197,7 +197,6 @@ int main(int argc, char* argv[])
     // known errors - mark with 'KNOWN'
     if (strstr(argv[2], "pqNTRUSign-")
         || strstr(argv[2], "NTRUEncrypt-ntru-kem-")
-        || strstr(argv[2], "Picnic_")
         || strstr("KCL-AKCN-MLWE", argv[2])
             ) {
         printf("this is a known error candidate!\n");
