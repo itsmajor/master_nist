@@ -110,9 +110,4 @@ cd ..
 echo "**** done test_all.sh (long running excluded) ****"
 ./test_longrunning.sh $@
 
-cd testresult
-cat test_all.log | grep -i "error" | grep -v "not equal" | grep -i -v "known error" | grep -i -v "skip " > test_all_errors.log
-cat verifyresult.log | grep -i error > verifyresult_errors.log
-cd ..
-
-mv testresult testresult_`hostname`_$(date +'%Y.%m.%d_%H.%M')_`echo $@ | sed 's/ /_/g'`
+./rename_testresult.sh $@
