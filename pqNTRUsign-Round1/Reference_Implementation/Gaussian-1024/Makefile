@@ -21,7 +21,7 @@ CSRC := $(wildcard *.c)
 # add common path (nothing happen if not found)
 COMMON := $(wildcard $(PROJECTCOMMONPATH)/*.c)
 # remove PQCgenKAT_kem.c from CSRC and add all COMMON files without path. vpath and cflags imports will find it)
-CSRC := $(subst PQCgenKAT_signOrig.c, ,$(CSRC)) $(notdir $(COMMON:.c=.o)) rng.c
+CSRC := $(subst PQCgenKAT_signOrig.c, ,$(CSRC)) $(notdir $(COMMON:.c=.o)) fastrandombytes.c rng.c
 
 # 4 kems to test them all, executable created in same folder
 TARGET = PQCgenKAT_sign PQCgenKAT_sign_dec PQCgenKAT_sign_enc PQCgenKAT_sign_keygen

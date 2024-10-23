@@ -195,16 +195,10 @@ int main(int argc, char* argv[])
 
     strcpy(knownError, "");
     // known errors - mark with 'KNOWN'
-    if (strstr(argv[2], "pqNTRUSign-")
-        || strstr(argv[2], "NTRUEncrypt-ntru-kem-")
-        || strstr("KCL-AKCN-MLWE", argv[2])
-            ) {
+    if (strstr(argv[2], "NTRUEncrypt-ntru-kem-")
+        || strstr("KCL-AKCN-MLWE", argv[2])) {
         printf("this is a known error candidate!\n");
         strcpy(knownError, "(KNOWN ERROR) ");
-
-//        fprintf(fp_verifyresult, "%s = SKIP (own RNG / creates new results)\n", argv[2]);
-//        fclose(fp_verifyresult);
-//        return 0;
     }
 
     // replace first 2 lines (written before loop)
