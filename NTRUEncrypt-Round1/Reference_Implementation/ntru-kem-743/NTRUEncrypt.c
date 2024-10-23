@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include "param.h"
 #include "poly.h"
-#include "../common/fastrandombytes.h"
+#include <fastrandombytes.h>
 #include "../common/crypto_hash_sha512.h"
 
 

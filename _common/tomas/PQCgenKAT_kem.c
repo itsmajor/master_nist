@@ -8,7 +8,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "../NIST/rng.h"
+#include <rng.h>
+#include <stdint.h>
+#include <fastrandombytes.h>
 #include "api.h"
 #include <time.h>
 #include <stdlib.h>
@@ -30,6 +32,7 @@ int		ReadHex(FILE *infile, unsigned char *A, int Length, const char *str);
 void	fprintBstr(FILE *fp, const char *S, unsigned char *A, unsigned long long L);
 void    hex_to_bin(size_t size, unsigned char *dest, const char *input);
 void    printHex(const char *fieldname, unsigned char *hexstring, int printamount, int maxamount);
+void    randombytes_init_extended(unsigned char *seed);
 
 // global variable
 bool    debug = false;
@@ -133,7 +136,7 @@ main(int argc, char* argv[])
             return KAT_DATA_ERROR;
         }
         fprintBstr(fp_rsp, "seed = ", seed, 48);
-        randombytes_init(seed, NULL, 256);
+        randombytes_init_extended(seed);
         time_prepare = ((double) (clock() - start));
 
         // Generate the public/private keypair
@@ -150,7 +153,7 @@ main(int argc, char* argv[])
         fprintBstr(fp_rsp, "sk = ", sk, CRYPTO_SECRETKEYBYTES);
 
         // encoding
-        randombytes_init(seed, NULL, 256);
+        randombytes_init_extended(seed);
         if (debug) printf("do crypto_kem_enc()");
         start = clock();
         if ( (ret_val = crypto_kem_enc(ct, ss, pk)) != 0) {
@@ -164,7 +167,7 @@ main(int argc, char* argv[])
         fprintBstr(fp_rsp, "ss = ", ss, CRYPTO_BYTES);
 
         // decoding
-        randombytes_init(seed, NULL, 256);
+        randombytes_init_extended(seed);
         if (debug) printf("do crypto_kem_dec()");
         start = clock();
         if ( (ret_val = crypto_kem_dec(ss1, ct, sk)) != 0) {
@@ -203,6 +206,18 @@ main(int argc, char* argv[])
     fclose(fp_time);
 
     return KAT_SUCCESS;
+}
+
+void randombytes_init_extended(unsigned char *seed) {
+    if (debug) printHex("randombytes_init seed: ", seed, 48, 48);
+    randombytes_init(seed, NULL, 256);
+    if (strstr(CRYPTO_ALGNAME, "Gaussian1024") // from pqNTRUsign-Round1
+        || strstr(CRYPTO_ALGNAME, "Uniform1024") // from pqNTRUsign-Round1
+        || strstr(CRYPTO_ALGNAME, "NTRU_KEM_")) { //SS_NTRU_KEM_1024, NTRU_PKE_443... SS_NTRU_PKE_1024  // from NTRUEncrypt-Round1
+        // need to reinit fastrandombytes
+        rng_cleanup();
+        rng_init();
+    }
 }
 
 void printHex(const char *fieldname, unsigned char *hexstring, int printamount, int maxamount) {
