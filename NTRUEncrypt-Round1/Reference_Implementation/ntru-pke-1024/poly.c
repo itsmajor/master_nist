@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "param.h"
-#include "../common/fastrandombytes.h"
+#include <fastrandombytes.h>
 #include "poly.h"
 
 

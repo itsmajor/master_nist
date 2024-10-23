@@ -4,6 +4,7 @@
 
 sec_array=(443 743 1024)
 
+# build
 for sec in "${sec_array[@]}"; do
   cd Reference_Implementation/ntru-pke-$sec
   echo "moved to: ${PWD}"
@@ -11,11 +12,13 @@ for sec in "${sec_array[@]}"; do
   cd ~-
 done
 
+# test
 for sec in "${sec_array[@]}"; do
   CIPHER="encrypt NTRUEncrypt-ntru-pke-$sec"
   ../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/ntru-pke-$sec $OPTIONS
   ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
 done
+
 
 
 #echo "skip NTRUEncrypt-ntru-kem-1024 - 'PQCgenKAT ERROR: crypto_kem_dec returned <-1>' in PQCgenKAT_kem and in PQCgenKAT_kem_dec"

@@ -9,7 +9,7 @@
 #include "poly.h"
 #include "api.h"
 #include "../common/crypto_hash_sha512.h"
-#include "../common/fastrandombytes.h"
+#include <fastrandombytes.h>
 
 /* kem and encryption use a same key gen */
 int crypto_kem_keypair(

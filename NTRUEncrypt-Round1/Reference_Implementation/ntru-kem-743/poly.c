@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include "param.h"
 #include "poly.h"
-#include "../common/fastrandombytes.h"
+#include <fastrandombytes.h>
 #include "../common/crypto_hash_sha512.h"
 
 #define PAD(N) ((N + 0x000f) & 0xfff0)

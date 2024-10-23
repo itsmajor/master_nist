@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
-#include "../common/fastrandombytes.h"
+#include <fastrandombytes.h>
 #include "../common/crypto_hash_sha512.h"
 
 
