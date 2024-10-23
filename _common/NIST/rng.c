@@ -141,7 +141,7 @@ randombytes_init(unsigned char *entropy_input,
                  int security_strength)
 {
     unsigned char   seed_material[48];
-    
+
     memcpy(seed_material, entropy_input, 48);
     if (personalization_string)
         for (int i=0; i<48; i++)
@@ -181,7 +181,7 @@ randombytes(unsigned char *x, unsigned long long xlen)
     }
     AES256_CTR_DRBG_Update(NULL, DRBG_ctx.Key, DRBG_ctx.V);
     DRBG_ctx.reseed_counter++;
-    
+
     return RNG_SUCCESS;
 }
 
