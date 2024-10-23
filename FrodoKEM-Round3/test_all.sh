@@ -2,16 +2,14 @@
 
 . ../_common/script/test_all_param.sh "$@"
 
-CIPHER="kem FrodoKEM-640"
-../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/optimized/FrodoKEM-640 $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
+sec_array=(640 976 1344)
+matrix_array=('AES' 'SHAKE')
 
-CIPHER="kem FrodoKEM-976"
-../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/optimized/FrodoKEM-976 $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
-
-CIPHER="kem FrodoKEM-1344"
-../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/optimized/FrodoKEM-1344 $OPTIONS
-../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
-
+for sec in "${sec_array[@]}"; do
+  for matrix in "${matrix_array[@]}"; do
+    CIPHER="kem FrodoKEM-"$sec"_"$matrix
+    ../_common/script/doKat.sh $VALGRIND $CIPHER bin/FrodoKEM-"$sec"_"$matrix" $OPTIONS
+    ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
+  done
+done
 

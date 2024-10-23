@@ -1,10 +1,22 @@
+#[AES/SHAKE]
+MATRIX=AES
+SEC=640
+
+ifeq ($(MATRIX),AES)
+    USE_GENERATION_A=_AES128_FOR_A_
+else
+    USE_GENERATION_A=_SHAKE128_FOR_A_
+endif
+
 # need for $$(patsubst %,%.o,$$@)
 .SECONDEXPANSION:
 # eval path to root
 PATHTOROOT = $(shell cd ../_common/ 2> /dev/null && echo "../")$(shell cd ../../_common 2> /dev/null && echo "../../")$(shell cd ../../../_common 2> /dev/null && echo "../../../")$(shell cd ../../../../_common 2> /dev/null && echo "../../../../")$(shell cd ../../../../../_common 2> /dev/null && echo "../../../../../")$(shell cd ../../../../../../_common 2> /dev/null && echo "../../../../../../")
 PROJECTCOMMONPATH=aes
+PROJECTNAME=$(shell basename $(CURDIR))
+BINARYPATH=../../../bin/$(PROJECTNAME)_$(MATRIX)
 CC=gcc
-CFLAGS= -I . -I $(PATHTOROOT)_common/NIST -I $(PROJECTCOMMONPATH) -I sha3 -Wall -fomit-frame-pointer -Ofast -march=native -w -DNIX -D_ARM_ -D_AES128_FOR_A_ -D_OPTIMIZED_GENERIC_ -D_USE_OPENSSL_
+CFLAGS= -I . -I $(PATHTOROOT)_common/NIST -I $(PROJECTCOMMONPATH) -I sha3 -Wall -fomit-frame-pointer -Ofast -march=native -w -DNIX -D_ARM_ -D$(USE_GENERATION_A) -D_OPTIMIZED_GENERIC_ -D_USE_OPENSSL_
 LDFLAGS =  -lrt -lm -lssl -lcrypto
 # add make lookup pathes
 # common: if project use common folder
@@ -14,10 +26,11 @@ vpath % sha3
 vpath % $(PATHTOROOT)_common/NIST
 # 4kem path
 vpath %.c $(PATHTOROOT)_common/tomas
+vpath % $(BINARYPATH)
 
 # add all c files in this directory
 #CSRC := $(wildcard *.c)
-CSRC := frodo976.c util.c
+CSRC := frodo$(SEC).c util.c
 # add common path (nothing happen if not found)
 #COMMON := $(wildcard $(PROJECTCOMMONPATH)/*.c)
 COMMON := aes/aes.c aes/aes_c.c sha3/fips202.c
@@ -28,7 +41,7 @@ CSRC := $(subst PQCgenKAT_kem.c, ,$(CSRC)) $(notdir $(COMMON:.c=.o)) rng.c
 TARGET = PQCgenKAT_kem PQCgenKAT_kem_dec PQCgenKAT_kem_enc PQCgenKAT_kem_keygen
 
 ## all files will be created in BUILD_DIR
-BUILD_DIR = .build
+BUILD_DIR = .build_$(MATRIX)
 
 OBJ=$(addprefix ${BUILD_DIR}/,$(CSRC:.c=.o))
 
@@ -37,12 +50,13 @@ all: removeOriginals $(TARGET)
 .PHONY: all clean removeOriginals
 
 clean:
-	@rm -f -R ./.build/ $(TARGET)
+	rm -f -R ./.build* $(BINARYPATH)
 
 DEP=$(OBJ:.o=.d)
 
-$(TARGET): $(OBJ) .build/$$(patsubst %,%.o,$$@)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+$(TARGET): $(OBJ) $$(BUILD_DIR)/$$(patsubst %,%.o,$$@)
+	mkdir -p $(BINARYPATH)
+	$(CC) $(CFLAGS) -o $(BINARYPATH)/$@ $^ $(LDFLAGS)
 
 # remove NIST originals in project
 removeOriginals:
@@ -52,9 +66,9 @@ $(BUILD_DIR)/%.o: %.c
 	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(BUILD_DIR)/%.o: %.s
-	@mkdir -p `dirname $@`
-	$(CC) $(CFLAGS) -c -o $@ $<
+#$(BUILD_DIR)/%.o: %.s
+#	@mkdir -p `dirname $@`
+#	$(CC) $(CFLAGS) -c -o $@ $<
 
 #$(BUILD_DIR)/%.d: %.c
 #	@mkdir -p `dirname $@`
