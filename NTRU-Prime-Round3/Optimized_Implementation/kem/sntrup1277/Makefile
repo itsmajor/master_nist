@@ -4,7 +4,7 @@
 PATHTOROOT = $(shell cd ../_common/ 2> /dev/null && echo "../")$(shell cd ../../_common 2> /dev/null && echo "../../")$(shell cd ../../../_common 2> /dev/null && echo "../../../")$(shell cd ../../../../_common 2> /dev/null && echo "../../../../")$(shell cd ../../../../../_common 2> /dev/null && echo "../../../../../")$(shell cd ../../../../../../_common 2> /dev/null && echo "../../../../../../")
 PROJECTCOMMONPATH=subroutines
 CC=gcc
-CFLAGS= -I. -I$(PATHTOROOT)_common/NIST -I$(PROJECTCOMMONPATH) -Wall -fomit-frame-pointer -Ofast -march=native -w -DKAT -DKATNUM=`cat KATNUM` -DKATNUM=`cat KATNUM` "-DCRYPTO_NAMESPACE(x)=x"
+CFLAGS= -I. -I$(PATHTOROOT)_common/NIST -I$(PROJECTCOMMONPATH) -Wall -fomit-frame-pointer -Ofast -march=native -w -DKAT -DKATNUM=`cat KATNUM`  -D"CRYPTO_NAMESPACE(x)=x"
 LDFLAGS = -lcrypto -ldl
 # add make lookup pathes
 # common: if project use common folder
