@@ -36,7 +36,6 @@ all: removeRandomness $(TARGET)
 removeRandomness:
 	@rm -f randomness.*
 
-
 .PHONY: all clean removeRandomness
 
 clean:
