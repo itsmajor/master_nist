@@ -4,7 +4,7 @@
 PATHTOROOT = $(shell cd ../_common/ 2> /dev/null && echo "../")$(shell cd ../../_common 2> /dev/null && echo "../../")$(shell cd ../../../_common 2> /dev/null && echo "../../../")$(shell cd ../../../../_common 2> /dev/null && echo "../../../../")$(shell cd ../../../../../_common 2> /dev/null && echo "../../../../../")$(shell cd ../../../../../../_common 2> /dev/null && echo "../../../../../../")
 PROJECTCOMMONPATH=subroutines
 CC=gcc
-CFLAGS= -I. -I$(PATHTOROOT)_common/NIST -I$(PROJECTCOMMONPATH) -Wall -fomit-frame-pointer -Ofast -march=native -w "-DCRYPTO_NAMESPACE(x)=x" "-D_CRYPTO_NAMESPACE(x)=_\#\#x"
+CFLAGS= -I. -I$(PATHTOROOT)_common/NIST -I$(PROJECTCOMMONPATH) -O3 -march=native -mtune=native -w -D"CRYPTO_NAMESPACE(x)=x"
 LDFLAGS = -lXKCP -lcrypto -ldl
 # add make lookup pathes
 # common: if project use common folder
@@ -43,6 +43,7 @@ $(TARGET): $(OBJ) .build/$$(patsubst %,%.o,$$@)
 
 # remove original PQCgenKAT_kem
 rmOriginal_PQCgenKAT_kem:
+	echo "#include <rng.h>" > randombytes.h
 	@rm -f PQCgenKAT_kem.c
 
 $(BUILD_DIR)/%.o: %.c
@@ -59,3 +60,6 @@ $(BUILD_DIR)/%.o: %.s
 
 -include $(DEP)
 
+
+#from build
+#gcc -O3 -march=native -mtune=native -Wall -Wextra -Wno-unused-function -Wno-unused-parameter -Wno-sign-compare -I. -Isubroutines -DKAT -DKATNUM=`cat KATNUM` "-DCRYPTO_NAMESPACE(x)=x" "-D_CRYPTO_NAMESPACE(x)=_##x" -o kat nist/kat_kem.c nist/rng.c benes.c bm.c controlbits.c decrypt.c encrypt.c fft.c fft_tr.c gf.c operations.c pk_gen.c sk_gen.c vec.c     -lXKCP -lcrypto -ldl
