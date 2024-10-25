@@ -96,7 +96,8 @@ echo "skip LOTUS-Round1 in 32bit (test fails)"
 #./build_all.sh $MAKEOPTION
 #cd ~-
 
-cd NewHope-Round1
+rm -f -r NewHope-Round1
+cd NewHope-Round2
 echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
