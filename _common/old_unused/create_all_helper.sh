@@ -100,7 +100,7 @@ touch test_all.sh
 chmod +x test_all.sh
 cd ..
 
-cd NewHope-Round1
+cd NewHope-Round2
 echo "moved to: ${PWD}"
 touch test_all.sh
 chmod +x test_all.sh

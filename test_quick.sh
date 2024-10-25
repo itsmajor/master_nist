@@ -45,7 +45,7 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
-cd NewHope-Round1
+cd NewHope-Round2
 echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
