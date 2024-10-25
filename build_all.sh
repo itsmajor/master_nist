@@ -146,6 +146,7 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
+rm -f -r ThreeBears-Round1
 #todo retest ThreeBears in 32bit
 #echo "skip ThreeBears-Round1 in 32bit (build fails)"
 cd ThreeBears-Round2
