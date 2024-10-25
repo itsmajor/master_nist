@@ -146,8 +146,15 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
-echo "skip ThreeBears-Round1 in 32bit (build fails)"
-#cd ThreeBears-Round1
+#todo retest ThreeBears in 32bit
+#echo "skip ThreeBears-Round1 in 32bit (build fails)"
+cd ThreeBears-Round2
+echo "moved to: ${PWD}"
+./build_all.sh $MAKEOPTION
+cd ~-
+
+# removed
+#cd Titanium-Round1
 #echo "moved to: ${PWD}"
 #./build_all.sh $MAKEOPTION
 #cd ~-

@@ -3,7 +3,7 @@
 # eval path to root
 PATHTOROOT = $(shell cd ../_common/ 2> /dev/null && echo "../")$(shell cd ../../_common 2> /dev/null && echo "../../")$(shell cd ../../../_common 2> /dev/null && echo "../../../")$(shell cd ../../../../_common 2> /dev/null && echo "../../../../")$(shell cd ../../../../../_common 2> /dev/null && echo "../../../../../")$(shell cd ../../../../../../_common 2> /dev/null && echo "../../../../../../")
 CC=gcc
-CFLAGS= -I. -I$(PATHTOROOT)_common/NIST -I../common -Wall -fomit-frame-pointer -Ofast -march=native -w
+CFLAGS= -I. -I$(PATHTOROOT)_common/NIST -I../common -Wall -Os -std=c11 -march=native -w
 LDFLAGS = -lm -lXKCP -lcrypto
 # add make lookup pathes
 # common: if project use common folder
