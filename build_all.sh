@@ -146,6 +146,7 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
+rm -f -r ThreeBears-Round1
 cd ThreeBears-Round2
 echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
