@@ -1,5 +1,5 @@
 #include "common.h"
-#include <libkeccak.a.headers/KeccakP-1600-SnP.h>
+#include <libXKCP.a.headers/KeccakP-1600-SnP.h>
 
 
 typedef struct hash_ctx_s {

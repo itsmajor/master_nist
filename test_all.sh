@@ -101,7 +101,7 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
-cd ThreeBears-Round1
+cd ThreeBears-Round2
 echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..

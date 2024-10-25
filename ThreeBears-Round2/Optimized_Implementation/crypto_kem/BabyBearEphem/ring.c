@@ -1,6 +1,6 @@
 /** Optimized ring arithmetic */
 #include "ring.h"
-#include <libkeccak.a.headers/brg_endian.h> /* from Keccak Code Package */
+#include <libXKCP.a.headers/brg_endian.h> /* from Keccak Code Package */
 
 
 /** Karatsuba inner loop */

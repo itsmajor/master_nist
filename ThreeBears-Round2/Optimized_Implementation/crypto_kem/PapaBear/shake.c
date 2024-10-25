@@ -2,7 +2,7 @@
 #include "shake.h"
 
 #if VECLEN==8
-    #include                <libkeccak.a.headers/KeccakP-1600-times8-SnP.h>
+    #include                <libXKCP.a.headers/KeccakP-1600-times8-SnP.h>
     #define kv                 KeccakP1600times8_PermuteAll_24rounds
     #define kv_state_size      KeccakP1600times8_statesSizeInBytes
     #define kv_state_alignment KeccakP1600times8_statesAlignment
@@ -12,7 +12,7 @@
     #define kv_init            KeccakP1600times8_StaticInitialize
     #define kv_broadcast       KeccakP1600times8_OverwriteLanesAll
 #elif VECLEN==4
-    #include                <libkeccak.a.headers/KeccakP-1600-times4-SnP.h>
+    #include                <libXKCP.a.headers/KeccakP-1600-times4-SnP.h>
     #define kv                 KeccakP1600times4_PermuteAll_24rounds
     #define kv_state_size      KeccakP1600times4_statesSizeInBytes
     #define kv_state_alignment KeccakP1600times4_statesAlignment
@@ -23,7 +23,7 @@
     #define kv_broadcast       KeccakP1600times4_OverwriteLanesAll
 #elif VECLEN==2
     #define VECLEN                             2
-    #include                <libkeccak.a.headers/KeccakP-1600-times2-SnP.h>
+    #include                <libXKCP.a.headers/KeccakP-1600-times2-SnP.h>
     #define kv                 KeccakP1600times2_PermuteAll_24rounds
     #define kv_state_size      KeccakP1600times2_statesSizeInBytes
     #define kv_state_alignment KeccakP1600times2_statesAlignment
