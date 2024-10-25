@@ -1,6 +1,7 @@
 #! /bin/bash
 
 MAKEOPTION=$1;
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "*** start (root) build_all.sh ***" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
 
 cd BIG_QUAKE-Round1
 echo "moved to: ${PWD}"
@@ -160,5 +161,4 @@ echo "skip ThreeBears-Round1 in 32bit (build fails)"
 #./build_all.sh $MAKEOPTION
 #cd ~-
 
-
-echo "**** root build_all.sh done ****"
+echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "*** done (root) build_all.sh ***" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
