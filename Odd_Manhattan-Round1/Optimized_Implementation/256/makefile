@@ -36,7 +36,7 @@ all: $(TARGET)
 .PHONY: all clean
 
 clean:
-	rm -f -R ./.build/ $(TARGET)
+	@rm -f -R ./.build/ $(TARGET)
 
 DEP=$(OBJ:.o=.d)
 
