@@ -1,6 +1,11 @@
 #! /bin/bash
 
-sudo apt install -y libssl-dev libntl-dev libgmp-dev libgf2x-dev
+#check last added lib
+if [ ! -f "/usr/include/gf2x.h" ]; then
+  sudo apt install -y libssl-dev libntl-dev libgmp-dev libgf2x-dev
+fi
+
+exit 0;
 
 MAKEOPTION=$1;
 echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "*** start (root) build_all.sh ***" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
