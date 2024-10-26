@@ -7,4 +7,5 @@ echo "alias ...='cd ../..'" >> ~/.bash_aliases
 echo "alias ....='cd ../../..'" >> ~/.bash_aliases
 echo "alias updateall='sudo apt update && sudo apt upgrade -y'" >> ~/.bash_aliases
 echo "alias stashpullpop='git stash && git pull && git stash pop'" >> ~/.bash_aliases
-. ~/.bashrc
+
+echo "use refreshbash or" \'. ~/.bashrc\'
