@@ -50,7 +50,7 @@ all: removeOriginals $(TARGET)
 .PHONY: all clean removeOriginals
 
 clean:
-	rm -f -R ./.build* $(BINARYPATH)
+	@rm -f -R ./.build* $(BINARYPATH)
 
 DEP=$(OBJ:.o=.d)
 

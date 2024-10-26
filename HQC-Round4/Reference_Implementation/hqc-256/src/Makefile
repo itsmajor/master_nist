@@ -39,7 +39,7 @@ echo:
 .PHONY: all clean removeOriginals
 
 clean:
-	rm -f -R ./.build/ $(TARGET)
+	@rm -f -R ./.build/ $(TARGET)
 
 DEP=$(OBJ:.o=.d)
 

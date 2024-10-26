@@ -36,7 +36,7 @@ all: $(TARGET)
 .PHONY: all clean
 
 clean:
-	rm -f -R ./.build/ $(TARGET) rng.c rng.h PQCgenKAT_kem.c
+	@rm -f -R ./.build/ $(TARGET) rng.c rng.h PQCgenKAT_kem.c
 
 DEP=$(OBJ:.o=.d)
 
