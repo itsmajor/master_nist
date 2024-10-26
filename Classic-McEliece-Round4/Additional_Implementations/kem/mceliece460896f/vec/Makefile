@@ -43,7 +43,7 @@ $(TARGET): $(OBJ) .build/$$(patsubst %,%.o,$$@)
 
 # remove original PQCgenKAT_kem
 rmOriginal_PQCgenKAT_kem:
-	echo "#include <rng.h>" > randombytes.h
+	@echo "#include <rng.h>" > randombytes.h
 	@rm -f PQCgenKAT_kem.c
 
 $(BUILD_DIR)/%.o: %.c
