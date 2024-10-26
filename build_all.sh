@@ -70,10 +70,14 @@ echo "moved to: ${PWD}"
 ./build_all.sh $MAKEOPTION
 cd ~-
 
-cd Gui-Round1
-echo "moved to: ${PWD}"
-./build_all.sh $MAKEOPTION
-cd ~-
+if [ `hostname` == "PiBanana" ]; then
+  echo "skip GUI-Round1 on Banana Pi"
+else
+  cd Gui-Round1
+  echo "moved to: ${PWD}"
+  ./build_all.sh $MAKEOPTION
+  cd ~-
+fi
 
 cd HQC-Round4
 echo "moved to: ${PWD}"
