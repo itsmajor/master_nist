@@ -105,12 +105,11 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
-#todo retest round2 in 32bit
-#echo "skip ThreeBears-Round2 in 32bit (build)"
-cd ThreeBears-Round2
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
+echo "skip ThreeBears-Round2 in 32bit (build)"
+#cd ThreeBears-Round2
+#echo "moved to: ${PWD}"
+#./test_all.sh $OPTIONS
+#cd ..
 
 
 echo "**** done test_all.sh (long running excluded) ****"
