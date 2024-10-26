@@ -1,0 +1,10 @@
+echo "alias refreshbash='. ~/.bashrc'" > ~/.bash_aliases
+echo "alias la='ls -lah'" >> ~/.bash_aliases
+echo "alias ls='ls -a --color=auto'" >> ~/.bash_aliases
+echo "alias cdmaster='cd ~/workspace/master_nist && git pull'" >> ~/.bash_aliases
+echo "alias ..='cd ..'" >> ~/.bash_aliases
+echo "alias ...='cd ../..'" >> ~/.bash_aliases
+echo "alias ....='cd ../../..'" >> ~/.bash_aliases
+echo "alias updateall='sudo apt update && sudo apt upgrade -y'" >> ~/.bash_aliases
+echo "alias stashpullpop='git stash && git pull && git stash pop'" >> ~/.bash_aliases
+. ~/.bashrc
