@@ -65,11 +65,9 @@ apih.txt
 /__this*
 
 liboqs/
-!liboqs/cpu_frequency_estimate.c
-!liboqs/get_cpuinfo.py
-!liboqs/prepare_liboqs.sh
-!liboqs/run_liboqs_tests.sh
-!liboqs/run_mem_tomas.py
+!liboqs/*.c
+!liboqs/*.py
+!liboqs/*.sh
 
 *.req
 *.rsp
