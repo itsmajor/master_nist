@@ -64,10 +64,10 @@ apih.txt
 .build/
 /__this*
 
-/_common/liboqs/
-!/_common/liboqs/*.c
-!/_common/liboqs/*.py
-!/_common/liboqs/*.sh
+liboqs/
+!liboqs/*.c
+!liboqs/*.py
+!liboqs/*.sh
 
 *.req
 *.rsp
