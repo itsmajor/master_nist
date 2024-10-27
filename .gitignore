@@ -65,9 +65,9 @@ apih.txt
 /__this*
 
 liboqs/
-!liboqs/*.c
-!liboqs/*.py
-!liboqs/*.sh
+!*.c
+!*.py
+!*.sh
 
 *.req
 *.rsp
