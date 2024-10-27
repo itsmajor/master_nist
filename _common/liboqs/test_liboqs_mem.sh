@@ -8,9 +8,8 @@ if [ ! -d "`eval echo ~/workspace/liboqs/build/`" ]; then
   echo "*** done ./prepare_liboqs.sh"
 fi
 
-echo "starting liboqs tests - this will take a while (check run.log for progress)"
+echo "starting liboqs mem tests - this will take a while (30s+) until first result is shown"
 script -c "python3 run_mem_tomas.py ~/workspace/liboqs/build/tests/test_kem_mem" liboqs_mem.log
-exit
 
 TESTPATH=../../testresult_liboqs_`hostname`_$(date +'%Y.%m.%d_%H.%M')
 mkdir -p $TESTPATH
