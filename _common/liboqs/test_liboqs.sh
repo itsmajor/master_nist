@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LIBOQSPATH=`eval echo ~/workspace/liboqs_backup/build/tests`
+LIBOQSPATH=`eval echo ~/workspace/liboqs/build/tests`
 TESTRESULTPATH=../../testresult_liboqs_`hostname`_$(date +'%Y.%m.%d_%H.%M')
 
 if [ ! -d "$LIBOQSPATH" ]; then
