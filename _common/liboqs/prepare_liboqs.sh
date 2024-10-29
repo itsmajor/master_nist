@@ -8,6 +8,11 @@ cd liboqs
 
 mkdir -p build
 cd build
-rm -f -r *
-cmake -GNinja ..
+#rm -f -r *
+
+if [ "armv6l" == `uname -m` ]; then
+  EXTRAOPTION=-DOQS_PERMIT_UNSUPPORTED_ARCHITECTURE=ON
+fi
+
+cmake -GNinja $EXTRAOPTION ..
 ninja
