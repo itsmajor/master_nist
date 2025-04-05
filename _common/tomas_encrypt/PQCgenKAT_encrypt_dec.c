@@ -195,6 +195,8 @@ ReadHex(FILE *infile, unsigned char *A, int Length, const char *str) {
     FindMarker(infile, str);
     getline(&line, &size1, infile);
     hex_to_bin(Length, A, line);
+    free(line);
+    line = NULL;
     if (debug) printf(" (took: %.0f μs)\n", ((double) (clock() - start)));
 //    if (debug) printf("ReadHex line length: %llu, size: %llu\n", strlen(line), size1);
     return 1;
