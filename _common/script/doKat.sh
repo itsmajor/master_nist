@@ -88,7 +88,7 @@ chmod +x dummy.sh
 FULL_CMD="valgrind -q --tool=massif --massif-out-file=massif.test --pages-as-heap=yes --heap=yes \
    --stacks=yes --max-snapshots=10 --time-unit=i ./dummy.sh"
 ERROR_OUTPUT=$( { eval "$FULL_CMD"; } 2>&1 )
-rm dummy.sh
+rm -f dummy.sh 2> /dev/null
 IS_BAD_OPTION=$(echo "$ERROR_OUTPUT" | grep -q "Bad option: --pages-as-heap=yes together with --stacks=yes" && echo "true" || echo "false")
 echo "  Valgrind 'bad option' (stacks & pages) is: $IS_BAD_OPTION (if true then exec all valgrind separatly)"
 

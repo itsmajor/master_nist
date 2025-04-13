@@ -15,4 +15,5 @@ echo "test options was '"$@"'" > testresult/test_all.log
 ./test_all.sh $PARAM >> testresult/test_all.log 2>&1 &
 
 #tail -f testresult/test_all.log
+echo "tail verifyresult.log:"
 tail -f testresult/verifyresult.log
