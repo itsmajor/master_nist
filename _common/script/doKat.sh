@@ -109,17 +109,17 @@ echo " "`date +'%d.%m.%Y %H:%M:%S.%3N'` "- $KATBINARY done (with time measuremen
 if [ $doValgrindKeygen == "2" ]; then
   if [[ "$IS_BAD_OPTION" == "true" ]]; then
       # Heap-only mit pages-as-heap
-      valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --pages-as-heap=yes --heap=yes \
+      valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --pages-as-heap=yes --heap=yes \
         --stacks=no --max-snapshots=100 --time-unit=i ./"$KATBINARY"_keygen $DEBUG_KAT_KEYGEN
       # Stack-only
-      valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --pages-as-heap=no --heap=no \
+      valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --pages-as-heap=no --heap=no \
         --stacks=yes --max-snapshots=100 --time-unit=i ./"$KATBINARY"_keygen $DEBUG_KAT_KEYGEN
   else
       # Heap (+pages) & Stack together
-      valgrind -q --tool=massif --massif-out-file=massif.out.enc.heapstack --pages-as-heap=yes --heap=yes \
+      valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heapstack --pages-as-heap=yes --heap=yes \
       --stacks=yes --max-snapshots=100 --time-unit=i ./"$KATBINARY"_keygen $DEBUG_KAT_KEYGEN
   fi
-#  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heapstack --pages-as-heap=yes --heap=yes --stacks=yes --max-snapshots=100 --time-unit=i ./"$KATBINARY"_keygen $DEBUG_KAT_KEYGEN
+#  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heapstack --pages-as-heap=yes --heap=yes --stacks=yes --max-snapshots=100 --time-unit=i ./"$KATBINARY"_keygen $DEBUG_KAT_KEYGEN
 #  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --heap=yes --stacks=no ./"$KATBINARY"_keygen $DEBUG_KAT_KEYGEN
 #  valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --heap=no --stacks=yes ./"$KATBINARY"_keygen $DEBUG_KAT_KEYGEN
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_keygen done -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
@@ -157,17 +157,17 @@ fi
 if [ $doValgrindDec == "2" ]; then
     if [[ "$IS_BAD_OPTION" == "true" ]]; then
         # Heap-only mit pages-as-heap
-        valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --pages-as-heap=yes --heap=yes \
+        valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --pages-as-heap=yes --heap=yes \
           --stacks=no --max-snapshots=100 --time-unit=i ./"$KATBINARY"_dec $DEBUG_KAT_DEC
         # Stack-only
-        valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --pages-as-heap=no --heap=no \
+        valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --pages-as-heap=no --heap=no \
           --stacks=yes --max-snapshots=100 --time-unit=i ./"$KATBINARY"_dec $DEBUG_KAT_DEC
     else
         # Heap (+pages) & Stack together
-        valgrind -q --tool=massif --massif-out-file=massif.out.enc.heapstack --pages-as-heap=yes --heap=yes \
+        valgrind -q --tool=massif --massif-out-file=massif.out.dec.heapstack --pages-as-heap=yes --heap=yes \
         --stacks=yes --max-snapshots=100 --time-unit=i ./"$KATBINARY"_dec $DEBUG_KAT_DEC
     fi
-#  valgrind -q --tool=massif --massif-out-file=massif.out.enc.heapstack --pages-as-heap=yes --heap=yes --stacks=yes --max-snapshots=100 --time-unit=i ./"$KATBINARY"_dec $DEBUG_KAT_DEC
+#  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heapstack --pages-as-heap=yes --heap=yes --stacks=yes --max-snapshots=100 --time-unit=i ./"$KATBINARY"_dec $DEBUG_KAT_DEC
 #  valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --heap=yes --stacks=no ./"$KATBINARY"_dec $DEBUG_KAT_DEC
 #  valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --heap=no --stacks=yes ./"$KATBINARY"_dec $DEBUG_KAT_DEC
   echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_dec done -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
