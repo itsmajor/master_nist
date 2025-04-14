@@ -1,5 +1,9 @@
 #! /bin/bash
 
+#### warning! ########
+# this is only for 32bit prepared!
+# read more in  resume_test_all.sh
+
 if [ -z $@ ]; then
   PARAM=-v
 else
