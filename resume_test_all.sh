@@ -3,6 +3,12 @@
 # (testresult/verifyresult.log) protokolliert sind, und deren zugehörige Verzeichnisse werden in Form
 # eines Resume-Aufrufs angezeigt.
 
+############### achtung ######################
+# ist nur für 32 bit gemacht. die liste kommt von banana pi verifyresults.
+# müsste für die weiteren tests auf 64 bit erweitert werden.
+
+
+
 set -e
 
 if [ -z $@ ]; then
