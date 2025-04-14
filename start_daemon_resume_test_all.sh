@@ -7,6 +7,7 @@ else
 fi
 
 echo "**** resume_test_all.sh ****" >> testresult/test_all.log
+echo "**** resume_test_all.sh ****" >> testresult/verifyresult.log
 
 ./resume_test_all.sh $PARAM >> testresult/test_all.log 2>&1 &
 
