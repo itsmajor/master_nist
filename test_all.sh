@@ -110,4 +110,5 @@ cd ..
 echo "**** done test_all.sh (long running excluded) ****"
 ./test_longrunning.sh $@
 
+echo "finished" >> testresult/verifyresult.log
 ./rename_testresult.sh $@
