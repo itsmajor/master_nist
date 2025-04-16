@@ -9,6 +9,6 @@ fi
 
 sudo mount -a
 
-echo "coping testresult/ to majorpc"
+echo "copying testresult/ to majorpc"
 cp -r testresult /mnt/majorpc/testresult_final/testresult_`hostname`_$(date +'%Y.%m.%d_%H.%M')_INCOMPLETE
 echo "copy done (testresult/)"
