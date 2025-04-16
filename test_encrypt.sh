@@ -3,7 +3,7 @@
 # clean or build would be done for all!
 #. ./_common/script/test_all_param.sh "$@"
 
-OPTIONS=$@
+OPTIONS="$@"
 #OPTIONS="-bv"
 #OPTIONS="-b"
 #OPTIONS="-br 1"

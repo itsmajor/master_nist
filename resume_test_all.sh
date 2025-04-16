@@ -11,10 +11,10 @@
 
 set -e
 
-if [ -z $@ ]; then
+if [ $# -eq 0 ]; then
   OPTIONS=-vb
 else
-  OPTIONS=$@
+  OPTIONS="$@"
 fi
 
 echo "=== RESUME TEST_ALL RUN  ==="
