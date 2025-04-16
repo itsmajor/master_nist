@@ -115,4 +115,5 @@ echo "skip ThreeBears-Round2 in 32bit (build)"
 echo "**** done test_all.sh (long running excluded) ****"
 ./test_longrunning.sh $@
 
+echo "finished" >> testresult/verifyresult.log
 ./rename_testresult.sh $@
