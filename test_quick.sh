@@ -1,6 +1,6 @@
 #! /bin/bash
 # do a quick round of all KAT, continue to all normal, then longrunning
-OPTIONS=$@
+OPTIONS="$@"
 
 echo "**** start test_quick.sh *** KEM 1 ****"
 

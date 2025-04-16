@@ -3,7 +3,7 @@
 # clean or build would be done for all!
 #. ./_common/script/test_all_param.sh "$@"
 
-OPTIONS=$@
+OPTIONS="$@"
 
 echo "this is longrunning - tests will take hours or even days"
 
