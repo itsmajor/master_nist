@@ -12,6 +12,7 @@ DEBUG_KAT=$9
 DEBUG_KAT_KEYGEN=${10}
 DEBUG_KAT_ENC=${11}
 DEBUG_KAT_DEC=${12}
+FORCE_10=${13}
 #echo "repeats:" $REPEATS $DEBUG_KAT $DEBUG_KAT_KEYGEN $DEBUG_KAT_ENC $DEBUG_KAT_DEC
 
 PARAMCOUNT=7;
@@ -54,6 +55,11 @@ if [[ -z $DEBUG_KAT ]]; then # -z = ! -n
   DEBUG_KAT_KEYGEN=0
   DEBUG_KAT_ENC=0
   DEBUG_KAT_DEC=0
+fi
+
+# options -s
+if [ "$FORCE_10" -eq 1 ]; then
+  REPEATS=10
 fi
 
 # remove last / in KATPATH

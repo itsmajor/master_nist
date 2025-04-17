@@ -10,7 +10,7 @@ for sec in "${sec_array[@]}"; do
   CIPHER="sign Gravity_SPHINCS_VERSION_"$sec
   REPEATS=1
   if [ ${OPTIONS_ARRAY[0]} -gt $REPEATS ]; then
-    OPTIONS="$REPEATS ${OPTIONS_ARRAY[1]} ${OPTIONS_ARRAY[2]} ${OPTIONS_ARRAY[3]} ${OPTIONS_ARRAY[4]}"
+    OPTIONS="$REPEATS ${OPTIONS_ARRAY[1]} ${OPTIONS_ARRAY[2]} ${OPTIONS_ARRAY[3]} ${OPTIONS_ARRAY[4]} ${OPTIONS_ARRAY[5]}"
     echo "*** reduced repeats to $REPEATS for $CIPHER ***"
   fi
   ../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/VERSION_$sec $OPTIONS
