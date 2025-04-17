@@ -17,10 +17,10 @@ for hash in "${hash_array[@]}"; do
         CIPHER="sign sphincs-"$hash"-"$sec$letter"-"$variant
         REPEATS=${repeat_array[i++]}
         if [ ${OPTIONS_ARRAY[0]} -gt $REPEATS ]; then
-          OPTIONS="$REPEATS ${OPTIONS_ARRAY[1]} ${OPTIONS_ARRAY[2]} ${OPTIONS_ARRAY[3]} ${OPTIONS_ARRAY[4]}"
+          OPTIONS="$REPEATS ${OPTIONS_ARRAY[1]} ${OPTIONS_ARRAY[2]} ${OPTIONS_ARRAY[3]} ${OPTIONS_ARRAY[4]} ${OPTIONS_ARRAY[5]}"
           echo "*** reduced repeats to $REPEATS for $CIPHER ***"
         else
-          OPTIONS="${OPTIONS_ARRAY[0]} ${OPTIONS_ARRAY[1]} ${OPTIONS_ARRAY[2]} ${OPTIONS_ARRAY[3]} ${OPTIONS_ARRAY[4]}"
+          OPTIONS="${OPTIONS_ARRAY[0]} ${OPTIONS_ARRAY[1]} ${OPTIONS_ARRAY[2]} ${OPTIONS_ARRAY[3]} ${OPTIONS_ARRAY[4]} ${OPTIONS_ARRAY[5]}"
         fi
         ../_common/script/doKat.sh $VALGRIND $CIPHER Optimized_Implementation/crypto_sign/sphincs-"$hash"-"$sec""$letter"-"$variant" $OPTIONS
         ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT

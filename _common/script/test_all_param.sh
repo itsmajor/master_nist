@@ -6,6 +6,7 @@ DO_VALGRIND=0
 
 # these are options, passed to doKat2.sh in this order (eg. 'doKat2.sh xxx 10 0 0 1 0 ', for 10 repeats and debug KAT_enc)
 REPEATS=10 #default
+FORCE_10=0
 DEBUG_KAT=0
 DEBUG_KAT_KEYGEN=0
 DEBUG_KAT_ENC=0
@@ -21,6 +22,7 @@ do
         b) DO_BUILD=1;;
         c) DO_CLEAN=1;;
         r) REPEATS=$OPTARG;;
+        s) FORCE_10=1;;
         d) echo "*** KAT debugging enabled ***"
            DEBUG_KAT=1;;
         e) echo "*** KAT_keygen debugging enabled ***"
@@ -55,7 +57,7 @@ if [[ $DO_BUILD -eq 1 ]]; then
   ./build_all.sh
 fi
 
-export OPTIONS="$REPEATS $DEBUG_KAT $DEBUG_KAT_KEYGEN $DEBUG_KAT_ENC $DEBUG_KAT_DEC"
+export OPTIONS="$REPEATS $DEBUG_KAT $DEBUG_KAT_KEYGEN $DEBUG_KAT_ENC $DEBUG_KAT_DEC $FORCE_10"
 #echo "options:" $OPTIONS
 
 echo "*** do KAT/VERIFY"
