@@ -10,8 +10,6 @@ if [[ "$OPTIONS" == *s* ]]; then
   echo "*** force enabled! no reduced repeats - this will take ages! ***"
 fi
 
-exit 1
-
 cd BIG_QUAKE-Round1
 echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
