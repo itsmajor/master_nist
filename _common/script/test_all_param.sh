@@ -13,7 +13,7 @@ DEBUG_KAT_ENC=0
 DEBUG_KAT_DEC=0
 
 #getopts syntax: letter followed by ':' need argument, space ignored
-while getopts "h a:cb r: defgi v" flag
+while getopts "h a:cb r:s defgi v" flag
 do
     case "${flag}" in
         h) ../_common/script/test_all_help.sh

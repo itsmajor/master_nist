@@ -6,7 +6,7 @@ OPTIONS_ARRAY=($OPTIONS)
 
 CIPHER="kem BIG_QUAKE_1"
 REPEATS=5
-if [ ${OPTIONS_ARRAY[0]} -gt $REPEATS ]; then
+if [ "${OPTIONS_ARRAY[0]}" -gt "$REPEATS" ] && [ "${OPTIONS_ARRAY[5]}" -ne 1 ]; then
   OPTIONS="$REPEATS ${OPTIONS_ARRAY[1]} ${OPTIONS_ARRAY[2]} ${OPTIONS_ARRAY[3]} ${OPTIONS_ARRAY[4]} ${OPTIONS_ARRAY[5]}"
   echo "*** reduced repeats to $REPEATS for $CIPHER ***"
 fi
@@ -16,7 +16,7 @@ fi
 
 CIPHER="kem BIG_QUAKE_3"
 REPEATS=2
-if [ ${OPTIONS_ARRAY[0]} -gt $REPEATS ]; then
+if [ "${OPTIONS_ARRAY[0]}" -gt "$REPEATS" ] && [ "${OPTIONS_ARRAY[5]}" -ne 1 ]; then
   OPTIONS="$REPEATS ${OPTIONS_ARRAY[1]} ${OPTIONS_ARRAY[2]} ${OPTIONS_ARRAY[3]} ${OPTIONS_ARRAY[4]} ${OPTIONS_ARRAY[5]}"
   echo "*** reduced repeats to $REPEATS for $CIPHER ***"
 fi
@@ -26,7 +26,7 @@ fi
 
 CIPHER="kem BIG_QUAKE_5"
 REPEATS=2
-if [ ${OPTIONS_ARRAY[0]} -gt $REPEATS ]; then
+if [ "${OPTIONS_ARRAY[0]}" -gt "$REPEATS" ] && [ "${OPTIONS_ARRAY[5]}" -ne 1 ]; then
   OPTIONS="$REPEATS ${OPTIONS_ARRAY[1]} ${OPTIONS_ARRAY[2]} ${OPTIONS_ARRAY[3]} ${OPTIONS_ARRAY[4]} ${OPTIONS_ARRAY[5]}"
   echo "*** reduced repeats to $REPEATS for $CIPHER ***"
 fi
