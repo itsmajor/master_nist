@@ -5,7 +5,12 @@
 
 OPTIONS="$@"
 
-echo "this is longrunning - tests will take hours or even days"
+echo "*** this is longrunning - tests will take hours or even days ***"
+if [[ "$OPTIONS" == *s* ]]; then
+  echo "*** force enabled! no reduced repeats - this will take ages! ***"
+fi
+
+exit 1
 
 cd BIG_QUAKE-Round1
 echo "moved to: ${PWD}"
