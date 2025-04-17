@@ -95,10 +95,15 @@ echo "moved to: ${PWD}"
 ./test_all.sh $OPTIONS
 cd ..
 
-cd pqNTRUsign-Round1
-echo "moved to: ${PWD}"
-./test_all.sh $OPTIONS
-cd ..
+# skip pqNTRUsign-Round1 on PiBanana
+if [[ "$(hostname)" != "PiBanana" ]]; then
+  cd pqNTRUsign-Round1
+  echo "moved to: ${PWD}"
+  ./test_all.sh $OPTIONS
+  cd ..
+else
+  echo "skip pqNTRUsign-Round1 auf $(hostname)"
+fi
 
 cd SABER-Round3
 echo "moved to: ${PWD}"
