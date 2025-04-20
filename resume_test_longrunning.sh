@@ -32,7 +32,6 @@ ALL=(
   EMBLEM_R_EMBLEM-Round1
   Gravity_SPHINCS-Round1
   Gui-Round1
-  LOTUS-Round1
   Odd_Manhattan-Round1
   SPHINCS-Round3
 )
