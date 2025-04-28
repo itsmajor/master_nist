@@ -29,9 +29,12 @@ BUILD_DIR = .build
 
 OBJ=$(addprefix ${BUILD_DIR}/,$(CSRC:.c=.o))
 
+# Default-Wert für SABER_L, falls nicht von außen gesetzt
+SABER_DEFINE ?= -DSABER_L=3
+
 all: rmOriginal_PQCgenKAT_kem $(TARGET)
 
-.PHONY: all clean rmOriginal_PQCgenKAT_kem
+.PHONY: all clean rmOriginal_PQCgenKAT_kem saber2 saber3 saber4
 
 clean:
 	@rm -f -R ./.build/ $(TARGET)
@@ -39,7 +42,7 @@ clean:
 DEP=$(OBJ:.o=.d)
 
 $(TARGET): $(OBJ) .build/$$(patsubst %,%.o,$$@)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CC) $(CFLAGS) $(SABER_DEFINE) -o $@ $^ $(LDFLAGS)
 
 # remove original PQCgenKAT_kem
 rmOriginal_PQCgenKAT_kem:
@@ -47,11 +50,11 @@ rmOriginal_PQCgenKAT_kem:
 
 $(BUILD_DIR)/%.o: %.c
 	@mkdir -p `dirname $@`
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) $(SABER_DEFINE) -c -o $@ $<
 
 $(BUILD_DIR)/%.o: %.s
 	@mkdir -p `dirname $@`
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) $(SABER_DEFINE) -c -o $@ $<
 
 #$(BUILD_DIR)/%.d: %.c
 #	@mkdir -p `dirname $@`
@@ -59,3 +62,12 @@ $(BUILD_DIR)/%.o: %.s
 
 -include $(DEP)
 
+# Zusätzliche Targets für SABER_L Auswahl
+saber2:
+	$(MAKE) SABER_DEFINE="-DSABER_L=2" all
+
+saber3:
+	$(MAKE) SABER_DEFINE="-DSABER_L=3" all
+
+saber4:
+	$(MAKE) SABER_DEFINE="-DSABER_L=4" all
