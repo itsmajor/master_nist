@@ -1,7 +1,7 @@
 MAKEOPTION=$1;
 
 mode_array=(1 3 5)
-hash_array=('AES' 'SHA3')
+hash_array=('aes' 'sha3')
 cd Reference_Implementation
 echo "moved to: ${PWD}"
 for hash in "${hash_array[@]}"; do
