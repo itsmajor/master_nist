@@ -7,7 +7,7 @@ hash_array=('aes' 'sha3')
 
 for mode in "${mode_array[@]}"; do
   for hash in "${hash_array[@]}"; do
-    CIPHER="kem bike_"$mode"_"$hash
+    CIPHER="kem bike-"$mode"_"$hash
     ../_common/script/doKat.sh $VALGRIND $CIPHER bin/"$hash"_"$mode" $OPTIONS
     ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
   done
