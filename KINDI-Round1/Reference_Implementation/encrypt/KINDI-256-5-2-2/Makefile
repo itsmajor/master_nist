@@ -5,7 +5,7 @@ PATHTOROOT = $(shell cd ../_common/ 2> /dev/null && echo "../")$(shell cd ../../
 PROJECTCOMMONPATH=../common
 CC=gcc
 CFLAGS= -I . -I $(PATHTOROOT)_common/NIST -I $(PROJECTCOMMONPATH) -fomit-frame-pointer -Ofast -march=native -w
-LDFLAGS = -lssl -lcrypto
+LDFLAGS = -lssl -lcrypto -lm
 #-lm -lXKCP
 
 # add make lookup pathes
