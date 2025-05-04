@@ -8,7 +8,7 @@ kat_array=('encrypt' 'kem')
 for kat in "${kat_array[@]}"; do
   for sec in "${sec_array[@]}"; do
     CIPHER="$kat KINDI-"$sec"_$kat"
-    ../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/"$kat"/"$sec" $OPTIONS
+    ../_common/script/doKat.sh $VALGRIND $CIPHER Reference_Implementation/"$kat"/KINDI-"$sec" $OPTIONS
     ../_common/script/doVerifyKat.sh $CIPHER $DEBUG_VERIFYKAT
   done
 done
