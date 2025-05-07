@@ -58,7 +58,7 @@ if [[ -z $DEBUG_KAT ]]; then # -z = ! -n
 fi
 
 # options -s
-if [ "$FORCE_10" -eq 1 ]; then
+if [ -n "$FORCE_10" ] && [ "$FORCE_10" -eq 1 ]; then
   REPEATS=10
 fi
 
