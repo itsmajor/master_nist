@@ -86,7 +86,7 @@ then
 fi
 
 cd $KATPATH
-echo "  "$(date +'%d.%m.%Y %H:%M:%S.%3N') "start KAT ($KATTYPE):" $CIPHERNAME
+echo "  "$(date +'%d.%m.%Y %H:%M:%S.%3N') "start KAT ($KATTYPE):" $CIPHERNAME "---" `vcgencmd measure_temp` "-" `vcgencmd get_throttled`
 
 
 # cleanup previous results
@@ -101,25 +101,21 @@ if [ $doValgrindFull == "2" ]; then
 fi
 # repeat for non valgrind time measure
 ./"$KATBINARY" $REPEATS $DEBUG_KAT
-echo " "`date +'%d.%m.%Y %H:%M:%S.%3N'` "- $KATBINARY done (with time measurement) -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
-vcgencmd get_throttled && vcgencmd measure_temp
+echo " "`date +'%d.%m.%Y %H:%M:%S.%3N'` "- $KATBINARY done (with time measurement) ---" `vcgencmd measure_temp` "-" `vcgencmd get_throttled`
 
 if [ $doValgrindKeygen == "2" ]; then
   # Heap-only mit pages-as-heap
   valgrind -q --tool=massif --massif-out-file=massif.out.keygen.heap --pages-as-heap=yes --heap=yes \
     --stacks=no --max-snapshots=100 --time-unit=i ./"$KATBINARY"_keygen $REPEATS $DEBUG_KAT_KEYGEN
-  vcgencmd get_throttled && vcgencmd measure_temp
-  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_keygen heap done -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_keygen heap done ---" `vcgencmd measure_temp` "-" `vcgencmd get_throttled`
   # Stack-only
   valgrind -q --tool=massif --massif-out-file=massif.out.keygen.stack --pages-as-heap=no --heap=no \
     --stacks=yes --max-snapshots=100 --time-unit=i ./"$KATBINARY"_keygen $REPEATS $DEBUG_KAT_KEYGEN
-  vcgencmd get_throttled && vcgencmd measure_temp
-  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_keygen stack done -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_keygen stack done ---" `vcgencmd measure_temp` "-" `vcgencmd get_throttled`
 fi
 if [ $doValgrindKeygen == "1" ]; then
   ./"$KATBINARY"_keygen $REPEATS $DEBUG_KAT_KEYGEN
-  vcgencmd get_throttled && vcgencmd measure_temp
-  echo " "`date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_keygen done (no valgrind) -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+  echo " "`date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_keygen done (no valgrind) ---" `vcgencmd measure_temp` "-" `vcgencmd get_throttled`
 fi
 
 
@@ -127,18 +123,15 @@ if [ $doValgrindEnc == "2" ]; then
   # Heap-only mit pages-as-heap
   valgrind -q --tool=massif --massif-out-file=massif.out.enc.heap --pages-as-heap=yes --heap=yes \
     --stacks=no --max-snapshots=100 --time-unit=i ./"$KATBINARY"_enc $REPEATS $DEBUG_KAT_ENC
- vcgencmd get_throttled && vcgencmd measure_temp
-  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_enc heap done -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_enc heap done ---" `vcgencmd measure_temp` "-" `vcgencmd get_throttled`
   # Stack-only
   valgrind -q --tool=massif --massif-out-file=massif.out.enc.stack --pages-as-heap=no --heap=no \
     --stacks=yes --max-snapshots=100 --time-unit=i ./"$KATBINARY"_enc $REPEATS $DEBUG_KAT_ENC
-  vcgencmd get_throttled && vcgencmd measure_temp
-  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_enc stack done -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_enc stack done ---" `vcgencmd measure_temp` "-" `vcgencmd get_throttled`
 fi
 if [ $doValgrindEnc == "1" ]; then
   ./"$KATBINARY"_enc $REPEATS $DEBUG_KAT_ENC
-  echo " "`date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_enc done (no valgrind) -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
-  vcgencmd get_throttled && vcgencmd measure_temp
+  echo " "`date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_enc done (no valgrind) ---" `vcgencmd measure_temp` "-" `vcgencmd get_throttled`
 fi
 
 
@@ -146,18 +139,15 @@ if [ $doValgrindDec == "2" ]; then
   # Heap-only mit pages-as-heap
   valgrind -q --tool=massif --massif-out-file=massif.out.dec.heap --pages-as-heap=yes --heap=yes \
     --stacks=no --max-snapshots=100 --time-unit=i ./"$KATBINARY"_dec $REPEATS $DEBUG_KAT_DEC
-  vcgencmd get_throttled && vcgencmd measure_temp
-  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_dec heap done -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_dec heap done ---" `vcgencmd measure_temp` "-" `vcgencmd get_throttled`
   # Stack-only
   valgrind -q --tool=massif --massif-out-file=massif.out.dec.stack --pages-as-heap=no --heap=no \
     --stacks=yes --max-snapshots=100 --time-unit=i ./"$KATBINARY"_dec $REPEATS $DEBUG_KAT_DEC
-  vcgencmd get_throttled && vcgencmd measure_temp
-  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_dec stack done -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+  echo `date +'%d.%m.%Y %H:%M:%S.%3N'` "- valgrind "$KATBINARY"_dec stack done ---" `vcgencmd measure_temp` "-" `vcgencmd get_throttled`
 fi
 if [ $doValgrindDec == "1" ]; then
   ./"$KATBINARY"_dec $REPEATS $DEBUG_KAT_DEC
-  vcgencmd get_throttled && vcgencmd measure_temp
-  echo " "`date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_dec done (no valgrind) -" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+  echo " "`date +'%d.%m.%Y %H:%M:%S.%3N'` "- "$KATBINARY"_dec done (no valgrind) ---" `vcgencmd measure_temp` "-" `vcgencmd get_throttled`
 fi
 
 
@@ -167,4 +157,4 @@ mv "$OUTPUTFILE"* "$LEAVEDIR"/../testresult/$CIPHERNAME
 mv massif.* "$LEAVEDIR"/../testresult/$CIPHERNAME/ 2> /dev/null
 cd $LEAVEDIR
 
-echo "  "$(date +'%d.%m.%Y %H:%M:%S.%3N') "finish KAT:" $CIPHERNAME "-" `sensors | grep temp | sed 's/  (crit = +110\.0°C)//g'`
+echo "  "$(date +'%d.%m.%Y %H:%M:%S.%3N') "finish KAT:" $CIPHERNAME "---" `vcgencmd measure_temp` "-" `vcgencmd get_throttled`
