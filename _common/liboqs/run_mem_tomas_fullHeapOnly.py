@@ -56,7 +56,16 @@ fieldname = ["insts", "maxBytes", "maxHeap", "extHeap", "maxStack"]
 
 def do_test(alg, meth, methnames, exepath):
     # process = subprocess.Popen(["valgrind", "--tool=massif", "--stacks=yes", "--massif-out-file=valgrind-out", exepath, alg, str(meth)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
-    process = subprocess.Popen(["valgrind", "--tool=massif", "--pages-as-heap=yes", "--massif-out-file=valgrind-out", exepath, alg, str(meth)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+    process = subprocess.Popen(["valgrind",
+                                "--tool=massif",
+                                "--time-unit=ms",
+                                "--peak-inaccuracy=0.0",
+                                "--pages-as-heap=yes",
+                                "--max-snapshots=1000",
+                                "--detailed-freq=1",
+                                "--threshold=0.0",
+                                "--massif-out-file=valgrind-out",
+                                exepath, alg, str(meth)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
     (outs, errs) = process.communicate()
     if process.returncode != 0:
         print("* Result for %s_%d: %s %d" % (alg, meth, "Valgrind died with", process.returncode))
