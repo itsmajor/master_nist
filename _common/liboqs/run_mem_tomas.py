@@ -54,22 +54,58 @@ def parse_config(output):
 fieldname = ["insts", "maxBytes", "maxHeap", "extHeap", "maxStack"]
 
 
+# def do_test(alg, meth, methnames, exepath):
+#     process = subprocess.Popen(["valgrind", "--tool=massif", "--stacks=yes", "--massif-out-file=valgrind-out", exepath, alg, str(meth)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+#     (outs, errs) = process.communicate()
+#     if process.returncode != 0:
+#         print("* Result for %s_%d: %s %d" % (alg, meth, "Valgrind died with", process.returncode))
+#         return
+#         # print("Valgrind died with retcode %d and \n%s\n%s\nFatal error. Exiting." % (process.returncode, outs, errs))
+#         # exit(1)
+#     if len(data["config"]) == 0:
+#         parse_config(outs)
+#     process = subprocess.Popen(["ms_print", "valgrind-out"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+#     (outs, errs) = process.communicate()
+#     result = get_peak(outs.splitlines())
+#     data[alg][methnames[meth]] = {}
+#     try:
+#         print("Result for %s %d (%s): %s" % (alg, meth, methnames[meth], " ".join(result)))
+#         for i in range(5):
+#             data[alg][methnames[meth]][fieldname[i]] = result[i]
+#     except TypeError:
+#         print("Result for %s %d: " % (alg, meth))
+#         print(result)
+#         print(outs.splitlines())
 def do_test(alg, meth, methnames, exepath):
-    process = subprocess.Popen(["valgrind", "--tool=massif", "--stacks=yes", "--massif-out-file=valgrind-out", exepath, alg, str(meth)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+    process = subprocess.Popen(
+        ["valgrind", "--tool=massif", "--stacks=yes", "--massif-out-file=valgrind-out", exepath, alg, str(meth)],
+        stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
     (outs, errs) = process.communicate()
+
     if process.returncode != 0:
         print("* Result for %s_%d: %s %d" % (alg, meth, "Valgrind died with", process.returncode))
         return
-        # print("Valgrind died with retcode %d and \n%s\n%s\nFatal error. Exiting." % (process.returncode, outs, errs))
-        # exit(1)
+
     if len(data["config"]) == 0:
         parse_config(outs)
-    process = subprocess.Popen(["ms_print", "valgrind-out"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+
+    process = subprocess.Popen(["ms_print", "valgrind-out"],
+                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
     (outs, errs) = process.communicate()
     result = get_peak(outs.splitlines())
+
     data[alg][methnames[meth]] = {}
+
     try:
-        print("Result for %s %d (%s): %s" % (alg, meth, methnames[meth], " ".join(result)))
+        # Temperatur und Throttle-Zustand abrufen
+        temp = subprocess.check_output(["vcgencmd", "measure_temp"], universal_newlines=True).strip()
+        throttled = subprocess.check_output(["vcgencmd", "get_throttled"], universal_newlines=True).strip()
+        rpi_status = f"{temp} - {throttled}"
+    except Exception as e:
+        rpi_status = f"Temp/Throttle failed: {e}"
+
+    try:
+        print("Result for %s %d (%s): %s   (%s)" % (alg, meth, methnames[meth], " ".join(result), rpi_status))
         for i in range(5):
             data[alg][methnames[meth]][fieldname[i]] = result[i]
     except TypeError:
