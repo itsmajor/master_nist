@@ -12,11 +12,11 @@ fi
 echo "starting liboqs tests"
 #script -c "$LIBOQSPATH/speed_kem" liboqs_kem_speed.log
 #script -c "$LIBOQSPATH/speed_sig" liboqs_sig_speed.log
-#script -c "python3 run_mem_tomas.py $LIBOQSPATH/test_kem_mem" liboqs_kem_mem.log
-#script -c "python3 run_mem_tomas.py $LIBOQSPATH/test_sig_mem" liboqs_sig_mem.log
+#script -c "python3 run_mem_modified.py $LIBOQSPATH/test_kem_mem" liboqs_kem_mem.log
+#script -c "python3 run_mem_modified.py $LIBOQSPATH/test_sig_mem" liboqs_sig_mem.log
 
-script -c "python3 run_mem_tomas_fullHeapOnly.py $LIBOQSPATH/test_kem_mem" liboqs_kem_mem_fullheap.log
-script -c "python3 run_mem_tomas_fullHeapOnly.py $LIBOQSPATH/test_sig_mem" liboqs_sig_mem_fullheap.log
+script -c "python3 run_mem_modified_fullHeapOnly.py $LIBOQSPATH/test_kem_mem" liboqs_kem_mem_fullheap.log
+script -c "python3 run_mem_modified_fullHeapOnly.py $LIBOQSPATH/test_sig_mem" liboqs_sig_mem_fullheap.log
 
 mkdir -p $TESTRESULTPATH
 mv liboqs_*.log $TESTRESULTPATH/
