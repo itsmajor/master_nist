@@ -1,8 +1,8 @@
-# Masterarbeit: Umsetzbarkeit postquantenkryptographischer Algorithmen auf Embedded Systemen
+# Masterarbeit: Umsetzbarkeit von Post-Quanten-Kryptographie auf Embedded Systemen
 
 Dieses Repository ist Teil der Masterarbeit:
 
-**"Umsetzbarkeit postquantenkryptographischer Algorithmen auf Embedded Systemen"**  
+**"Umsetzbarkeit von Post-Quanten-Kryptographie auf Embedded Systemen"**  
 Fachhochschule FH Campus Wien – Masterstudiengang IT-Security
 
 Dieses Repository enthält die vollständige Testumgebung für die Evaluation ausgewählter *NIST Post-Quantum Cryptography* (PQC)-Kandidaten.
