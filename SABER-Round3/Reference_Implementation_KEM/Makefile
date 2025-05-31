@@ -1,7 +1,13 @@
+# Default-Wert für SABER_L, falls nicht von außen gesetzt
+SABER_DEFINE ?= -DSABER_L=3
+SABER_CLEANED := $(subst =,-,$(patsubst -D%,%,$(SABER_DEFINE)))
+
 # need for $$(patsubst %,%.o,$$@)
 .SECONDEXPANSION:
 # eval path to root
 PATHTOROOT = $(shell cd ../_common/ 2> /dev/null && echo "../")$(shell cd ../../_common 2> /dev/null && echo "../../")$(shell cd ../../../_common 2> /dev/null && echo "../../../")$(shell cd ../../../../_common 2> /dev/null && echo "../../../../")$(shell cd ../../../../../_common 2> /dev/null && echo "../../../../../")$(shell cd ../../../../../../_common 2> /dev/null && echo "../../../../../../")
+PROJECTNAME=$(shell basename $(CURDIR))
+BINARYPATH=../bin/$(SABER_CLEANED)
 CC=gcc
 CFLAGS= -I. -I$(PATHTOROOT)_common/NIST -I../common -Wall -fomit-frame-pointer -Ofast -march=native -w
 #LDFLAGS = -lm -lssl-lcrypto
@@ -13,6 +19,7 @@ vpath % ../common
 vpath % $(PATHTOROOT)_common/NIST
 # 4kem path
 vpath %.c $(PATHTOROOT)_common/tomas
+vpath % $(BINARYPATH)
 
 # add all c files in this directory
 CSRC := $(wildcard *.c)
@@ -25,36 +32,34 @@ CSRC := $(subst PQCgenKAT_kem.c, ,$(CSRC)) $(notdir $(COMMON:.c=.o)) rng.c
 TARGET = PQCgenKAT_kem PQCgenKAT_kem_dec PQCgenKAT_kem_enc PQCgenKAT_kem_keygen
 
 ## all files will be created in BUILD_DIR
-BUILD_DIR = .build
+BUILD_DIR = .build-$(SABER_CLEANED)
 
 OBJ=$(addprefix ${BUILD_DIR}/,$(CSRC:.c=.o))
 
-# Default-Wert für SABER_L, falls nicht von außen gesetzt
-SABER_DEFINE ?= -DSABER_L=3
+all: removeOriginals $(TARGET)
 
-all: rmOriginal_PQCgenKAT_kem $(TARGET)
-
-.PHONY: all clean rmOriginal_PQCgenKAT_kem saber2 saber3 saber4
+.PHONY: all clean removeOriginals saber2 saber3 saber4
 
 clean:
-	@rm -f -R ./.build/ $(TARGET)
+	@rm -f -R ./.build* $(BINARYPATH)
 
 DEP=$(OBJ:.o=.d)
 
-$(TARGET): $(OBJ) .build/$$(patsubst %,%.o,$$@)
-	$(CC) $(CFLAGS) $(SABER_DEFINE) -o $@ $^ $(LDFLAGS)
+$(TARGET): $(OBJ) $$(BUILD_DIR)/$$(patsubst %,%.o,$$@)
+	mkdir -p $(BINARYPATH)
+	$(CC) $(CFLAGS) -o $(BINARYPATH)/$@ $^ $(LDFLAGS)
 
-# remove original PQCgenKAT_kem
-rmOriginal_PQCgenKAT_kem:
-	@rm -f PQCgenKAT_kem.c
+# remove NIST originals in project
+removeOriginals:
+	@rm -f PQCgenKAT_kem.c randombytes.h rng.c rng.h
 
 $(BUILD_DIR)/%.o: %.c
 	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) $(SABER_DEFINE) -c -o $@ $<
 
-$(BUILD_DIR)/%.o: %.s
-	@mkdir -p `dirname $@`
-	$(CC) $(CFLAGS) $(SABER_DEFINE) -c -o $@ $<
+#$(BUILD_DIR)/%.o: %.s
+#	@mkdir -p `dirname $@`
+#	$(CC) $(CFLAGS) $(SABER_DEFINE) -c -o $@ $<
 
 #$(BUILD_DIR)/%.d: %.c
 #	@mkdir -p `dirname $@`
