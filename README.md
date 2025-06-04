@@ -80,7 +80,7 @@ Ergebnisse werden in automatisch erzeugte `testresult_*`-Verzeichnisse geschrieb
 ## Ergebnisse
 
 - Ergebnisdaten werden als Logdateien und CSV-Tabellen gespeichert.
-- Die weitere Analyse erfolgt über externe Jupyter-Notebooks (separat).
+- Die weitere Analyse erfolgt über externe Jupyter-Notebooks (siehe _common/jupyterLab). 
 
 ## Hinweise
 

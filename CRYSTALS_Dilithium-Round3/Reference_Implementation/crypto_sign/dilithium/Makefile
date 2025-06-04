@@ -4,6 +4,9 @@ HASH=AES
 # for AES an extra gcc flag is needed,
 ifeq ($(HASH),AES)
 	AESFLAG=-DDILITHIUM_USE_AES
+    EXTRA_SRC := symmetric-aes.c aes256ctr.c
+else
+    EXTRA_SRC := symmetric-shake.c
 endif
 
 # need for $$(patsubst %,%.o,$$@)
@@ -31,7 +34,7 @@ CSRC := $(wildcard *.c)
 # add common path (nothing happen if not found)
 COMMON := $(wildcard $(PROJECTCOMMONPATH)/*.c)
 # remove PQCgenKAT_kem.c from CSRC and add all COMMON files without path. vpath and cflags imports will find it)
-CSRC := $(subst PQCgenKAT_kem.c, ,$(CSRC)) $(notdir $(COMMON:.c=.o)) rng.c
+CSRC := $(subst PQCgenKAT_kem.c, ,$(CSRC)) $(notdir $(COMMON:.c=.o)) rng.c $(EXTRA_SRC)
 
 # 4 kems to test them all, executable created in same folder
 TARGET = PQCgenKAT_sign PQCgenKAT_sign_dec PQCgenKAT_sign_enc PQCgenKAT_sign_keygen
