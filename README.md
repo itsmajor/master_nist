@@ -91,3 +91,16 @@ Ergebnisse werden in automatisch erzeugte `testresult_*`-Verzeichnisse geschrieb
 ## Lizenz
 
 Dieses Repository ist ausschließlich für akademische Zwecke vorgesehen. Eine Weiterverwendung oder Veröffentlichung bedarf der Zustimmung des Autors.
+
+
+## Source Acknowledgment
+
+All folders in this repository represent cryptographic schemes submitted to the NIST Post-Quantum Cryptography Standardization Process. The naming of each folder includes an indicator of the corresponding round (`Round1`, `Round2`, `Round3`, `Round4`).
+
+For more information about each round, refer to the official NIST documentation:
+- [Round 1](https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/round-1-submissions)
+- [Round 2](https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/round-2-submissions)
+- [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/round-3-submissions)
+- [Round 4](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-4-submissions)
+
+The scripts in the `_common/liboqs` directory are adapted from the [Open Quantum Safe (liboqs) repository](https://github.com/open-quantum-safe/liboqs). To execute them properly, a local clone of the `liboqs` repository is required.
