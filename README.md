@@ -3,7 +3,7 @@
 Dieses Repository ist Teil der Masterarbeit:
 
 **"Umsetzbarkeit von Post-Quanten-Kryptographie auf Embedded Systemen"**  
-Fachhochschule FH Campus Wien – Masterstudiengang IT-Security
+Hochschule Campus Wien – Masterstudiengang IT-Security
 
 Dieses Repository enthält die vollständige Testumgebung für die Evaluation ausgewählter *NIST Post-Quantum Cryptography* (PQC)-Kandidaten.
 
@@ -80,14 +80,35 @@ Ergebnisse werden in automatisch erzeugte `testresult_*`-Verzeichnisse geschrieb
 ## Ergebnisse
 
 - Ergebnisdaten werden als Logdateien und CSV-Tabellen gespeichert.
-- Die weitere Analyse erfolgt über externe Jupyter-Notebooks (separat).
+- Die weitere Analyse erfolgt über externe Jupyter-Notebooks (siehe _common/jupyterLab). 
 
 ## Hinweise
 
 - Die getesteten Implementierungen sind originalgetreu (übernommen aus offiziellen NIST-Einreichungen oder deren optimierten Varianten).
 - Anpassungen erfolgten nur zur Portierung und Testbarkeit (Makefiles, Hardwarekompatibilität).
 - Keine Änderungen der kryptographischen Verfahren selbst.
+- Dieses Repository ist für akademische Zwecke erstellt worden. 
 
 ## Lizenz
 
-Dieses Repository ist ausschließlich für akademische Zwecke vorgesehen. Eine Weiterverwendung oder Veröffentlichung bedarf der Zustimmung des Autors.
+MIT License
+
+Copyright (c) 2025 Tomas Antal
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+## Source Acknowledgment
+
+All folders in this repository represent cryptographic schemes submitted to the NIST Post-Quantum Cryptography Standardization Process. The naming of each folder includes an indicator of the corresponding round (`Round1`, `Round2`, `Round3`, `Round4`).
+
+For more information about each round, refer to the official NIST documentation:
+- [Round 1](https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/round-1-submissions)
+- [Round 2](https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/round-2-submissions)
+- [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/round-3-submissions)
+- [Round 4](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-4-submissions)
+
+The scripts in the `_common/liboqs` directory are adapted from the [Open Quantum Safe (liboqs) repository](https://github.com/open-quantum-safe/liboqs). To execute them properly, a local clone of the `liboqs` repository is required.
